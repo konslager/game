@@ -1,5 +1,8 @@
 # IdleMMO — Idle MMORPG prototipas (C# / .NET 8)
 
+## Telefone / naršyklėje
+`web/index.html` – ta pati logika JavaScript'u, vienas failas, mobiliam ekranui. Progresas saugomas naršyklėje (localStorage), offline progresas skaičiuojamas atidarius iš naujo.
+
 ## Paleidimas
 ```bash
 dotnet run --project src/IdleMMO.Cli                      # interaktyvus režimas (1 tick = 1 s)
