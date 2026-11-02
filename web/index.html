@@ -27,54 +27,76 @@ body {
   font: 16px/1.4 var(--body);
   padding-left: max(16px, env(safe-area-inset-left, 0px));
   padding-right: max(16px, env(safe-area-inset-right, 0px));
-  padding-block: 12px 128px;
+  padding-block: 12px 120px;
   max-width: 560px; margin: 0 auto;
   -webkit-tap-highlight-color: transparent;
 }
 .num { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: .82em; }
 h1 { font: 700 1.35rem/1.1 var(--display); margin: 0; letter-spacing: .02em; color: var(--brass); }
+h2 { font: 700 1.05rem/1.2 var(--display); margin: 6px 0 0; color: var(--brass); letter-spacing: .02em; }
+p.lead { margin: 0; color: var(--muted); font-size: .9rem; }
 .top { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; }
 .top .sub { color: var(--muted); font-size: .9rem; }
-.gold { color: var(--brass); font-weight: 700; white-space: nowrap; }
+.gold { color: var(--brass); font-weight: 700; white-space: nowrap; text-align: right; }
+.gold small { display: block; color: var(--muted); font-weight: 500; font-size: .75rem; }
 .bars { display: grid; gap: 6px; margin-top: 12px; }
 .bar { position: relative; height: 18px; background: var(--surface); border: 1px solid var(--line); border-radius: 3px; overflow: hidden; }
 .bar > i { position: absolute; inset: 0 auto 0 0; width: 0; transition: width .2s linear; }
 .bar > span { position: relative; display: flex; justify-content: space-between; padding: 0 6px; font-size: .75rem; line-height: 16px; }
 .bar.hp > i { background: var(--hp); } .bar.mp > i { background: var(--mp); } .bar.xp > i { background: var(--xp); }
-.bar.shield > i { background: var(--fg); opacity: .35; }
 .arena { overflow: hidden; margin-top: 14px; padding: 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; }
 .arena.boss { border-color: var(--hp); box-shadow: inset 0 0 0 1px var(--hp); }
 .foe { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 8px; }
 .foe b { font: 700 1.05rem var(--display); }
 .badge { font: 700 .7rem var(--body); letter-spacing: .08em; text-transform: uppercase; padding: 2px 6px; border-radius: 3px; background: var(--hp); color: var(--bg); }
-.hit { height: 1.6em; margin-top: 8px; font-weight: 700; color: var(--muted); }
+.badge.elite { background: var(--t3); }
+.hit { height: 1.6em; margin-top: 8px; font-weight: 700; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .hit.crit { color: var(--brass); animation: pop .25s ease-out; transform-origin: left center; }
-@keyframes pop { from { transform: scale(1.25); } to { transform: none; } }
+@keyframes pop { from { transform: scale(1.2); } to { transform: none; } }
 .gate { margin-top: 10px; display: grid; grid-template-columns: repeat(25, 1fr); gap: 2px; }
 .gate i { height: 5px; background: var(--raised); border-radius: 1px; }
 .gate i.on { background: var(--brass); }
-.gatelabel { display: flex; justify-content: space-between; margin-top: 6px; font-size: .8rem; color: var(--muted); }
-.tabs { display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 14px; border-bottom: 1px solid var(--line); }
-.tabs button { background: none; border: 0; color: var(--muted); font: 500 .95rem var(--body); padding: 10px 0; border-bottom: 2px solid transparent; }
+.gatelabel { display: flex; justify-content: space-between; gap: 8px; margin-top: 6px; font-size: .8rem; color: var(--muted); }
+.activity { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+.tabs { display: grid; grid-template-columns: repeat(6, 1fr); margin-top: 14px; border-bottom: 1px solid var(--line); }
+.tabs button { position: relative; background: none; border: 0; color: var(--muted); font: 500 .86rem var(--body); padding: 10px 0; border-bottom: 2px solid transparent; }
 .tabs button[aria-selected="true"] { color: var(--fg); border-bottom-color: var(--brass); }
+.tabs button.dot::after { content: ""; position: absolute; top: 7px; right: 6px; width: 6px; height: 6px; border-radius: 50%; background: var(--brass); }
 #panel { margin-top: 10px; display: grid; gap: 8px; }
 .attrs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; text-align: center; }
 .attrs div, .derived div { background: var(--surface); padding: 6px 2px; border-radius: 4px; }
 .attrs small, .derived small { display: block; color: var(--muted); font-size: .7rem; letter-spacing: .08em; }
 .derived { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; text-align: center; }
-.row { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; padding: 10px; background: var(--surface); border-radius: 4px; border-left: 3px solid var(--tc, var(--line)); }
-.row .name { font-weight: 700; color: var(--tc, var(--fg)); min-width: 0; }
+.row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; align-items: center; padding: 10px; background: var(--surface); border-radius: 4px; border-left: 3px solid var(--tc, var(--line)); }
+.row .name { font-weight: 700; color: var(--tc, var(--fg)); }
 .row .meta { color: var(--muted); font-size: .8rem; }
-.row .acts { display: flex; gap: 6px; }
+.row .meta.need { color: var(--fg); }
+.row .acts { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+.miss { color: var(--hp); }
 .t0 { --tc: var(--t0); } .t1 { --tc: var(--t1); } .t2 { --tc: var(--t2); } .t3 { --tc: var(--t3); } .t4 { --tc: var(--t4); }
 button.sm { font: 700 .78rem var(--body); padding: 7px 9px; border-radius: 4px; border: 1px solid var(--line); background: var(--raised); color: var(--fg); min-width: 64px; }
+button.sm.go { background: var(--brass); color: var(--bg); border-color: var(--brass); }
 button.sm:disabled { opacity: .4; }
 button:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
 .cd { height: 4px; background: var(--raised); border-radius: 2px; margin-top: 6px; overflow: hidden; }
 .cd i { display: block; height: 100%; background: var(--mp); }
+.cd.q i { background: var(--brass); }
 .log { font-size: .88rem; display: grid; gap: 4px; }
 .log div { padding: 6px 8px; background: var(--surface); border-radius: 3px; }
-.log .up { color: var(--xp); } .log .bad { color: var(--hp); } .log .boss { color: var(--brass); }
+.log .up { color: var(--xp); } .log .bad { color: var(--hp); } .log .boss, .log .quest { color: var(--brass); }
+.chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip { font: 500 .8rem var(--body); padding: 6px 11px; border-radius: 99px; border: 1px solid var(--line); background: none; color: var(--muted); }
+.chip[aria-pressed="true"] { color: var(--brass); border-color: var(--brass); }
+.toggles .chip::before { content: "○ "; } .toggles .chip[aria-pressed="true"]::before { content: "● "; }
+.npc { padding: 10px; background: var(--surface); border-radius: 4px; }
+.npc b { font-family: var(--display); }
+.npc .meta { color: var(--muted); font-size: .8rem; }
+.npc p { margin: 4px 0 0; font-size: .9rem; }
+.mats { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 4px; }
+.mats div { display: flex; justify-content: space-between; gap: 6px; padding: 6px 8px; background: var(--surface); border-radius: 4px; font-size: .85rem; border-left: 3px solid var(--tc, var(--line)); }
+.obj { font-size: .85rem; display: grid; gap: 2px; margin-top: 4px; }
+.obj .ok { color: var(--xp); }
+.section { margin-top: 4px; font: 700 .72rem var(--body); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
 .dock {
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 5;
   background: var(--surface); border-top: 1px solid var(--line);
@@ -84,10 +106,9 @@ button:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
 .dock button { font: 700 .95rem var(--body); padding: 12px 6px; border-radius: 6px; border: 1px solid var(--line); background: var(--raised); color: var(--fg); }
 .dock .primary { background: var(--brass); color: var(--bg); border-color: var(--brass); }
 .dock .primary:disabled { background: var(--raised); color: var(--muted); border-color: var(--line); }
-.toggles { max-width: 528px; margin: 8px auto 0; display: flex; gap: 6px; flex-wrap: wrap; }
-.chip { font: 500 .78rem var(--body); padding: 5px 10px; border-radius: 99px; border: 1px solid var(--line); background: none; color: var(--muted); }
-.chip[aria-pressed="true"] { color: var(--brass); border-color: var(--brass); }
-.chip::before { content: "○ "; } .chip[aria-pressed="true"]::before { content: "● "; }
+.toggles { max-width: 528px; margin: 8px auto 0; display: flex; gap: 5px; align-items: center; overflow-x: auto; scrollbar-width: none; }
+.toggles > span { color: var(--muted); font-size: .75rem; flex: none; }
+.toggles .chip { flex: none; font-size: .74rem; padding: 4px 8px; }
 .notice { margin-top: 12px; padding: 12px; border: 1px solid var(--brass); border-radius: 6px; background: var(--surface); }
 .notice p { margin: 0 0 8px; }
 .danger { color: var(--hp); }
@@ -96,7 +117,7 @@ button:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
 
 <div class="top">
   <div><h1 id="hName">Hero · Gladiator</h1><div class="sub" id="hZone">Zone</div></div>
-  <div class="gold"><span class="num" id="hGold">0</span> g</div>
+  <div class="gold"><span class="num" id="hGold">0</span> g<small id="hRep">Neutral</small></div>
 </div>
 <div class="bars">
   <div class="bar hp"><i id="bHp"></i><span><b>HP</b><span class="num" id="tHp"></span></span></div>
@@ -110,10 +131,13 @@ button:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
   <div class="hit" id="hit" aria-live="polite"></div>
   <div class="gate" id="gate"></div>
   <div class="gatelabel"><span id="gateText"></span><span id="modeText"></span></div>
+  <div class="activity chips" id="activity"></div>
 </section>
-<nav class="tabs" role="tablist">
+<nav class="tabs" role="tablist" id="tabs">
+  <button role="tab" data-tab="hero" aria-selected="false">Hero</button>
   <button role="tab" data-tab="gear" aria-selected="true">Gear</button>
-  <button role="tab" data-tab="skills" aria-selected="false">Skills</button>
+  <button role="tab" data-tab="town" aria-selected="false">Town</button>
+  <button role="tab" data-tab="quests" aria-selected="false">Quests</button>
   <button role="tab" data-tab="zones" aria-selected="false">Zones</button>
   <button role="tab" data-tab="log" aria-selected="false">Log</button>
 </nav>
@@ -125,18 +149,26 @@ button:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
     <button id="btnSpeed">Speed 1×</button>
   </div>
   <div class="toggles">
-    <button class="chip" id="tgBoss" aria-pressed="true">Auto boss</button>
-    <button class="chip" id="tgUp" aria-pressed="true">Auto upgrade</button>
-    <button class="chip" id="tgAdv" aria-pressed="true">Auto advance</button>
+    <span>Auto</span>
+    <button class="chip" id="tgBoss" aria-pressed="true">Boss</button>
+    <button class="chip" id="tgUp" aria-pressed="true">Upgrade</button>
+    <button class="chip" id="tgAdv" aria-pressed="true">Advance</button>
+    <button class="chip" id="tgPot" aria-pressed="true">Potions</button>
   </div>
 </div>
+
+<!-- Region data: generated from data/regions/emberwatch.json by tools/embed_region.py — edit the JSON, not this block. -->
+<script id="region-data" type="application/json">
+{"schemaVersion":1,"region":{"id":"emberwatch_march","name":"Emberwatch March","levelRange":[1,11],"zoneIds":[1,2],"description":"Pasienio regionas prie Plyšio (the Rift). Prieš 40 metų dangus čia suskilo, ir nuo tada be paliovos krenta pelenai. Gyvenvietė Emberwatch – paskutinė tvirtovė prieš Ashen Outskirts dykynes ir Shattered Rift plyšį."},"settlement":{"id":"emberwatch","name":"Emberwatch","type":"frontier_fortress_town","population":3200,"faction":"emberwatch_garrison","atmosphere":"Tamsi pasienio tvirtovė ant senojo sargybos bokšto griuvėsių. Stogai pilki nuo pelenų, gatvėse dega žarijų žibintai, o naktį Plyšys nušviečia dangų violetine šviesa. Gyventojai pavargę, bet atkaklūs: čia visi kažkam skolingi – garnizonui, kalviui ar kontrabandininkams.","ambience":{"weather":"ash_fall","music":"low_drums_strings","dayNightCycle":true},"respawnPoint":"gatehold_square"},"districts":[{"id":"gatehold_square","name":"Gatehold Square","type":"market","safeZone":true,"description":"Pagrindinė turgaus aikštė prie vartų. Čia stovi užduočių lenta, vaistinė ir karavanų stovykla.","npcIds":["sela_quickmarrow","captain_hedda_varr"],"features":["quest_board","stash","respawn_point"]},{"id":"anvil_row","name":"Anvil Row","type":"craft_quarter","safeZone":true,"description":"Amatininkų kvartalas. Kalvių kūjų dūžiai girdimi per visą miestą, o oras dvokia anglimi ir ištirpusiu metalu.","npcIds":["brakka_ironjaw","torvald_ashmane","ilsa_moonvane"],"features":["forge","jeweler_bench","salvage_station"]},{"id":"the_cinders","name":"The Cinders","type":"slums","safeZone":false,"levelRange":[4,6],"description":"Pavojingieji lūšnynai sudegusiame rytiniame kvartale. Čia valdo kontrabandininkai, o neatsargų keliautoją užpuola Cinder Cutthroats.","npcIds":["vex_ninefingers"],"features":["black_market"],"monsterIds":["cinder_cutthroat"],"events":[{"id":"cutthroat_ambush","chancePerVisit":0.2,"spawn":{"monsterId":"cinder_cutthroat","count":3}}]},{"id":"wardtower_keep","name":"Wardtower Keep","type":"garrison","safeZone":true,"description":"Garnizono štabas. Čia saugomi bosų vartai į Ashen Outskirts gilumą ir reputacijos kvartirmeisteris.","npcIds":["captain_hedda_varr"],"features":["boss_gate","reputation_vendor"]},{"id":"riftside_gate","name":"Riftside Gate","type":"zone_exit","safeZone":true,"description":"Užantspauduoti vartai į Shattered Rift. Atsidaro nugalėjus Kharn, the Cinder Warden.","unlock":{"type":"boss_defeated","monsterId":"ashen_outskirts_warden"},"leadsToZoneId":2}],"factions":[{"id":"emberwatch_garrison","name":"Emberwatch Garrison","ranks":[{"rank":"Neutral","minRep":0,"shopDiscount":0.0},{"rank":"Friendly","minRep":500,"shopDiscount":0.05},{"rank":"Honored","minRep":1500,"shopDiscount":0.1},{"rank":"Revered","minRep":4000,"shopDiscount":0.15}]}],"materials":[{"id":"ash_wolf_fang","name":"Ash Wolf Fang","tier":"Common","sellPrice":4,"sources":[{"monsterId":"ash_wolf","dropChance":0.35}]},{"id":"ghoul_marrow","name":"Ghoul Marrow","tier":"Common","sellPrice":8,"sources":[{"monsterId":"cinder_ghoul","dropChance":0.25}]},{"id":"ash_bloom","name":"Ash Bloom","tier":"Common","sellPrice":3,"sources":[{"nodeId":"ash_bloom_patch","zoneId":1,"gatherSeconds":5}]},{"id":"cinder_iron_ore","name":"Cinder Iron Ore","tier":"Uncommon","sellPrice":10,"sources":[{"nodeId":"cinder_vein","zoneId":1,"gatherSeconds":8},{"monsterId":"cinder_ghoul","dropChance":0.15}]},{"id":"riftglass_shard","name":"Riftglass Shard","tier":"Rare","sellPrice":60,"sources":[{"monsterId":"rift_stalker","dropChance":0.12},{"monsterId":"shardback_crawler","dropChance":0.12}]},{"id":"cinder_warden_core","name":"Cinder Warden Core","tier":"Epic","sellPrice":600,"sources":[{"monsterId":"ashen_outskirts_warden","dropChance":1.0}]},{"id":"rift_warden_heart","name":"Rift Warden Heart","tier":"Legendary","sellPrice":1500,"sources":[{"monsterId":"shattered_rift_warden","dropChance":1.0}]}],"monsters":[{"id":"ash_wolf","name":"Ash Wolf","zoneId":1,"level":[1,3],"hp":100,"damage":12,"defense":5,"exp":18,"gold":7},{"id":"cinder_ghoul","name":"Cinder Ghoul","zoneId":1,"level":[3,5],"hp":140,"damage":16,"defense":5,"exp":22,"gold":9},{"id":"cinder_cutthroat","name":"Cinder Cutthroat","zoneId":1,"level":[5,5],"elite":true,"hp":300,"damage":22,"defense":10,"exp":60,"gold":25},{"id":"ashen_outskirts_warden","name":"Kharn, the Cinder Warden","zoneId":1,"boss":true,"level":[6,6],"hp":2400,"damage":42,"defense":10,"exp":300,"gold":120},{"id":"rift_stalker","name":"Rift Stalker","zoneId":2,"level":[6,9],"hp":220,"damage":24,"defense":20,"exp":40,"gold":15},{"id":"shardback_crawler","name":"Shardback Crawler","zoneId":2,"level":[8,11],"hp":260,"damage":26,"defense":20,"exp":44,"gold":17},{"id":"shattered_rift_warden","name":"Ysolde of the Broken Sky","zoneId":2,"boss":true,"level":[12,12],"hp":4800,"damage":75,"defense":40,"exp":630,"gold":240}],"npcs":[{"id":"brakka_ironjaw","name":"Brakka Ironjaw","race":"Dwarf","role":"merchant","districtId":"anvil_row","trait":"Niurzgus ir tiesmukas. Niekada nesiderėja, bet už kiekvieną savo kalavijo dūžį garantuoja galva."},{"id":"sela_quickmarrow","name":"Sela Quickmarrow","race":"Half-Elf","role":"merchant","districtId":"gatehold_square","trait":"Nervinga plepė. Kalba greičiau, nei verda jos katilai, ir viską užsirašo į sudegusį sąsiuvinį."},{"id":"vex_ninefingers","name":"Vex \"Nine-Fingers\"","race":"Ashborn","role":"merchant","districtId":"the_cinders","trait":"Mandagus, šaltas kontrabandininkas. Dešimto piršto neteko per derybas ir nuo tada nemėgsta skolininkų."},{"id":"torvald_ashmane","name":"Torvald Ashmane","race":"Human","role":"crafter","profession":"Blacksmith","districtId":"anvil_row","trait":"Buvęs garnizono veteranas su perdega ranka. Kantrus mokytojas, bet nepakenčia prastos rūdos."},{"id":"ilsa_moonvane","name":"Ilsa Moonvane","race":"Elf","role":"crafter","profession":"Jeweler / Runesmith","districtId":"anvil_row","trait":"Tyli perfekcionistė. Riftglass skeveldras tyrinėja su lupa ir šnabžda joms kaip gyvoms."},{"id":"captain_hedda_varr","name":"Captain Hedda Varr","race":"Human","role":"quest_giver","districtId":"wardtower_keep","trait":"Griežta garnizono kapitonė. Vertina rezultatus, ne žodžius."}],"shops":[{"id":"split_anvil_armory","name":"The Split Anvil Armory","ownerNpcId":"brakka_ironjaw","districtId":"anvil_row","specialization":"Ginklai ir šarvai","currency":"gold","items":[{"id":"worn_hauberk","name":"Worn Hauberk","type":"equipment","slot":"Armor","tier":"Common","itemLevel":3,"baseBonus":{"strength":2,"agility":0,"intelligence":0,"vitality":10,"luck":0},"baseDefense":6,"price":350},{"id":"tempered_claymore","name":"Tempered Claymore","type":"equipment","slot":"Weapon","tier":"Uncommon","itemLevel":4,"baseBonus":{"strength":12,"agility":3,"intelligence":0,"vitality":0,"luck":2},"baseDefense":0,"price":900},{"id":"tempered_greaves","name":"Tempered Greaves","type":"equipment","slot":"Boots","tier":"Uncommon","itemLevel":5,"baseBonus":{"strength":0,"agility":7,"intelligence":0,"vitality":4,"luck":0},"baseDefense":10,"price":1100},{"id":"riftforged_warblade","name":"Riftforged Warblade","type":"equipment","slot":"Weapon","tier":"Rare","itemLevel":8,"baseBonus":{"strength":20,"agility":5,"intelligence":0,"vitality":0,"luck":3},"baseDefense":0,"price":6500,"requires":{"factionId":"emberwatch_garrison","rank":"Friendly"}}]},{"id":"embervial_apothecary","name":"Embervial Apothecary","ownerNpcId":"sela_quickmarrow","districtId":"gatehold_square","specialization":"Eliksyrai ir laikini sustiprinimai","currency":"gold","items":[{"id":"minor_healing_draught","name":"Minor Healing Draught","type":"consumable","effect":{"kind":"heal_pct","value":0.25},"cooldownSeconds":30,"price":40},{"id":"mana_tonic","name":"Mana Tonic","type":"consumable","effect":{"kind":"mana_flat","value":60},"cooldownSeconds":30,"price":35},{"id":"ironhide_elixir","name":"Ironhide Elixir","type":"consumable","effect":{"kind":"defense_pct","value":0.15,"durationSeconds":300},"price":220},{"id":"elixir_of_fortune","name":"Elixir of Fortune","type":"consumable","effect":{"kind":"luck_flat","value":10,"durationSeconds":600},"price":450}]},{"id":"rift_curio","name":"The Rift Curio","ownerNpcId":"vex_ninefingers","districtId":"the_cinders","specialization":"Reti komponentai ir juodoji rinka","currency":"gold","dailyRestock":true,"items":[{"id":"riftglass_shard","type":"material","price":250,"dailyLimit":5},{"id":"cinder_warden_core","type":"material","price":2400,"dailyLimit":1},{"id":"rift_catalyst","name":"Rift Catalyst","type":"consumable","effect":{"kind":"promote_gold_cost_pct","value":-0.25,"uses":1},"price":800},{"id":"unidentified_rift_cache","name":"Unidentified Rift Cache","type":"lootbox","effect":{"kind":"roll_item","zoneId":2,"minTier":"Uncommon"},"price":1500}]}],"crafters":[{"npcId":"torvald_ashmane","station":"forge","services":[{"id":"enhance","name":"Enhance (+1)","appliesTo":"any_equipment","goldCostFormula":"40 * itemLevel * (1 + tier) * 1.45^enhancement","materials":[{"id":"cinder_iron_ore","qtyFormula":"1 + floor(enhancement / 2)"},{"id":"riftglass_shard","qtyFormula":"enhancement >= 5 ? 1 : 0"}],"maxEnhancement":10},{"id":"promote_common_uncommon","name":"Promote: Common → Uncommon","requires":{"enhancement":5,"fromTier":"Common"},"goldCostFormula":"400 * itemLevel * (1 + tier)^2","materials":[{"id":"cinder_iron_ore","qty":5},{"id":"ash_wolf_fang","qty":10}]},{"id":"promote_uncommon_rare","name":"Promote: Uncommon → Rare","requires":{"enhancement":5,"fromTier":"Uncommon"},"goldCostFormula":"400 * itemLevel * (1 + tier)^2","materials":[{"id":"cinder_iron_ore","qty":10},{"id":"ghoul_marrow","qty":6},{"id":"riftglass_shard","qty":3}]},{"id":"craft_emberwatch_guard_plate","name":"Craft: Emberwatch Guard Plate","unlockedByQuestId":"ore_for_the_anvil","goldCost":1200,"materials":[{"id":"cinder_iron_ore","qty":12},{"id":"ash_wolf_fang","qty":15}],"output":{"id":"emberwatch_guard_plate","name":"Emberwatch Guard Plate","type":"equipment","slot":"Armor","tier":"Uncommon","itemLevel":6,"baseBonus":{"strength":4,"agility":0,"intelligence":0,"vitality":16,"luck":0},"baseDefense":12}}]},{"npcId":"ilsa_moonvane","station":"jeweler_bench","services":[{"id":"promote_rare_epic","name":"Promote: Rare → Epic","requires":{"enhancement":5,"fromTier":"Rare"},"goldCostFormula":"400 * itemLevel * (1 + tier)^2","materials":[{"id":"riftglass_shard","qty":8},{"id":"cinder_warden_core","qty":1}]},{"id":"promote_epic_legendary","name":"Promote: Epic → Legendary","requires":{"enhancement":5,"fromTier":"Epic"},"goldCostFormula":"400 * itemLevel * (1 + tier)^2","materials":[{"id":"riftglass_shard","qty":15},{"id":"rift_warden_heart","qty":1}]},{"id":"craft_signet_of_embers","name":"Craft: Signet of Embers","goldCost":3000,"materials":[{"id":"riftglass_shard","qty":4},{"id":"cinder_iron_ore","qty":6}],"output":{"id":"signet_of_embers","name":"Signet of Embers","type":"equipment","slot":"Ring","tier":"Rare","itemLevel":8,"baseBonus":{"strength":5,"agility":5,"intelligence":5,"vitality":0,"luck":10},"baseDefense":0}}]}],"quests":[{"id":"fangs_at_the_palisade","name":"Fangs at the Palisade","giverNpcId":"captain_hedda_varr","type":"hunt","minLevel":2,"prerequisiteQuestIds":[],"description":"Pelenų vilkai naktimis puola rytinį palisadą. Kapitonė Varr nori, kad jų gauja būtų išretinta prieš atvykstant karavanui.","objectives":[{"kind":"kill","monsterId":"ash_wolf","count":12,"zoneId":1}],"rewards":{"exp":600,"gold":150,"reputation":[{"factionId":"emberwatch_garrison","amount":150}],"items":[{"id":"minor_healing_draught","qty":3}]}},{"id":"ore_for_the_anvil","name":"Ore for the Anvil","giverNpcId":"torvald_ashmane","type":"gather","minLevel":4,"prerequisiteQuestIds":["fangs_at_the_palisade"],"description":"Garnizonui reikia naujų šarvų, bet Torvaldo sandėlis tuščias. Atnešk Cinder Iron Ore iš gyslų Ashen Outskirts dykynėse ir vilkų iltis grūdinimui.","objectives":[{"kind":"collect","itemId":"cinder_iron_ore","count":6},{"kind":"collect","itemId":"ash_wolf_fang","count":10}],"rewards":{"exp":1500,"gold":400,"reputation":[{"factionId":"emberwatch_garrison","amount":200}],"items":[{"id":"tempered_girdle","name":"Tempered Girdle","type":"equipment","slot":"Belt","tier":"Uncommon","itemLevel":4,"baseBonus":{"strength":4,"agility":0,"intelligence":0,"vitality":6,"luck":0},"baseDefense":0,"qty":1}],"unlocks":["craft_emberwatch_guard_plate"]}},{"id":"a_shard_too_bright","name":"A Shard Too Bright","giverNpcId":"sela_quickmarrow","type":"delivery","minLevel":5,"prerequisiteQuestIds":[],"description":"Sela užsakė užantspauduotą Riftglass pavyzdį iš Vex lūšnynuose, bet pati bijo ten eiti. Paimk siuntinį The Cinders ir neatidaręs pristatyk Ilsai į Anvil Row. Kelyje gali užpulti Cinder Cutthroats.","objectives":[{"kind":"talk","npcId":"vex_ninefingers","receivesItemId":"sealed_riftglass_sample"},{"kind":"kill","monsterId":"cinder_cutthroat","count":3,"optional":true},{"kind":"deliver","itemId":"sealed_riftglass_sample","toNpcId":"ilsa_moonvane"}],"questItems":[{"id":"sealed_riftglass_sample","name":"Sealed Riftglass Sample","type":"quest_item"}],"timeLimitSeconds":900,"failConditions":["quest_item_opened","time_expired"],"rewards":{"exp":4000,"gold":900,"reputation":[{"factionId":"emberwatch_garrison","amount":300}],"items":[{"id":"riftforged_band","name":"Riftforged Band","type":"equipment","slot":"Ring","tier":"Rare","itemLevel":7,"baseBonus":{"strength":4,"agility":4,"intelligence":4,"vitality":0,"luck":9},"baseDefense":0,"qty":1}],"bonusIfOptionalDone":{"gold":250}}}]}
+</script>
 
 <script>
 // ===== Data (mirrors src/IdleMMO.Core) =====
 const SLOTS = ['Weapon', 'Armor', 'Helmet', 'Boots', 'Belt', 'Ring'];
 const TIERS = ['Common', 'Uncommon', 'Rare', 'Epic', 'Legendary'];
+const TIER_IX = Object.fromEntries(TIERS.map((t, i) => [t, i]));
 const TIER_MULT = [1, 1.5, 2.2, 3.2, 4.5];
-const MAX_ENH = 10, PROMOTE_AT = 5, INV_CAP = 40, LOG_CAP = 30;
+const MAX_ENH = 10, PROMOTE_AT = 5, INV_CAP = 40, LOG_CAP = 40;
 const A = (s, a, i, v, l) => ({ s, a, i, v, l });
 const addA = (x, y) => { x.s += y.s; x.a += y.a; x.i += y.i; x.v += y.v; x.l += y.l; };
 const scaleA = (x, f) => A(Math.round(x.s * f), Math.round(x.a * f), Math.round(x.i * f), Math.round(x.v * f), Math.round(x.l * f));
@@ -167,7 +199,7 @@ const effB = it => scaleA(it.base, mult(it));
 const effD = it => Math.round(it.def * mult(it));
 const power = it => totA(effB(it)) * 2 + effD(it);
 const enhCost = it => Math.trunc(40 * it.ilvl * (1 + it.tier) * Math.pow(1.45, it.enh));
-const proCost = it => 400 * it.ilvl * (1 + it.tier) ** 2;
+const proCostBase = it => 400 * it.ilvl * (1 + it.tier) ** 2;
 const salv = it => 5 * it.ilvl * (1 + it.tier) * (1 + it.enh);
 const canEnh = it => it.enh < MAX_ENH;
 const canPro = it => it.tier < 4 && it.enh >= PROMOTE_AT;
@@ -191,14 +223,60 @@ const BASE_NAMES = {
 const PREFIX = ['Worn', 'Tempered', 'Riftforged', 'Stormbound', 'Sunfire'];
 const rand = n => Math.floor(Math.random() * n);
 
+// ===== Region (data/regions/emberwatch.json) =====
+const R = JSON.parse(document.getElementById('region-data').textContent);
+const byId = arr => Object.fromEntries((arr || []).map(x => [x.id, x]));
+const MON = byId(R.monsters), MAT = byId(R.materials), NPC = byId(R.npcs), DIST = byId(R.districts), QST = byId(R.quests);
+const FACTION = (R.factions || [])[0];
+const SHOPS = R.shops || [];
+const CONS = {};   // consumables & lootboxes, by id
+for (const s of SHOPS) for (const it of s.items) if (it.type === 'consumable' || it.type === 'lootbox') CONS[it.id] = it;
+const DROPS = {};  // monsterId -> [{id, chance}]
+for (const m of R.materials || []) for (const src of m.sources) if (src.monsterId) (DROPS[src.monsterId] ||= []).push({ id: m.id, chance: src.dropChance });
+const NODES = {};  // nodeId -> {mat, seconds}
+for (const m of R.materials || []) for (const src of m.sources) if (src.nodeId) NODES[src.nodeId] = { mat: m.id, seconds: src.gatherSeconds };
+const NODE_LABEL = { cinder_vein: 'Mine ore', ash_bloom_patch: 'Pick bloom' };
+// Zones beyond the region keep feeding the crafting economy.
+const GENERIC_DROPS = [{ id: 'riftglass_shard', chance: .12 }, { id: 'cinder_iron_ore', chance: .2 }];
+const CRAFT = {};  // service id -> {svc, npc}
+for (const c of R.crafters || []) for (const s of c.services) CRAFT[s.id] = { svc: s, npc: NPC[c.npcId] };
+const PROMO = {};  // from-tier index -> crafter service
+for (const k in CRAFT) { const r = CRAFT[k].svc.requires; if (r && r.fromTier) PROMO[TIER_IX[r.fromTier]] = CRAFT[k]; }
+const matName = id => (MAT[id] || CONS[id] || { name: id }).name;
+const toItem = d => ({
+  id: Math.random().toString(36).slice(2), name: d.name, slot: d.slot, tier: TIER_IX[d.tier], ilvl: d.itemLevel, enh: 0,
+  base: A(d.baseBonus.strength, d.baseBonus.agility, d.baseBonus.intelligence, d.baseBonus.vitality, d.baseBonus.luck), def: d.baseDefense || 0,
+});
+const rankOf = rep => FACTION ? FACTION.ranks.filter(r => rep >= r.minRep).pop() : { rank: '—', shopDiscount: 0 };
+const nextRank = rep => FACTION ? FACTION.ranks.find(r => r.minRep > rep) : null;
+const rankIx = name => FACTION ? FACTION.ranks.findIndex(r => r.rank === name) : 0;
+
+// Crafting material requirements (formulas from the forge service in the JSON).
+function enhMats(it) {
+  const m = [{ id: 'cinder_iron_ore', n: 1 + Math.floor(it.enh / 2) }];
+  if (it.enh >= 5) m.push({ id: 'riftglass_shard', n: 1 });
+  return m;
+}
+const proMats = it => (PROMO[it.tier] ? PROMO[it.tier].svc.materials.map(x => ({ id: x.id, n: x.qty })) : []);
+const hasMats = (p, ms) => ms.every(m => (p.mats[m.id] || 0) >= m.n);
+const takeMats = (p, ms) => ms.forEach(m => { p.mats[m.id] -= m.n; });
+const addMat = (p, id, n = 1) => { p.mats[id] = (p.mats[id] || 0) + n; };
+const proCost = p => it => Math.round(proCostBase(it) * (p.catalyst ? .75 : 1));
+
 // ===== Player =====
 function attrs(p) {
   const n = p.level - 1, b = CLS.base, g = CLS.grow;
   const a = A(b.s + g.s * n, b.a + g.a * n, b.i + g.i * n, b.v + g.v * n, b.l + g.l * n);
   for (const it of Object.values(p.eq)) addA(a, effB(it));
+  for (const bf of p.buffs) if (bf.kind === 'luck_flat') a.l += bf.value;
   return a;
 }
-const stats = p => derived(attrs(p), Object.values(p.eq).reduce((t, it) => t + effD(it), 0));
+function stats(p) {
+  const d = derived(attrs(p), Object.values(p.eq).reduce((t, it) => t + effD(it), 0));
+  const defPct = p.buffs.filter(b => b.kind === 'defense_pct').reduce((t, b) => t + b.value, 0);
+  d.def = Math.round(d.def * (1 + defPct));
+  return d;
+}
 function restore(p) { const st = stats(p); p.hp = st.maxHp; p.mp = st.maxMp; p.shield = 0; p.cd = {}; p.meter = 0; }
 function gainExp(p, n) {
   p.exp += n; let g = 0;
@@ -217,6 +295,9 @@ function ptick(p) {
   p.rc = (p.rc || 0) + st.hpReg; const w = Math.trunc(p.rc); p.rc -= w; heal(p, w);
   p.mp = Math.min(st.maxMp, p.mp + Math.ceil(st.mpReg));
   for (const k in p.cd) if (p.cd[k] > 0) p.cd[k]--;
+  for (const k in p.ccd) if (p.ccd[k] > 0) p.ccd[k]--;
+  for (const b of p.buffs) b.left--;
+  if (p.buffs.some(b => b.left <= 0)) { p.buffs = p.buffs.filter(b => b.left > 0); const mx = stats(p).maxHp; p.hp = Math.min(p.hp, mx); }
 }
 const ready = (p, s) => s.lvl <= p.level && p.mp >= s.mp && (p.cd[s.id] || 0) <= 0;
 const maxBy = (arr, f) => arr.reduce((m, x) => (m === null || f(x) > f(m) ? x : m), null);
@@ -240,12 +321,42 @@ function receive(p, it) {
   p.inv.push(it); return 'stored';
 }
 function enhance(p, slot) {
-  const it = p.eq[slot]; if (!it || !canEnh(it) || p.gold < enhCost(it)) return false;
-  p.gold -= enhCost(it); it.enh++; return true;
+  const it = p.eq[slot]; if (!it || !canEnh(it) || p.gold < enhCost(it) || !hasMats(p, enhMats(it))) return false;
+  p.gold -= enhCost(it); takeMats(p, enhMats(it)); it.enh++; return true;
 }
 function promote(p, slot) {
-  const it = p.eq[slot]; if (!it || !canPro(it) || p.gold < proCost(it)) return false;
-  p.gold -= proCost(it); it.tier++; it.enh = 0; return true;
+  const it = p.eq[slot], cost = it && proCost(p)(it);
+  if (!it || !canPro(it) || p.gold < cost || !hasMats(p, proMats(it))) return false;
+  p.gold -= cost; takeMats(p, proMats(it)); it.tier++; it.enh = 0;
+  if (p.catalyst) { p.catalyst = false; emit('Rift Catalyst consumed: promote was 25% cheaper.'); }
+  emit(`${PROMO[it.tier - 1] ? PROMO[it.tier - 1].npc.name : 'Smith'} promoted ${it.name} to ${TIERS[it.tier]}.`, 'loot t' + it.tier);
+  return true;
+}
+
+// ===== Consumables =====
+function useCons(p, id, silent) {
+  const d = CONS[id]; if (!d || !(p.cons[id] > 0)) return false;
+  const e = d.effect, st = stats(p);
+  if ((p.ccd[id] || 0) > 0) return false;
+  if (e.kind === 'heal_pct') heal(p, Math.round(st.maxHp * e.value));
+  else if (e.kind === 'mana_flat') p.mp = Math.min(st.maxMp, p.mp + e.value);
+  else if (e.kind === 'defense_pct' || e.kind === 'luck_flat') { p.buffs = p.buffs.filter(b => b.id !== id); p.buffs.push({ id, kind: e.kind, value: e.value, left: e.durationSeconds }); }
+  else if (e.kind === 'promote_gold_cost_pct') { if (p.catalyst) return false; p.catalyst = true; }
+  else if (e.kind === 'roll_item') {
+    const z = ZONES[e.zoneId - 1], it = genItem(z, false);
+    it.tier = Math.max(it.tier, TIER_IX[e.minTier] || 0);
+    emit(`Rift Cache: ${TIERS[it.tier]} ${it.name} — ${receive(p, it)}`, 'loot t' + it.tier);
+  }
+  if (d.cooldownSeconds) p.ccd[id] = d.cooldownSeconds;
+  p.cons[id]--;
+  if (!silent && e.kind !== 'roll_item') emit(`Used ${d.name}.`);
+  return true;
+}
+function autoPotions(p) {
+  if (!G.autoPot) return;
+  const st = stats(p);
+  if (p.hp / st.maxHp < .3) useCons(p, 'minor_healing_draught', true);
+  if (p.mp / st.maxMp < .2) useCons(p, 'mana_tonic', true);
 }
 
 // ===== Loot =====
@@ -269,21 +380,36 @@ function genItem(z, boss) {
 // ===== Session =====
 let G;
 function newGame() {
-  const p = { level: 1, exp: 0, gold: 0, hp: 0, mp: 0, shield: 0, hz: 1, inv: [], eq: {}, cd: {}, meter: 0, rc: 0 };
+  const p = {
+    level: 1, exp: 0, gold: 0, hp: 0, mp: 0, shield: 0, hz: 1, inv: [], eq: {}, cd: {}, meter: 0, rc: 0,
+    mats: {}, cons: {}, ccd: {}, buffs: [], q: {}, qitems: {}, rep: 0, unlocks: [], daily: { day: '', bought: {} }, catalyst: false, killsBy: {},
+  };
   restore(p);
-  return { p, zone: 1, kills: 0, autoBoss: true, autoUp: true, autoAdv: true, speed: 1, mode: 'farm', mon: null, ticks: 0, log: [], hit: null, loot: true };
+  return {
+    p, zone: 1, kills: 0, autoBoss: true, autoUp: true, autoAdv: true, autoPot: true, speed: 1, mode: 'farm', mon: null,
+    ticks: 0, log: [], hit: null, loot: true, activity: 'fight', gather: 0, queue: [], district: 'gatehold_square',
+  };
 }
 const Z = () => ZONES[G.zone - 1];
 const bossAvail = () => G.kills >= Z().kills && G.mode === 'farm';
 function emit(msg, cls = '') { G.log.push({ msg, cls }); if (G.log.length > LOG_CAP) G.log.shift(); }
+const regionFoes = id => (R.monsters || []).filter(m => m.zoneId === id && !m.boss && !m.elite);
+const regionBoss = id => (R.monsters || []).find(m => m.zoneId === id && m.boss);
+function fromDef(d, boss) {
+  const v = boss ? 1 : .9 + Math.random() * .2, hp = Math.trunc(d.hp * v);
+  return { mid: d.id, name: d.name, max: hp, hp, dmg: d.damage, def: d.defense, exp: d.exp, gold: d.gold, boss: !!boss, elite: !!d.elite };
+}
 function spawn() {
+  if (G.queue.length) return fromDef(MON[G.queue.shift()]);
+  const foes = regionFoes(G.zone);
+  if (foes.length) return fromDef(foes[rand(foes.length)]);
   const z = Z(), v = .9 + Math.random() * .2;
-  return { name: `${z.name} Prowler`, max: Math.trunc(z.hp * v), hp: Math.trunc(z.hp * v), dmg: z.dmg, def: z.def, exp: z.exp, gold: z.gold, boss: false };
+  return { mid: null, name: `${z.name} Prowler`, max: Math.trunc(z.hp * v), hp: Math.trunc(z.hp * v), dmg: z.dmg, def: z.def, exp: z.exp, gold: z.gold, boss: false };
 }
 function startBoss() {
   if (!bossAvail() || G.p.level < Z().req) return false;
-  const z = Z(); G.mode = 'boss'; restore(G.p);
-  G.mon = { name: `${z.name} Warden`, max: z.hp * BOSS.hp, hp: z.hp * BOSS.hp, dmg: z.dmg * BOSS.dmg, def: z.def * 2, exp: z.exp * BOSS.reward, gold: z.gold * BOSS.reward, boss: true };
+  const z = Z(), rb = regionBoss(z.id); G.mode = 'boss'; G.activity = 'fight'; restore(G.p);
+  G.mon = rb ? fromDef(rb, true) : { mid: null, name: `${z.name} Warden`, max: z.hp * BOSS.hp, hp: z.hp * BOSS.hp, dmg: z.dmg * BOSS.dmg, def: z.def * 2, exp: z.exp * BOSS.reward, gold: z.gold * BOSS.reward, boss: true };
   emit(`Boss challenge: ${G.mon.name}`, 'boss');
   return true;
 }
@@ -303,10 +429,32 @@ function act(m) {
   const d = mitigate(Math.trunc(raw), m.def); m.hp = Math.max(0, m.hp - d);
   G.hit = { text: `${s ? s.name : 'Attack'} ${d}${crit ? ' CRIT' : ''}`, crit };
 }
+function dropMats(m) {
+  if (!G.loot) return;
+  const list = m.mid ? (DROPS[m.mid] || []) : GENERIC_DROPS;
+  for (const d of list) if (Math.random() < d.chance) {
+    addMat(G.p, d.id);
+    const t = MAT[d.id] ? TIER_IX[MAT[d.id].tier] : 0;
+    if (t >= 2) emit(`Material: ${matName(d.id)}`, 'loot t' + t);
+  }
+}
+function questKill(mid) {
+  for (const [qid, st] of Object.entries(G.p.q)) {
+    if (st.state !== 'active') continue;
+    QST[qid].objectives.forEach((o, i) => {
+      if (o.kind === 'kill' && o.monsterId === mid && st.prog[i] < o.count) {
+        st.prog[i]++;
+        if (st.prog[i] === o.count) emit(`Quest “${QST[qid].name}”: ${MON[mid].name} ${o.count}/${o.count}`, 'quest');
+      }
+    });
+  }
+}
 function killed(m) {
   const p = G.p, z = Z();
   if (gainExp(p, m.exp)) emit(`Level up! Level ${p.level}`, 'up');
   p.gold += m.gold;
+  if (m.mid) { p.killsBy[m.mid] = (p.killsBy[m.mid] || 0) + 1; questKill(m.mid); }
+  dropMats(m);
   if (G.loot && (m.boss || Math.random() < z.loot)) {
     const it = genItem(z, m.boss), out = receive(p, it);
     emit(`${TIERS[it.tier]} ${it.name} (${it.slot}) — ${out}`, 'loot t' + it.tier);
@@ -315,32 +463,63 @@ function killed(m) {
     G.mode = 'farm'; emit(`Boss defeated: ${m.name}`, 'boss');
     const next = z.id + 1;
     if (next <= ZONES.length) {
+      if (p.hz < next && next === 2) emit('Riftside Gate is open: the Shattered Rift awaits.', 'quest');
       p.hz = Math.max(p.hz, next);
       if (G.autoAdv && p.level >= ZONES[next - 1].req) travel(next);
     }
     G.kills = 0;
-  } else G.kills++;
+  } else if (!m.elite) G.kills++;
   G.mon = null;
 }
 function defeated() {
-  emit(G.mon && G.mon.boss ? `Defeated by ${G.mon.name}. Re-farm and retry.` : 'You fell. Respawning.', 'bad');
+  emit(G.mon && G.mon.boss ? `Defeated by ${G.mon.name}. Re-farm and retry.` : 'You fell. Respawning in Gatehold Square.', 'bad');
   if (G.mode === 'boss') { G.mode = 'farm'; G.kills = Math.trunc(Z().kills / 2); }
+  G.queue = [];
   restore(G.p); G.mon = null;
 }
+function questTimers() {
+  for (const [qid, st] of Object.entries(G.p.q)) {
+    const lim = QST[qid].timeLimitSeconds;
+    if (st.state === 'active' && lim && G.ticks - st.t > lim) failQuest(qid, 'time ran out');
+  }
+}
 function tick() {
-  const p = G.p; G.ticks++; ptick(p);
+  const p = G.p; G.ticks++; ptick(p); questTimers();
+  if (G.activity !== 'fight' && !G.queue.length && G.mode !== 'boss') {
+    const node = NODES[G.activity];
+    if (++G.gather >= node.seconds) {
+      G.gather = 0; addMat(p, node.mat);
+      G.hit = { text: `+1 ${matName(node.mat)} (${p.mats[node.mat]})` };
+    } else G.hit = { text: `Gathering ${matName(node.mat)} ${G.gather}/${node.seconds}s` };
+    G.mon = null;
+    return;
+  }
   if (!G.mon || G.mon.hp <= 0) {
-    if (G.autoBoss && bossAvail() && p.level >= Z().req) startBoss(); else G.mon = spawn();
+    if (G.autoBoss && bossAvail() && p.level >= Z().req && !G.queue.length) startBoss(); else G.mon = spawn();
   }
   const m = G.mon;
+  autoPotions(p);
   p.meter += stats(p).as;
   while (p.meter >= 1 && m.hp > 0) { p.meter -= 1; act(m); }
   if (m.hp <= 0) { killed(m); return; }
   takeDmg(p, m.dmg);
+  autoPotions(p);
   if (p.hp <= 0) defeated();
 }
+// Materials that active "collect" quests still need are kept out of auto-upgrade's reach.
+function questReserve(p) {
+  const r = {};
+  for (const [qid, st] of Object.entries(p.q)) if (st.state === 'active')
+    for (const o of QST[qid].objectives) if (o.kind === 'collect') r[o.itemId] = (r[o.itemId] || 0) + o.count;
+  return r;
+}
 function autoUpgrade() {
-  const p = G.p; let n = 0;
+  const p = G.p, res = questReserve(p);
+  for (const k in res) { res[k] = Math.min(res[k], p.mats[k] || 0); p.mats[k] -= res[k]; }
+  try { return autoUpgradeInner(p); } finally { for (const k in res) p.mats[k] += res[k]; }
+}
+function autoUpgradeInner(p) {
+  let n = 0;
   for (const slot of SLOTS) {
     const best = maxBy(p.inv.filter(i => i.slot === slot), power);
     if (best && (!p.eq[slot] || power(best) > power(p.eq[slot]))) { equip(p, best); n++; }
@@ -350,7 +529,7 @@ function autoUpgrade() {
   }
   for (let prog = true; prog;) {
     prog = false;
-    const order = Object.values(p.eq).sort((a, b) => (canPro(a) ? proCost(a) : enhCost(a)) - (canPro(b) ? proCost(b) : enhCost(b)));
+    const order = Object.values(p.eq).sort((a, b) => (canPro(a) ? proCost(p)(a) : enhCost(a)) - (canPro(b) ? proCost(p)(b) : enhCost(b)));
     for (const it of order) {
       if (canPro(it) && promote(p, it.slot)) { n++; prog = true; break; }
       if ((it.enh < PROMOTE_AT || it.tier === 4) && enhance(p, it.slot)) { n++; prog = true; break; }
@@ -359,15 +538,106 @@ function autoUpgrade() {
   return n;
 }
 
+// ===== Town: shops, crafting, districts =====
+const today = () => new Date().toISOString().slice(0, 10);
+function dailyBought(p, id) { if (p.daily.day !== today()) p.daily = { day: today(), bought: {} }; return p.daily.bought[id] || 0; }
+const price = (p, it) => Math.round(it.price * (1 - rankOf(p.rep).shopDiscount));
+function canBuy(p, it) {
+  if (p.gold < price(p, it)) return false;
+  if (it.requires && rankIx(rankOf(p.rep).rank) < rankIx(it.requires.rank)) return false;
+  if (it.dailyLimit && dailyBought(p, it.id) >= it.dailyLimit) return false;
+  return true;
+}
+function buy(p, shopId, idx) {
+  const it = SHOPS.find(s => s.id === shopId).items[idx];
+  if (!canBuy(p, it)) return;
+  p.gold -= price(p, it);
+  if (it.dailyLimit) p.daily.bought[it.id] = dailyBought(p, it.id) + 1;
+  if (it.type === 'equipment') emit(`Bought ${it.name} — ${receive(p, toItem(it))}`, 'loot t' + TIER_IX[it.tier]);
+  else if (it.type === 'material') { addMat(p, it.id); emit(`Bought ${matName(it.id)}.`); }
+  else { p.cons[it.id] = (p.cons[it.id] || 0) + 1; emit(`Bought ${it.name}.`); }
+}
+function craft(p, svcId) {
+  const c = CRAFT[svcId], s = c.svc, ms = s.materials.map(x => ({ id: x.id, n: x.qty }));
+  if (s.unlockedByQuestId && !p.unlocks.includes(svcId)) return;
+  if (p.gold < s.goldCost || !hasMats(p, ms)) return;
+  p.gold -= s.goldCost; takeMats(p, ms);
+  const it = toItem(s.output);
+  emit(`${c.npc.name} crafted ${it.name} — ${receive(p, it)}`, 'loot t' + it.tier);
+}
+function visit(id) {
+  G.district = id;
+  const d = DIST[id];
+  for (const ev of d.events || []) if (Math.random() < ev.chancePerVisit) {
+    for (let i = 0; i < ev.spawn.count; i++) G.queue.push(ev.spawn.monsterId);
+    G.activity = 'fight'; G.mon = null;
+    emit(`Ambush in ${d.name}! ${ev.spawn.count}× ${MON[ev.spawn.monsterId].name}`, 'bad');
+  }
+}
+
+// ===== Quests =====
+const qState = qid => G.p.q[qid];
+function qAvailable(q) {
+  const s = qState(q.id);
+  return (!s || s.state === 'failed') && G.p.level >= q.minLevel && q.prerequisiteQuestIds.every(x => qState(x) && qState(x).state === 'done');
+}
+function objDone(q, st, i) {
+  const o = q.objectives[i];
+  if (o.kind === 'kill') return st.prog[i] >= o.count;
+  if (o.kind === 'collect') return (G.p.mats[o.itemId] || 0) >= o.count;
+  return st.prog[i] >= 1;
+}
+const qComplete = (q, st) => q.objectives.every((o, i) => o.optional || objDone(q, st, i));
+function acceptQuest(qid) {
+  G.p.q[qid] = { state: 'active', prog: QST[qid].objectives.map(() => 0), t: G.ticks };
+  emit(`Quest accepted: ${QST[qid].name}`, 'quest');
+}
+function failQuest(qid, why) {
+  const q = QST[qid]; G.p.q[qid].state = 'failed';
+  for (const qi of q.questItems || []) delete G.p.qitems[qi.id];
+  emit(`Quest failed: ${q.name} (${why}). Ask ${NPC[q.giverNpcId].name} to try again.`, 'bad');
+}
+function questAction(qid, i) {
+  const q = QST[qid], st = qState(qid), o = q.objectives[i];
+  if (o.kind === 'talk') {
+    visit(NPC[o.npcId].districtId);
+    st.prog[i] = 1;
+    if (o.receivesItemId) G.p.qitems[o.receivesItemId] = 1;
+    emit(`${NPC[o.npcId].name} hands you the ${(q.questItems || []).find(x => x.id === o.receivesItemId)?.name || 'package'}.`, 'quest');
+  } else if (o.kind === 'deliver') {
+    const prev = q.objectives.slice(0, i).every((x, j) => x.optional || objDone(q, st, j));
+    if (!prev || !G.p.qitems[o.itemId]) return;
+    visit(NPC[o.toNpcId].districtId);
+    delete G.p.qitems[o.itemId]; st.prog[i] = 1;
+    emit(`Delivered to ${NPC[o.toNpcId].name}.`, 'quest');
+  }
+}
+function turnIn(qid) {
+  const q = QST[qid], st = qState(qid), p = G.p, r = q.rewards;
+  if (!st || st.state !== 'active' || !qComplete(q, st)) return;
+  q.objectives.forEach(o => { if (o.kind === 'collect') p.mats[o.itemId] -= o.count; });
+  st.state = 'done';
+  gainExp(p, r.exp); p.gold += r.gold;
+  for (const rp of r.reputation || []) p.rep += rp.amount;
+  for (const it of r.items || []) {
+    if (it.type === 'equipment') emit(`Reward: ${it.name} — ${receive(p, toItem(it))}`, 'loot t' + TIER_IX[it.tier]);
+    else p.cons[it.id] = (p.cons[it.id] || 0) + it.qty;
+  }
+  for (const u of r.unlocks || []) if (!p.unlocks.includes(u)) p.unlocks.push(u);
+  const opt = q.objectives.some((o, i) => o.optional && objDone(q, st, i));
+  if (opt && r.bonusIfOptionalDone) p.gold += r.bonusIfOptionalDone.gold;
+  emit(`Quest complete: ${q.name} — +${r.exp} exp, +${r.gold + (opt && r.bonusIfOptionalDone ? r.bonusIfOptionalDone.gold : 0)} gold`, 'quest');
+}
+
 // ===== Offline progress (sample 300 ticks, extrapolate at 60%, cap 12h) =====
 const totalExp = p => { let s = p.exp; for (let l = 1; l < p.level; l++) s += expToNext(l); return s; };
 function offline(seconds) {
   const sec = Math.min(Math.floor(seconds), 12 * 3600);
   if (sec <= 0) return null;
   const p = G.p, e0 = totalExp(p), g0 = p.gold, l0 = p.level, sample = Math.min(sec, 300);
-  const ab = G.autoBoss; G.autoBoss = false; G.loot = false;
+  const ab = G.autoBoss, act0 = G.activity; G.autoBoss = false; G.loot = false; G.activity = 'fight'; G.queue = [];
   for (let i = 0; i < sample; i++) tick();
-  G.autoBoss = ab; G.loot = true;
+  G.autoBoss = ab; G.loot = true; G.activity = act0;
   const rest = sec - sample;
   if (rest > 0) {
     const k = rest / sample * .6;
@@ -379,110 +649,288 @@ function offline(seconds) {
 
 // ===== Save =====
 const KEY = 'riftbound.save.v1';
-const snapshot = () => ({ v: 1, t: Date.now(), p: { ...G.p, cd: {} }, zone: G.zone, kills: G.kills, autoBoss: G.autoBoss, autoUp: G.autoUp, autoAdv: G.autoAdv, speed: G.speed });
+const snapshot = () => ({
+  v: 2, t: Date.now(), p: { ...G.p, cd: {} }, zone: G.zone, kills: G.kills, autoBoss: G.autoBoss, autoUp: G.autoUp,
+  autoAdv: G.autoAdv, autoPot: G.autoPot, speed: G.speed, activity: G.activity, district: G.district, ticks: G.ticks,
+});
 function save() { try { localStorage.setItem(KEY, JSON.stringify(snapshot())); } catch (e) { /* storage unavailable */ } }
 function fromSnap(d) {
   const g = newGame();
-  Object.assign(g, { zone: d.zone, kills: d.kills, autoBoss: d.autoBoss, autoUp: d.autoUp, autoAdv: d.autoAdv, speed: d.speed || 1 });
+  for (const k of ['zone', 'kills', 'autoBoss', 'autoUp', 'autoAdv', 'autoPot', 'speed', 'activity', 'district', 'ticks']) if (d[k] !== undefined) g[k] = d[k];
   g.p = Object.assign(g.p, d.p); g.p.cd = {};
+  if (!NODES[g.activity]) g.activity = 'fight';
   return g;
 }
 
 // ===== UI =====
 const $ = id => document.getElementById(id);
 const fmt = n => n >= 1e6 ? (n / 1e6).toFixed(2) + 'M' : n >= 1e4 ? (n / 1e3).toFixed(1) + 'k' : String(Math.floor(n));
-let tab = 'gear', lastPanel = '';
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+let tab = 'gear', lastPanel = '', resetPending = false;
 const setBar = (id, v, max) => { $(id).style.width = Math.max(0, Math.min(100, v / max * 100)) + '%'; };
+const matsText = (p, ms) => ms.map(m => { const h = p.mats[m.id] || 0; return `<span class="${h < m.n ? 'miss' : ''}">${m.n}× ${matName(m.id)} (${h})</span>`; }).join(', ');
+const btn = (label, data, enabled = true, cls = 'sm') => `<button class="${cls}" ${data} ${enabled ? '' : 'disabled'}>${label}</button>`;
+const statBox = (pairs, cls) => `<div class="${cls}">${pairs.map(([k, v]) => `<div><small>${k}</small><span class="num">${v}</span></div>`).join('')}</div>`;
+
+function heroHtml(p) {
+  const a = attrs(p), st = stats(p), rk = rankOf(p.rep), nx = nextRank(p.rep);
+  let h = statBox([['STR', a.s], ['AGI', a.a], ['INT', a.i], ['VIT', a.v], ['LUK', a.l]], 'attrs')
+    + statBox([['DMG', st.pdmg], ['DEF', st.def], ['CRIT', Math.round(st.crit * 100) + '%'], ['SPD', st.as.toFixed(2)]], 'derived');
+  h += `<div class="row"><div><div class="name">${FACTION ? FACTION.name : 'Reputation'}: ${rk.rank}</div>
+    <div class="meta"><span class="num">${p.rep}</span> rep${nx ? ` · ${nx.rank} at ${nx.minRep}` : ''} · shop discount ${Math.round(rk.shopDiscount * 100)}%</div>
+    ${nx ? `<div class="cd q"><i style="width:${(p.rep - rk.minRep) / (nx.minRep - rk.minRep) * 100}%"></i></div>` : ''}</div></div>`;
+  if (p.buffs.length || p.catalyst) h += `<div class="section">Active effects</div>` + p.buffs.map(b => `<div class="row"><div><div class="name">${esc(CONS[b.id].name)}</div><div class="meta">${b.kind === 'defense_pct' ? `+${b.value * 100}% DEF` : `+${b.value} LUK`} · ${b.left}s left</div></div></div>`).join('')
+    + (p.catalyst ? `<div class="row"><div><div class="name">Rift Catalyst armed</div><div class="meta">Next promote costs 25% less gold</div></div></div>` : '');
+  h += `<div class="section">Skills</div>`;
+  h += CLS.skills.map(s => {
+    const locked = s.lvl > p.level, cd = p.cd[s.id] || 0;
+    const kind = s.kind === 'dmg' ? `${s.pow}× damage` : s.kind === 'heal' ? `heal ${s.pow * 100}% HP` : `shield ${s.pow * 100}% HP`;
+    return `<div class="row"><div><div class="name" ${locked ? 'style="color:var(--muted)"' : ''}>${s.name}</div>
+      <div class="meta">${kind} · ${s.cd}s cooldown · ${s.mp} MP${locked ? ` · unlocks at Lv ${s.lvl}` : ''}</div>
+      ${locked ? '' : `<div class="cd"><i style="width:${(1 - cd / s.cd) * 100}%"></i></div>`}</div>
+      <div class="meta">${locked ? 'Locked' : cd > 0 ? cd + 's' : 'Ready'}</div></div>`;
+  }).join('');
+  return h + `<div class="meta">The fighter heals below 30% HP, shields below 50%, otherwise uses the strongest ready skill. Auto potions drink a Healing Draught below 30% HP and a Mana Tonic below 20% MP.</div>`;
+}
+
+function gearHtml(p) {
+  let h = '';
+  for (const slot of SLOTS) {
+    const it = p.eq[slot];
+    if (!it) { h += `<div class="row"><div><div class="name">${slot}</div><div class="meta">Empty — drops from monsters or buy at the Armory</div></div></div>`; continue; }
+    const pro = canPro(it), cost = pro ? proCost(p)(it) : enhCost(it), ms = pro ? proMats(it) : enhMats(it);
+    const can = pro || canEnh(it), who = pro ? (PROMO[it.tier] ? PROMO[it.tier].npc.name : '') : 'Torvald Ashmane';
+    h += `<div class="row t${it.tier}"><div><div class="name">${esc(it.name)}${it.enh ? ' +' + it.enh : ''}</div>
+      <div class="meta">${slot} · ${TIERS[it.tier]} · iLvl ${it.ilvl} · power <span class="num">${power(it)}</span></div>
+      ${can ? `<div class="meta need">${pro ? 'Promote' : 'Enhance'} (${esc(who)}): ${matsText(p, ms)}</div>` : ''}</div>
+      <div class="acts">${can ? btn(`${pro ? 'Promote' : 'Enhance'}<br><span class="num">${fmt(cost)} g</span>`, `data-act="${pro ? 'pro' : 'enh'}" data-slot="${slot}"`, p.gold >= cost && hasMats(p, ms)) : '<span class="meta">Max</span>'}</div></div>`;
+  }
+  const cons = Object.entries(p.cons).filter(([, n]) => n > 0);
+  h += `<div class="section">Consumables</div>`;
+  h += cons.length ? cons.map(([id, n]) => {
+    const d = CONS[id], cd = p.ccd[id] || 0;
+    return `<div class="row"><div><div class="name">${esc(d.name)} ×${n}</div><div class="meta">${effectText(d)}</div></div>
+      <div class="acts">${btn(cd > 0 ? cd + 's' : 'Use', `data-act="use" data-id="${id}"`, cd <= 0 && !(d.effect.kind === 'promote_gold_cost_pct' && p.catalyst))}</div></div>`;
+  }).join('') : '<div class="meta">None. Sela sells potions in Gatehold Square.</div>';
+  const qi = Object.keys(p.qitems);
+  if (qi.length) {
+    h += `<div class="section">Quest items</div>`;
+    for (const id of qi) {
+      const q = Object.values(QST).find(x => (x.questItems || []).some(y => y.id === id));
+      const name = q.questItems.find(y => y.id === id).name;
+      h += `<div class="row t3"><div><div class="name">${esc(name)}</div><div class="meta">For “${esc(q.name)}”. Opening it fails the quest.</div></div>
+        <div class="acts">${btn('Open', `data-act="open" data-q="${q.id}"`)}</div></div>`;
+    }
+  }
+  h += `<div class="section">Materials</div><div class="mats">${(R.materials || []).map(m => `<div class="t${TIER_IX[m.tier]}"><span>${esc(m.name)}</span><span class="num">${p.mats[m.id] || 0}</span></div>`).join('')}</div>`;
+  h += `<div class="section">Bag <span class="num">${p.inv.length}/${INV_CAP}</span></div>`;
+  h += p.inv.slice().sort((a, b) => power(b) - power(a)).slice(0, 12).map(it => `<div class="row t${it.tier}"><div><div class="name">${esc(it.name)}${it.enh ? ' +' + it.enh : ''}</div>
+      <div class="meta">${it.slot} · ${TIERS[it.tier]} · power <span class="num">${power(it)}</span>${p.eq[it.slot] ? ` (worn ${power(p.eq[it.slot])})` : ''}</div></div>
+      <div class="acts">${btn('Equip', `data-act="equip" data-id="${it.id}"`)}${btn(`Sell ${fmt(salv(it))}`, `data-act="sell" data-id="${it.id}"`)}</div></div>`).join('');
+  if (p.inv.length > 12) h += `<div class="meta">${p.inv.length - 12} weaker items not shown.</div>`;
+  if (p.inv.length) h += `<div class="acts" style="display:flex;justify-content:flex-end">${btn(`Salvage all (${fmt(p.inv.reduce((t, i) => t + salv(i), 0))} g)`, 'data-act="salvage"')}</div>`;
+  return h;
+}
+
+function effectText(d) {
+  const e = d.effect;
+  return { heal_pct: `Restores ${e.value * 100}% HP`, mana_flat: `Restores ${e.value} MP`, defense_pct: `+${e.value * 100}% DEF for ${e.durationSeconds / 60} min`,
+    luck_flat: `+${e.value} LUK for ${e.durationSeconds / 60} min`, promote_gold_cost_pct: `Next promote costs ${-e.value * 100}% less gold`,
+    roll_item: `Random item from zone ${e.zoneId}, ${e.minTier} or better` }[e.kind] + (d.cooldownSeconds ? ` · ${d.cooldownSeconds}s cooldown` : '');
+}
+function itemLine(it) {
+  if (it.type === 'equipment') {
+    const b = it.baseBonus, parts = [['STR', b.strength], ['AGI', b.agility], ['INT', b.intelligence], ['VIT', b.vitality], ['LUK', b.luck], ['DEF', it.baseDefense]].filter(x => x[1]).map(x => `${x[0]} ${x[1]}`);
+    return `${it.slot} · ${it.tier} · iLvl ${it.itemLevel} · ${parts.join(', ')}`;
+  }
+  if (it.type === 'material') return `${MAT[it.id].tier} material`;
+  return effectText(it);
+}
+
+function townHtml(p) {
+  const d = DIST[G.district];
+  let h = `<div class="chips">${R.districts.map(x => `<button class="chip" data-act="district" data-id="${x.id}" aria-pressed="${x.id === G.district}">${esc(x.name)}</button>`).join('')}</div>`;
+  h += `<h2>${esc(d.name)}</h2><p class="lead">${esc(d.description)}${d.safeZone ? '' : ' <span class="miss">Unsafe district.</span>'}</p>`;
+  for (const nid of d.npcIds || []) {
+    const n = NPC[nid];
+    h += `<div class="npc"><b>${esc(n.name)}</b> <span class="meta">${esc(n.race)} · ${esc(n.profession || n.role.replace('_', ' '))}</span><p>${esc(n.trait)}</p></div>`;
+    for (const s of SHOPS.filter(s => s.ownerNpcId === nid)) {
+      h += `<div class="section">${esc(s.name)} — ${esc(s.specialization)}</div>`;
+      h += s.items.map((it, i) => {
+        const name = it.name || matName(it.id), t = it.tier ? TIER_IX[it.tier] : (it.type === 'material' ? TIER_IX[MAT[it.id].tier] : '');
+        const lock = it.requires && rankIx(rankOf(p.rep).rank) < rankIx(it.requires.rank) ? `Requires ${it.requires.rank}` : '';
+        const lim = it.dailyLimit ? ` · ${it.dailyLimit - dailyBought(p, it.id)}/${it.dailyLimit} left today` : '';
+        const owned = it.type === 'material' ? ` · have ${p.mats[it.id] || 0}` : CONS[it.id] ? ` · have ${p.cons[it.id] || 0}` : '';
+        return `<div class="row ${t !== '' ? 't' + t : ''}"><div><div class="name">${esc(name)}</div><div class="meta">${esc(itemLine(it))}${lim}${owned}</div>${lock ? `<div class="meta miss">${lock}</div>` : ''}</div>
+          <div class="acts">${btn(`Buy<br><span class="num">${fmt(price(p, it))} g</span>`, `data-act="buy" data-shop="${s.id}" data-i="${i}"`, canBuy(p, it))}</div></div>`;
+      }).join('');
+    }
+    const cr = (R.crafters || []).find(c => c.npcId === nid);
+    if (cr) {
+      h += `<div class="section">${esc(n.profession)} services</div>`;
+      for (const s of cr.services) {
+        if (s.output) {
+          const ms = s.materials.map(x => ({ id: x.id, n: x.qty })), locked = s.unlockedByQuestId && !p.unlocks.includes(s.id);
+          h += `<div class="row t${TIER_IX[s.output.tier]}"><div><div class="name">${esc(s.output.name)}</div><div class="meta">${esc(itemLine(s.output))}</div>
+            <div class="meta need">${matsText(p, ms)}</div>${locked ? `<div class="meta miss">Unlocked by quest “${esc(QST[s.unlockedByQuestId].name)}”</div>` : ''}</div>
+            <div class="acts">${btn(`Craft<br><span class="num">${fmt(s.goldCost)} g</span>`, `data-act="craft" data-id="${s.id}"`, !locked && p.gold >= s.goldCost && hasMats(p, ms))}</div></div>`;
+        } else {
+          const ms = s.id === 'enhance' ? 'Cinder Iron Ore ×(1 + enh/2); from +5 also 1 Riftglass Shard' : s.materials.map(x => `${x.qty}× ${matName(x.id)}`).join(', ');
+          h += `<div class="row"><div><div class="name">${esc(s.name)}</div><div class="meta">${esc(ms)} · use the Gear tab</div></div></div>`;
+        }
+      }
+    }
+  }
+  if (d.features && d.features.includes('reputation_vendor')) {
+    const rk = rankOf(p.rep);
+    h += `<div class="section">Quartermaster</div>` + FACTION.ranks.map(r => `<div class="row ${r.rank === rk.rank ? 't4' : ''}"><div><div class="name">${r.rank}</div><div class="meta">${r.minRep} rep · ${Math.round(r.shopDiscount * 100)}% shop discount</div></div></div>`).join('');
+  }
+  if (d.features && d.features.includes('boss_gate')) {
+    const rb = regionBoss(G.zone);
+    h += `<div class="row t3"><div><div class="name">Boss gate</div><div class="meta">${rb ? esc(rb.name) : esc(Z().name) + ' Warden'} · ${Math.min(G.kills, Z().kills)}/${Z().kills} kills</div></div></div>`;
+  }
+  if (d.leadsToZoneId) {
+    const open = p.hz >= d.leadsToZoneId;
+    h += `<div class="row ${open ? 't1' : ''}"><div><div class="name">${open ? 'Gate open' : 'Sealed'}</div><div class="meta">${open ? 'Travel from the Zones tab.' : `Defeat ${esc(MON[d.unlock.monsterId].name)} to open it.`}</div></div>
+      <div class="acts">${open && G.zone !== d.leadsToZoneId ? btn('Travel', `data-act="go" data-zone="${d.leadsToZoneId}"`, p.level >= ZONES[d.leadsToZoneId - 1].req) : ''}</div></div>`;
+  }
+  return h;
+}
+
+function questsHtml(p) {
+  const all = Object.values(QST);
+  const list = all.filter(q => qState(q.id) && qState(q.id).state === 'active')
+    .concat(all.filter(q => qAvailable(q)))
+    .concat(all.filter(q => !qState(q.id) && !qAvailable(q)))
+    .concat(all.filter(q => qState(q.id) && qState(q.id).state === 'done'));
+  return list.map(q => {
+    const st = qState(q.id), r = q.rewards, g = NPC[q.giverNpcId];
+    const rew = [`${fmt(r.exp)} exp`, `${fmt(r.gold)} g`, ...(r.reputation || []).map(x => `${x.amount} rep`), ...(r.items || []).map(i => `${i.qty > 1 ? i.qty + '× ' : ''}${i.name || matName(i.id)}`)].join(' · ');
+    let body = `<div class="meta">${q.type} · Lv ${q.minLevel}+ · from ${esc(g.name)} (${esc(DIST[g.districtId].name)})</div>`;
+    let actBtn = '';
+    if (st && st.state === 'active') {
+      body += `<div class="obj">${q.objectives.map((o, i) => {
+        const done = objDone(q, st, i);
+        let label, extra = '';
+        if (o.kind === 'kill') label = `Kill ${MON[o.monsterId].name} ${Math.min(st.prog[i], o.count)}/${o.count}`;
+        else if (o.kind === 'collect') label = `Bring ${matName(o.itemId)} ${Math.min(p.mats[o.itemId] || 0, o.count)}/${o.count}`;
+        else if (o.kind === 'talk') { label = `Meet ${NPC[o.npcId].name} in ${DIST[NPC[o.npcId].districtId].name}`; if (!done) extra = btn('Go', `data-act="qact" data-q="${q.id}" data-i="${i}"`); }
+        else { label = `Deliver to ${NPC[o.toNpcId].name} in ${DIST[NPC[o.toNpcId].districtId].name}`; if (!done) extra = btn('Deliver', `data-act="qact" data-q="${q.id}" data-i="${i}"`, !!p.qitems[o.itemId]); }
+        return `<div class="${done ? 'ok' : ''}">${done ? '✓' : '○'} ${esc(label)}${o.optional ? ' (optional)' : ''} ${extra}</div>`;
+      }).join('')}</div>`;
+      if (q.timeLimitSeconds) {
+        const left = q.timeLimitSeconds - (G.ticks - st.t);
+        body += `<div class="meta">Time left: <span class="num">${Math.floor(left / 60)}:${String(left % 60).padStart(2, '0')}</span> (game time)</div><div class="cd q"><i style="width:${left / q.timeLimitSeconds * 100}%"></i></div>`;
+      }
+      actBtn = btn('Turn in', `data-act="turnin" data-q="${q.id}"`, qComplete(q, st), 'sm go');
+    } else if (qAvailable(q)) {
+      body += `<p class="lead" style="margin-top:4px">${esc(q.description)}</p>`;
+      if (st && st.state === 'failed') body += `<div class="meta miss">Failed earlier — you can try again.</div>`;
+      actBtn = btn('Accept', `data-act="accept" data-q="${q.id}"`, true, 'sm go');
+    } else if (st && st.state === 'done') {
+      actBtn = '<span class="meta">Done</span>';
+    } else {
+      const need = [p.level < q.minLevel ? `Lv ${q.minLevel}` : '', ...q.prerequisiteQuestIds.filter(x => !(qState(x) && qState(x).state === 'done')).map(x => `“${QST[x].name}”`)].filter(Boolean).join(', ');
+      body += `<div class="meta miss">Requires ${esc(need)}</div>`;
+      actBtn = '<span class="meta">Locked</span>';
+    }
+    body += `<div class="meta">Reward: ${esc(rew)}${r.bonusIfOptionalDone ? ` · +${r.bonusIfOptionalDone.gold} g bonus` : ''}</div>`;
+    return `<div class="row ${st && st.state === 'done' ? '' : 't4'}"><div><div class="name">${esc(q.name)}</div>${body}</div><div class="acts">${actBtn}</div></div>`;
+  }).join('');
+}
+
+function zonesHtml(p) {
+  return ZONES.map(z => {
+    const open = z.id <= p.hz, lvlOk = p.level >= z.req, here = z.id === G.zone, rb = regionBoss(z.id), foes = regionFoes(z.id);
+    return `<div class="row"><div><div class="name">${z.id}. ${z.name}</div>
+      <div class="meta">Lv ${z.req}+ · ${foes.length ? esc(foes.map(f => f.name).join(', ')) : `foe HP ${fmt(z.hp)}`}</div>
+      <div class="meta">Boss: ${rb ? esc(rb.name) : esc(z.name) + ' Warden'}</div></div>
+      <div class="acts">${here ? '<span class="meta">Here</span>' : btn(!open ? 'Locked' : !lvlOk ? 'Lv ' + z.req : 'Travel', `data-act="go" data-zone="${z.id}"`, open && lvlOk)}</div></div>`;
+  }).join('') + `<div class="row"><div><div class="name">New game</div><div class="meta">Erases this hero.</div></div><div class="acts" id="resetBox">${resetPending ? btn('Erase', 'data-act="reset-yes"', true, 'sm danger') + btn('Keep', 'data-act="reset-no"') : btn('Reset', 'data-act="reset"')}</div></div>`;
+}
 
 function panelHtml() {
   const p = G.p;
-  if (tab === 'gear') {
-    const a = attrs(p), st = stats(p);
-    let h = `<div class="attrs">${[['STR', a.s], ['AGI', a.a], ['INT', a.i], ['VIT', a.v], ['LUK', a.l]].map(([k, v]) => `<div><small>${k}</small><span class="num">${v}</span></div>`).join('')}</div>
-      <div class="derived">${[['DMG', st.pdmg], ['DEF', st.def], ['CRIT', Math.round(st.crit * 100) + '%'], ['SPD', st.as.toFixed(2)]].map(([k, v]) => `<div><small>${k}</small><span class="num">${v}</span></div>`).join('')}</div>`;
-    for (const slot of SLOTS) {
-      const it = p.eq[slot];
-      if (!it) { h += `<div class="row"><div><div class="name">${slot}</div><div class="meta">Empty — drops from monsters</div></div></div>`; continue; }
-      const pro = canPro(it), cost = pro ? proCost(it) : enhCost(it), can = pro || canEnh(it);
-      h += `<div class="row t${it.tier}"><div style="min-width:0"><div class="name">${it.name}${it.enh ? ' +' + it.enh : ''}</div>
-        <div class="meta">${slot} · ${TIERS[it.tier]} · iLvl ${it.ilvl} · power <span class="num">${power(it)}</span></div></div>
-        <div class="acts">${can ? `<button class="sm" data-act="${pro ? 'pro' : 'enh'}" data-slot="${slot}" ${p.gold < cost ? 'disabled' : ''}>${pro ? 'Promote' : 'Enhance'}<br><span class="num">${fmt(cost)} g</span></button>` : '<span class="meta">Max</span>'}</div></div>`;
-    }
-    h += `<div class="row"><div><div class="name">Bag</div><div class="meta"><span class="num">${p.inv.length}/${INV_CAP}</span> items · worth <span class="num">${fmt(p.inv.reduce((t, i) => t + salv(i), 0))}</span> g</div></div>
-      <div class="acts"><button class="sm" data-act="salvage" ${p.inv.length ? '' : 'disabled'}>Salvage all</button></div></div>`;
-    return h;
-  }
-  if (tab === 'skills') {
-    return CLS.skills.map(s => {
-      const locked = s.lvl > p.level, cd = p.cd[s.id] || 0;
-      const kind = s.kind === 'dmg' ? `${s.pow}× damage` : s.kind === 'heal' ? `heal ${s.pow * 100}% HP` : `shield ${s.pow * 100}% HP`;
-      return `<div class="row"><div><div class="name" ${locked ? 'style="color:var(--muted)"' : ''}>${s.name}</div>
-        <div class="meta">${kind} · ${s.cd}s cooldown · ${s.mp} MP${locked ? ` · unlocks at Lv ${s.lvl}` : ''}</div>
-        ${locked ? '' : `<div class="cd"><i style="width:${(1 - cd / s.cd) * 100}%"></i></div>`}</div>
-        <div class="meta">${locked ? 'Locked' : cd > 0 ? cd + 's' : 'Ready'}</div></div>`;
-    }).join('') + `<div class="meta">The fighter heals below 30% HP, shields below 50%, otherwise uses the strongest ready skill.</div>`;
-  }
-  if (tab === 'zones') {
-    return ZONES.map(z => {
-      const open = z.id <= p.hz, lvlOk = p.level >= z.req, here = z.id === G.zone;
-      return `<div class="row"><div><div class="name">${z.id}. ${z.name}</div>
-        <div class="meta">Lv ${z.req}+ · foe HP <span class="num">${fmt(z.hp)}</span> · <span class="num">${fmt(z.exp)}</span> exp/kill</div></div>
-        <div class="acts">${here ? '<span class="meta">Here</span>' : `<button class="sm" data-act="go" data-zone="${z.id}" ${open && lvlOk ? '' : 'disabled'}>${!open ? 'Locked' : !lvlOk ? 'Lv ' + z.req : 'Travel'}</button>`}</div></div>`;
-    }).join('') + `<div class="row"><div><div class="name">New game</div><div class="meta">Erases this hero.</div></div><div class="acts" id="resetBox"><button class="sm" data-act="reset">Reset</button></div></div>`;
-  }
-  return `<div class="log">${G.log.slice().reverse().map(l => `<div class="${l.cls}">${l.msg}</div>`).join('') || '<div>Fights will appear here.</div>'}</div>`;
+  if (tab === 'hero') return heroHtml(p);
+  if (tab === 'gear') return gearHtml(p);
+  if (tab === 'town') return townHtml(p);
+  if (tab === 'quests') return questsHtml(p);
+  if (tab === 'zones') return zonesHtml(p);
+  return `<div class="log">${G.log.slice().reverse().map(l => `<div class="${l.cls}">${esc(l.msg)}</div>`).join('') || '<div>Fights will appear here.</div>'}</div>`;
 }
 
 function render() {
   const p = G.p, st = stats(p), z = Z(), m = G.mon;
-  $('hName').textContent = `Hero · ${CLS.name}`;
   $('hZone').textContent = `Zone ${z.id}: ${z.name}`;
   $('hGold').textContent = fmt(p.gold);
+  $('hRep').textContent = `${rankOf(p.rep).rank} · ${p.rep} rep`;
   setBar('bHp', p.hp, st.maxHp); $('tHp').textContent = `${p.hp}/${st.maxHp}${p.shield ? ' +' + p.shield : ''}`;
   setBar('bMp', p.mp, st.maxMp); $('tMp').textContent = `${p.mp}/${st.maxMp}`;
   setBar('bXp', p.exp, expToNext(p.level)); $('tLv').textContent = `Lv ${p.level}`; $('tXp').textContent = `${fmt(p.exp)}/${fmt(expToNext(p.level))}`;
-  $('mName').textContent = m ? m.name : 'Searching…';
-  $('mBadge').innerHTML = m && m.boss ? '<span class="badge">Boss</span>' : '';
+  const gathering = G.activity !== 'fight' && !G.queue.length && G.mode !== 'boss';
+  $('mName').textContent = gathering ? (G.activity === 'cinder_vein' ? 'Cinder Vein' : 'Ash Bloom patch') : m ? m.name : 'Searching…';
+  $('mBadge').innerHTML = m && m.boss ? '<span class="badge">Boss</span>' : m && m.elite ? '<span class="badge elite">Elite</span>' : '';
   $('arena').classList.toggle('boss', !!(m && m.boss));
-  if (m) { setBar('bMon', m.hp, m.max); $('tMon').textContent = `${fmt(m.hp)}/${fmt(m.max)}`; }
+  if (gathering) { const n = NODES[G.activity]; setBar('bMon', G.gather, n.seconds); $('tMon').textContent = `${G.gather}/${n.seconds}s`; }
+  else if (m) { setBar('bMon', m.hp, m.max); $('tMon').textContent = `${fmt(m.hp)}/${fmt(m.max)}`; }
   const hit = $('hit');
   if (G.hit) { hit.textContent = G.hit.text; hit.className = 'hit' + (G.hit.crit ? ' crit' : ''); }
   const k = Math.min(G.kills, z.kills);
   $('gate').innerHTML = Array.from({ length: z.kills }, (_, i) => `<i class="${i < k ? 'on' : ''}"></i>`).join('');
   $('gateText').textContent = G.mode === 'boss' ? 'Boss fight in progress' : bossAvail() ? (p.level < z.req ? `Boss needs Lv ${z.req}` : 'Boss ready') : `Boss gate ${k}/${z.kills} kills`;
-  $('modeText').textContent = G.mode === 'boss' ? '' : `${G.ticks}s fought`;
+  $('modeText').textContent = G.queue.length ? `${G.queue.length} ambushers left` : '';
+  const acts = [['fight', 'Fight'], ...Object.keys(NODES).map(id => [id, NODE_LABEL[id] || id])];
+  const ah = acts.map(([id, l]) => `<button class="chip" data-activity="${id}" aria-pressed="${G.activity === id}">${l}</button>`).join('');
+  if ($('activity').dataset.h !== ah) { $('activity').innerHTML = ah; $('activity').dataset.h = ah; }
   $('btnBoss').disabled = !(bossAvail() && p.level >= z.req);
   $('btnSpeed').textContent = `Speed ${G.speed}×`;
-  $('tgBoss').setAttribute('aria-pressed', G.autoBoss); $('tgUp').setAttribute('aria-pressed', G.autoUp); $('tgAdv').setAttribute('aria-pressed', G.autoAdv);
+  $('tgBoss').setAttribute('aria-pressed', G.autoBoss); $('tgUp').setAttribute('aria-pressed', G.autoUp);
+  $('tgAdv').setAttribute('aria-pressed', G.autoAdv); $('tgPot').setAttribute('aria-pressed', G.autoPot);
+  const qReady = Object.entries(p.q).some(([id, s]) => s.state === 'active' && qComplete(QST[id], s)) || Object.values(QST).some(q => qAvailable(q));
+  document.querySelector('[data-tab="quests"]').classList.toggle('dot', qReady && tab !== 'quests');
   const html = panelHtml();
-  if (html !== lastPanel && !resetPending) { $('panel').innerHTML = html; lastPanel = html; }
+  if (html !== lastPanel) { $('panel').innerHTML = html; lastPanel = html; }
 }
 
-let resetPending = false;
 $('panel').addEventListener('click', e => {
-  const b = e.target.closest('button'); if (!b) return;
-  const p = G.p, act = b.dataset.act;
-  if (act === 'enh') enhance(p, b.dataset.slot);
-  else if (act === 'pro') promote(p, b.dataset.slot);
-  else if (act === 'salvage') { p.gold += p.inv.reduce((t, i) => t + salv(i), 0); p.inv = []; }
-  else if (act === 'go') travel(+b.dataset.zone);
-  else if (act === 'reset') { resetPending = true; $('resetBox').innerHTML = '<button class="sm danger" data-act="reset-yes">Erase</button><button class="sm" data-act="reset-no">Keep</button>'; return; }
-  else if (act === 'reset-yes') { resetPending = false; G = newGame(); save(); }
-  else if (act === 'reset-no') { resetPending = false; }
+  const b = e.target.closest('button'); if (!b || b.disabled) return;
+  const p = G.p, a = b.dataset.act, ds = b.dataset;
+  if (a === 'enh') enhance(p, ds.slot);
+  else if (a === 'pro') promote(p, ds.slot);
+  else if (a === 'salvage') { p.gold += p.inv.reduce((t, i) => t + salv(i), 0); p.inv = []; }
+  else if (a === 'equip') { const it = p.inv.find(i => i.id === ds.id); if (it) equip(p, it); }
+  else if (a === 'sell') { const it = p.inv.find(i => i.id === ds.id); if (it) { p.inv.splice(p.inv.indexOf(it), 1); p.gold += salv(it); } }
+  else if (a === 'use') useCons(p, ds.id);
+  else if (a === 'open') failQuest(ds.q, 'you opened the sealed package');
+  else if (a === 'buy') buy(p, ds.shop, +ds.i);
+  else if (a === 'craft') craft(p, ds.id);
+  else if (a === 'district') visit(ds.id);
+  else if (a === 'accept') acceptQuest(ds.q);
+  else if (a === 'qact') questAction(ds.q, +ds.i);
+  else if (a === 'turnin') turnIn(ds.q);
+  else if (a === 'go') travel(+ds.zone);
+  else if (a === 'reset') resetPending = true;
+  else if (a === 'reset-no') resetPending = false;
+  else if (a === 'reset-yes') { resetPending = false; G = newGame(); emit('A Gladiator arrives in Emberwatch.'); }
   lastPanel = ''; render(); save();
 });
-document.querySelector('.tabs').addEventListener('click', e => {
+$('tabs').addEventListener('click', e => {
   const b = e.target.closest('button'); if (!b) return;
   tab = b.dataset.tab; resetPending = false;
-  document.querySelectorAll('.tabs button').forEach(x => x.setAttribute('aria-selected', x === b));
+  document.querySelectorAll('#tabs button').forEach(x => x.setAttribute('aria-selected', x === b));
   lastPanel = ''; render();
 });
-$('btnBoss').onclick = () => { startBoss(); render(); };
-$('btnUp').onclick = () => { const n = autoUpgrade(); emit(n ? `Upgrade: ${n} improvements` : 'Upgrade: nothing affordable'); lastPanel = ''; render(); save(); };
+$('activity').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  G.activity = b.dataset.activity; G.gather = 0; G.mon = null; render();
+});
+$('btnBoss').onclick = () => { G.activity = 'fight'; startBoss(); render(); };
+$('btnUp').onclick = () => { const n = autoUpgrade(); emit(n ? `Upgrade: ${n} improvements` : 'Upgrade: nothing affordable (check gold and materials)'); lastPanel = ''; render(); save(); };
 $('btnSpeed').onclick = () => { G.speed = G.speed === 1 ? 5 : G.speed === 5 ? 20 : 1; render(); };
 $('tgBoss').onclick = () => { G.autoBoss = !G.autoBoss; render(); };
 $('tgUp').onclick = () => { G.autoUp = !G.autoUp; render(); };
 $('tgAdv').onclick = () => { G.autoAdv = !G.autoAdv; render(); };
+$('tgPot').onclick = () => { G.autoPot = !G.autoPot; render(); };
 
 function showReport(r) {
   if (!r || r.sec < 60) return;
@@ -508,7 +956,11 @@ function start(hotData) {
   else {
     let d = null; try { d = JSON.parse(localStorage.getItem(KEY)); } catch (e) { d = null; }
     if (d && d.p) { G = fromSnap(d); report = offline((Date.now() - d.t) / 1000); }
-    else { G = newGame(); emit('A Gladiator enters the Ashen Outskirts.'); }
+    else {
+      G = newGame();
+      G.p.cons.minor_healing_draught = 2;
+      emit('A Gladiator arrives in Emberwatch. Captain Varr has work — check the Quests tab.', 'quest');
+    }
   }
   render(); showReport(report);
   setInterval(loop, 250);

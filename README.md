@@ -2,6 +2,7 @@
 
 ## Telefone / naršyklėje
 `web/index.html` – ta pati logika JavaScript'u, vienas failas, mobiliam ekranui. Progresas saugomas naršyklėje (localStorage), offline progresas skaičiuojamas atidarius iš naujo.
+Regiono duomenys (`data/regions/emberwatch.json`) įterpiami į puslapį: pakeitus JSON paleiskite `python3 tools/embed_region.py`.
 
 ## Paleidimas
 ```bash
