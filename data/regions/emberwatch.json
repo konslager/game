@@ -7,7 +7,6 @@
     "zoneIds": [1, 2],
     "description": "Pasienio regionas prie Plyšio (the Rift). Prieš 40 metų dangus čia suskilo, ir nuo tada be paliovos krenta pelenai. Gyvenvietė Emberwatch – paskutinė tvirtovė prieš Ashen Outskirts dykynes ir Shattered Rift plyšį."
   },
-
   "settlement": {
     "id": "emberwatch",
     "name": "Emberwatch",
@@ -15,10 +14,9 @@
     "population": 3200,
     "faction": "emberwatch_garrison",
     "atmosphere": "Tamsi pasienio tvirtovė ant senojo sargybos bokšto griuvėsių. Stogai pilki nuo pelenų, gatvėse dega žarijų žibintai, o naktį Plyšys nušviečia dangų violetine šviesa. Gyventojai pavargę, bet atkaklūs: čia visi kažkam skolingi – garnizonui, kalviui ar kontrabandininkams.",
-    "ambience": { "weather": "ash_fall", "music": "low_drums_strings", "dayNightCycle": true },
+    "ambience": {"weather": "ash_fall", "music": "low_drums_strings", "dayNightCycle": true},
     "respawnPoint": "gatehold_square"
   },
-
   "districts": [
     {
       "id": "gatehold_square",
@@ -27,7 +25,28 @@
       "safeZone": true,
       "description": "Pagrindinė turgaus aikštė prie vartų. Čia stovi užduočių lenta, vaistinė ir karavanų stovykla.",
       "npcIds": ["sela_quickmarrow", "captain_hedda_varr"],
-      "features": ["quest_board", "stash", "respawn_point"]
+      "features": ["quest_board", "stash", "respawn_point"],
+      "buildings": [
+        {
+          "id": "town_gate",
+          "name": "Town Gate",
+          "type": "gate",
+          "description": "Išvykimas į zonas. Čia renkiesi, kur keliauti."
+        },
+        {
+          "id": "quest_board",
+          "name": "Quest Board",
+          "type": "board",
+          "description": "Visi miesto darbai ir kur rasti jų davėjus."
+        },
+        {
+          "id": "embervial_apothecary",
+          "name": "Embervial Apothecary",
+          "type": "shop",
+          "shopId": "embervial_apothecary",
+          "npcId": "sela_quickmarrow"
+        }
+      ]
     },
     {
       "id": "anvil_row",
@@ -36,7 +55,30 @@
       "safeZone": true,
       "description": "Amatininkų kvartalas. Kalvių kūjų dūžiai girdimi per visą miestą, o oras dvokia anglimi ir ištirpusiu metalu.",
       "npcIds": ["brakka_ironjaw", "torvald_ashmane", "ilsa_moonvane"],
-      "features": ["forge", "jeweler_bench", "salvage_station"]
+      "features": ["forge", "jeweler_bench", "salvage_station"],
+      "buildings": [
+        {
+          "id": "torvald_forge",
+          "name": "Torvald's Forge",
+          "type": "forge",
+          "npcId": "torvald_ashmane",
+          "description": "Rūdos lydymas į luitus, enhance, promote (Common→Rare) ir kalimas."
+        },
+        {
+          "id": "moonvane_jewelers",
+          "name": "Moonvane Jewelers",
+          "type": "jeweler",
+          "npcId": "ilsa_moonvane",
+          "description": "Promote Rare→Legendary ir žiedų kūrimas."
+        },
+        {
+          "id": "split_anvil_armory",
+          "name": "The Split Anvil Armory",
+          "type": "shop",
+          "shopId": "split_anvil_armory",
+          "npcId": "brakka_ironjaw"
+        }
+      ]
     },
     {
       "id": "the_cinders",
@@ -48,7 +90,22 @@
       "npcIds": ["vex_ninefingers"],
       "features": ["black_market"],
       "monsterIds": ["cinder_cutthroat"],
-      "events": [{ "id": "cutthroat_ambush", "chancePerVisit": 0.2, "spawn": { "monsterId": "cinder_cutthroat", "count": 3 } }]
+      "events": [
+        {
+          "id": "cutthroat_ambush",
+          "chancePerVisit": 0.2,
+          "spawn": {"monsterId": "cinder_cutthroat", "count": 3}
+        }
+      ],
+      "buildings": [
+        {
+          "id": "rift_curio",
+          "name": "The Rift Curio",
+          "type": "shop",
+          "shopId": "rift_curio",
+          "npcId": "vex_ninefingers"
+        }
+      ]
     },
     {
       "id": "wardtower_keep",
@@ -57,7 +114,16 @@
       "safeZone": true,
       "description": "Garnizono štabas. Čia saugomi bosų vartai į Ashen Outskirts gilumą ir reputacijos kvartirmeisteris.",
       "npcIds": ["captain_hedda_varr"],
-      "features": ["boss_gate", "reputation_vendor"]
+      "features": ["boss_gate", "reputation_vendor"],
+      "buildings": [
+        {
+          "id": "captains_hall",
+          "name": "Captain's Hall",
+          "type": "garrison",
+          "npcId": "captain_hedda_varr",
+          "description": "Kapitonės užduotys, garnizono reputacija ir bosų vartų žinios."
+        }
+      ]
     },
     {
       "id": "riftside_gate",
@@ -65,53 +131,230 @@
       "type": "zone_exit",
       "safeZone": true,
       "description": "Užantspauduoti vartai į Shattered Rift. Atsidaro nugalėjus Kharn, the Cinder Warden.",
-      "unlock": { "type": "boss_defeated", "monsterId": "ashen_outskirts_warden" },
-      "leadsToZoneId": 2
+      "unlock": {"type": "boss_defeated", "monsterId": "ashen_outskirts_warden"},
+      "leadsToZoneId": 2,
+      "buildings": [
+        {
+          "id": "riftside_portal",
+          "name": "Riftside Gate",
+          "type": "gate",
+          "zoneIds": [2],
+          "description": "Tiesus kelias į Shattered Rift."
+        }
+      ]
     }
   ],
-
   "factions": [
     {
       "id": "emberwatch_garrison",
       "name": "Emberwatch Garrison",
       "ranks": [
-        { "rank": "Neutral", "minRep": 0, "shopDiscount": 0.0 },
-        { "rank": "Friendly", "minRep": 500, "shopDiscount": 0.05 },
-        { "rank": "Honored", "minRep": 1500, "shopDiscount": 0.10 },
-        { "rank": "Revered", "minRep": 4000, "shopDiscount": 0.15 }
+        {"rank": "Neutral", "minRep": 0, "shopDiscount": 0.0},
+        {"rank": "Friendly", "minRep": 500, "shopDiscount": 0.05},
+        {"rank": "Honored", "minRep": 1500, "shopDiscount": 0.1},
+        {"rank": "Revered", "minRep": 4000, "shopDiscount": 0.15}
       ]
     }
   ],
-
   "materials": [
-    { "id": "ash_wolf_fang", "name": "Ash Wolf Fang", "tier": "Common", "sellPrice": 4, "sources": [{ "monsterId": "ash_wolf", "dropChance": 0.35 }] },
-    { "id": "ghoul_marrow", "name": "Ghoul Marrow", "tier": "Common", "sellPrice": 8, "sources": [{ "monsterId": "cinder_ghoul", "dropChance": 0.25 }] },
-    { "id": "ash_bloom", "name": "Ash Bloom", "tier": "Common", "sellPrice": 3, "sources": [{ "nodeId": "ash_bloom_patch", "zoneId": 1, "gatherSeconds": 5 }] },
-    { "id": "cinder_iron_ore", "name": "Cinder Iron Ore", "tier": "Uncommon", "sellPrice": 10, "sources": [{ "nodeId": "cinder_vein", "zoneId": 1, "gatherSeconds": 8 }, { "monsterId": "cinder_ghoul", "dropChance": 0.15 }] },
-    { "id": "riftglass_shard", "name": "Riftglass Shard", "tier": "Rare", "sellPrice": 60, "sources": [{ "monsterId": "rift_stalker", "dropChance": 0.12 }, { "monsterId": "shardback_crawler", "dropChance": 0.12 }] },
-    { "id": "cinder_warden_core", "name": "Cinder Warden Core", "tier": "Epic", "sellPrice": 600, "sources": [{ "monsterId": "ashen_outskirts_warden", "dropChance": 1.0 }] },
-    { "id": "rift_warden_heart", "name": "Rift Warden Heart", "tier": "Legendary", "sellPrice": 1500, "sources": [{ "monsterId": "shattered_rift_warden", "dropChance": 1.0 }] }
+    {
+      "id": "ash_wolf_fang",
+      "name": "Ash Wolf Fang",
+      "tier": "Common",
+      "sellPrice": 4,
+      "sources": [{"monsterId": "ash_wolf", "dropChance": 0.35}]
+    },
+    {
+      "id": "ghoul_marrow",
+      "name": "Ghoul Marrow",
+      "tier": "Common",
+      "sellPrice": 8,
+      "sources": [{"monsterId": "cinder_ghoul", "dropChance": 0.25}]
+    },
+    {
+      "id": "ash_bloom",
+      "name": "Ash Bloom",
+      "tier": "Common",
+      "sellPrice": 3,
+      "sources": [{"nodeId": "ash_bloom_patch", "zoneId": 1, "gatherSeconds": 5}]
+    },
+    {
+      "id": "cinder_iron_ore",
+      "name": "Cinder Iron Ore",
+      "tier": "Uncommon",
+      "sellPrice": 10,
+      "sources": [
+        {"nodeId": "cinder_vein", "zoneId": 1, "gatherSeconds": 8},
+        {"monsterId": "cinder_ghoul", "dropChance": 0.15}
+      ]
+    },
+    {
+      "id": "cinder_iron_ingot",
+      "name": "Cinder Iron Ingot",
+      "tier": "Uncommon",
+      "sellPrice": 30,
+      "description": "Išlydyta Cinder geležis. Naudojama daiktų stiprinimui (enhance), promote ir kalimui.",
+      "sources": [{"crafterNpcId": "torvald_ashmane", "serviceId": "smelt_cinder_iron"}]
+    },
+    {
+      "id": "riftglass_shard",
+      "name": "Riftglass Shard",
+      "tier": "Rare",
+      "sellPrice": 60,
+      "sources": [
+        {"monsterId": "rift_stalker", "dropChance": 0.12},
+        {"monsterId": "shardback_crawler", "dropChance": 0.12}
+      ]
+    },
+    {
+      "id": "cinder_warden_core",
+      "name": "Cinder Warden Core",
+      "tier": "Epic",
+      "sellPrice": 600,
+      "sources": [{"monsterId": "ashen_outskirts_warden", "dropChance": 1.0}]
+    },
+    {
+      "id": "rift_warden_heart",
+      "name": "Rift Warden Heart",
+      "tier": "Legendary",
+      "sellPrice": 1500,
+      "sources": [{"monsterId": "shattered_rift_warden", "dropChance": 1.0}]
+    }
   ],
-
   "monsters": [
-    { "id": "ash_wolf", "name": "Ash Wolf", "zoneId": 1, "level": [1, 3], "hp": 100, "damage": 12, "defense": 5, "exp": 18, "gold": 7 },
-    { "id": "cinder_ghoul", "name": "Cinder Ghoul", "zoneId": 1, "level": [3, 5], "hp": 140, "damage": 16, "defense": 5, "exp": 22, "gold": 9 },
-    { "id": "cinder_cutthroat", "name": "Cinder Cutthroat", "zoneId": 1, "level": [5, 5], "elite": true, "hp": 300, "damage": 22, "defense": 10, "exp": 60, "gold": 25 },
-    { "id": "ashen_outskirts_warden", "name": "Kharn, the Cinder Warden", "zoneId": 1, "boss": true, "level": [6, 6], "hp": 2400, "damage": 42, "defense": 10, "exp": 300, "gold": 120 },
-    { "id": "rift_stalker", "name": "Rift Stalker", "zoneId": 2, "level": [6, 9], "hp": 220, "damage": 24, "defense": 20, "exp": 40, "gold": 15 },
-    { "id": "shardback_crawler", "name": "Shardback Crawler", "zoneId": 2, "level": [8, 11], "hp": 260, "damage": 26, "defense": 20, "exp": 44, "gold": 17 },
-    { "id": "shattered_rift_warden", "name": "Ysolde of the Broken Sky", "zoneId": 2, "boss": true, "level": [12, 12], "hp": 4800, "damage": 75, "defense": 40, "exp": 630, "gold": 240 }
+    {
+      "id": "ash_wolf",
+      "name": "Ash Wolf",
+      "zoneId": 1,
+      "level": [1, 3],
+      "hp": 100,
+      "damage": 12,
+      "defense": 5,
+      "exp": 18,
+      "gold": 7
+    },
+    {
+      "id": "cinder_ghoul",
+      "name": "Cinder Ghoul",
+      "zoneId": 1,
+      "level": [3, 5],
+      "hp": 140,
+      "damage": 16,
+      "defense": 5,
+      "exp": 22,
+      "gold": 9
+    },
+    {
+      "id": "cinder_cutthroat",
+      "name": "Cinder Cutthroat",
+      "zoneId": 1,
+      "level": [5, 5],
+      "elite": true,
+      "hp": 300,
+      "damage": 22,
+      "defense": 10,
+      "exp": 60,
+      "gold": 25
+    },
+    {
+      "id": "ashen_outskirts_warden",
+      "name": "Kharn, the Cinder Warden",
+      "zoneId": 1,
+      "boss": true,
+      "level": [6, 6],
+      "hp": 2400,
+      "damage": 42,
+      "defense": 10,
+      "exp": 300,
+      "gold": 120
+    },
+    {
+      "id": "rift_stalker",
+      "name": "Rift Stalker",
+      "zoneId": 2,
+      "level": [6, 9],
+      "hp": 220,
+      "damage": 24,
+      "defense": 20,
+      "exp": 40,
+      "gold": 15
+    },
+    {
+      "id": "shardback_crawler",
+      "name": "Shardback Crawler",
+      "zoneId": 2,
+      "level": [8, 11],
+      "hp": 260,
+      "damage": 26,
+      "defense": 20,
+      "exp": 44,
+      "gold": 17
+    },
+    {
+      "id": "shattered_rift_warden",
+      "name": "Ysolde of the Broken Sky",
+      "zoneId": 2,
+      "boss": true,
+      "level": [12, 12],
+      "hp": 4800,
+      "damage": 75,
+      "defense": 40,
+      "exp": 630,
+      "gold": 240
+    }
   ],
-
   "npcs": [
-    { "id": "brakka_ironjaw", "name": "Brakka Ironjaw", "race": "Dwarf", "role": "merchant", "districtId": "anvil_row", "trait": "Niurzgus ir tiesmukas. Niekada nesiderėja, bet už kiekvieną savo kalavijo dūžį garantuoja galva." },
-    { "id": "sela_quickmarrow", "name": "Sela Quickmarrow", "race": "Half-Elf", "role": "merchant", "districtId": "gatehold_square", "trait": "Nervinga plepė. Kalba greičiau, nei verda jos katilai, ir viską užsirašo į sudegusį sąsiuvinį." },
-    { "id": "vex_ninefingers", "name": "Vex \"Nine-Fingers\"", "race": "Ashborn", "role": "merchant", "districtId": "the_cinders", "trait": "Mandagus, šaltas kontrabandininkas. Dešimto piršto neteko per derybas ir nuo tada nemėgsta skolininkų." },
-    { "id": "torvald_ashmane", "name": "Torvald Ashmane", "race": "Human", "role": "crafter", "profession": "Blacksmith", "districtId": "anvil_row", "trait": "Buvęs garnizono veteranas su perdega ranka. Kantrus mokytojas, bet nepakenčia prastos rūdos." },
-    { "id": "ilsa_moonvane", "name": "Ilsa Moonvane", "race": "Elf", "role": "crafter", "profession": "Jeweler / Runesmith", "districtId": "anvil_row", "trait": "Tyli perfekcionistė. Riftglass skeveldras tyrinėja su lupa ir šnabžda joms kaip gyvoms." },
-    { "id": "captain_hedda_varr", "name": "Captain Hedda Varr", "race": "Human", "role": "quest_giver", "districtId": "wardtower_keep", "trait": "Griežta garnizono kapitonė. Vertina rezultatus, ne žodžius." }
+    {
+      "id": "brakka_ironjaw",
+      "name": "Brakka Ironjaw",
+      "race": "Dwarf",
+      "role": "merchant",
+      "districtId": "anvil_row",
+      "trait": "Niurzgus ir tiesmukas. Niekada nesiderėja, bet už kiekvieną savo kalavijo dūžį garantuoja galva."
+    },
+    {
+      "id": "sela_quickmarrow",
+      "name": "Sela Quickmarrow",
+      "race": "Half-Elf",
+      "role": "merchant",
+      "districtId": "gatehold_square",
+      "trait": "Nervinga plepė. Kalba greičiau, nei verda jos katilai, ir viską užsirašo į sudegusį sąsiuvinį."
+    },
+    {
+      "id": "vex_ninefingers",
+      "name": "Vex \"Nine-Fingers\"",
+      "race": "Ashborn",
+      "role": "merchant",
+      "districtId": "the_cinders",
+      "trait": "Mandagus, šaltas kontrabandininkas. Dešimto piršto neteko per derybas ir nuo tada nemėgsta skolininkų."
+    },
+    {
+      "id": "torvald_ashmane",
+      "name": "Torvald Ashmane",
+      "race": "Human",
+      "role": "crafter",
+      "profession": "Blacksmith",
+      "districtId": "anvil_row",
+      "trait": "Buvęs garnizono veteranas su perdega ranka. Kantrus mokytojas, bet nepakenčia prastos rūdos."
+    },
+    {
+      "id": "ilsa_moonvane",
+      "name": "Ilsa Moonvane",
+      "race": "Elf",
+      "role": "crafter",
+      "profession": "Jeweler / Runesmith",
+      "districtId": "anvil_row",
+      "trait": "Tyli perfekcionistė. Riftglass skeveldras tyrinėja su lupa ir šnabžda joms kaip gyvoms."
+    },
+    {
+      "id": "captain_hedda_varr",
+      "name": "Captain Hedda Varr",
+      "race": "Human",
+      "role": "quest_giver",
+      "districtId": "wardtower_keep",
+      "trait": "Griežta garnizono kapitonė. Vertina rezultatus, ne žodžius."
+    }
   ],
-
   "shops": [
     {
       "id": "split_anvil_armory",
@@ -121,10 +364,51 @@
       "specialization": "Ginklai ir šarvai",
       "currency": "gold",
       "items": [
-        { "id": "worn_hauberk", "name": "Worn Hauberk", "type": "equipment", "slot": "Armor", "tier": "Common", "itemLevel": 3, "baseBonus": { "strength": 2, "agility": 0, "intelligence": 0, "vitality": 10, "luck": 0 }, "baseDefense": 6, "price": 350 },
-        { "id": "tempered_claymore", "name": "Tempered Claymore", "type": "equipment", "slot": "Weapon", "tier": "Uncommon", "itemLevel": 4, "baseBonus": { "strength": 12, "agility": 3, "intelligence": 0, "vitality": 0, "luck": 2 }, "baseDefense": 0, "price": 900 },
-        { "id": "tempered_greaves", "name": "Tempered Greaves", "type": "equipment", "slot": "Boots", "tier": "Uncommon", "itemLevel": 5, "baseBonus": { "strength": 0, "agility": 7, "intelligence": 0, "vitality": 4, "luck": 0 }, "baseDefense": 10, "price": 1100 },
-        { "id": "riftforged_warblade", "name": "Riftforged Warblade", "type": "equipment", "slot": "Weapon", "tier": "Rare", "itemLevel": 8, "baseBonus": { "strength": 20, "agility": 5, "intelligence": 0, "vitality": 0, "luck": 3 }, "baseDefense": 0, "price": 6500, "requires": { "factionId": "emberwatch_garrison", "rank": "Friendly" } }
+        {
+          "id": "worn_hauberk",
+          "name": "Worn Hauberk",
+          "type": "equipment",
+          "slot": "Armor",
+          "tier": "Common",
+          "itemLevel": 3,
+          "baseBonus": {"strength": 2, "agility": 0, "intelligence": 0, "vitality": 10, "luck": 0},
+          "baseDefense": 6,
+          "price": 350
+        },
+        {
+          "id": "tempered_claymore",
+          "name": "Tempered Claymore",
+          "type": "equipment",
+          "slot": "Weapon",
+          "tier": "Uncommon",
+          "itemLevel": 4,
+          "baseBonus": {"strength": 12, "agility": 3, "intelligence": 0, "vitality": 0, "luck": 2},
+          "baseDefense": 0,
+          "price": 900
+        },
+        {
+          "id": "tempered_greaves",
+          "name": "Tempered Greaves",
+          "type": "equipment",
+          "slot": "Boots",
+          "tier": "Uncommon",
+          "itemLevel": 5,
+          "baseBonus": {"strength": 0, "agility": 7, "intelligence": 0, "vitality": 4, "luck": 0},
+          "baseDefense": 10,
+          "price": 1100
+        },
+        {
+          "id": "riftforged_warblade",
+          "name": "Riftforged Warblade",
+          "type": "equipment",
+          "slot": "Weapon",
+          "tier": "Rare",
+          "itemLevel": 8,
+          "baseBonus": {"strength": 20, "agility": 5, "intelligence": 0, "vitality": 0, "luck": 3},
+          "baseDefense": 0,
+          "price": 6500,
+          "requires": {"factionId": "emberwatch_garrison", "rank": "Friendly"}
+        }
       ]
     },
     {
@@ -135,10 +419,36 @@
       "specialization": "Eliksyrai ir laikini sustiprinimai",
       "currency": "gold",
       "items": [
-        { "id": "minor_healing_draught", "name": "Minor Healing Draught", "type": "consumable", "effect": { "kind": "heal_pct", "value": 0.25 }, "cooldownSeconds": 30, "price": 40 },
-        { "id": "mana_tonic", "name": "Mana Tonic", "type": "consumable", "effect": { "kind": "mana_flat", "value": 60 }, "cooldownSeconds": 30, "price": 35 },
-        { "id": "ironhide_elixir", "name": "Ironhide Elixir", "type": "consumable", "effect": { "kind": "defense_pct", "value": 0.15, "durationSeconds": 300 }, "price": 220 },
-        { "id": "elixir_of_fortune", "name": "Elixir of Fortune", "type": "consumable", "effect": { "kind": "luck_flat", "value": 10, "durationSeconds": 600 }, "price": 450 }
+        {
+          "id": "minor_healing_draught",
+          "name": "Minor Healing Draught",
+          "type": "consumable",
+          "effect": {"kind": "heal_pct", "value": 0.25},
+          "cooldownSeconds": 30,
+          "price": 40
+        },
+        {
+          "id": "mana_tonic",
+          "name": "Mana Tonic",
+          "type": "consumable",
+          "effect": {"kind": "mana_flat", "value": 60},
+          "cooldownSeconds": 30,
+          "price": 35
+        },
+        {
+          "id": "ironhide_elixir",
+          "name": "Ironhide Elixir",
+          "type": "consumable",
+          "effect": {"kind": "defense_pct", "value": 0.15, "durationSeconds": 300},
+          "price": 220
+        },
+        {
+          "id": "elixir_of_fortune",
+          "name": "Elixir of Fortune",
+          "type": "consumable",
+          "effect": {"kind": "luck_flat", "value": 10, "durationSeconds": 600},
+          "price": 450
+        }
       ]
     },
     {
@@ -150,51 +460,82 @@
       "currency": "gold",
       "dailyRestock": true,
       "items": [
-        { "id": "riftglass_shard", "type": "material", "price": 250, "dailyLimit": 5 },
-        { "id": "cinder_warden_core", "type": "material", "price": 2400, "dailyLimit": 1 },
-        { "id": "rift_catalyst", "name": "Rift Catalyst", "type": "consumable", "effect": { "kind": "promote_gold_cost_pct", "value": -0.25, "uses": 1 }, "price": 800 },
-        { "id": "unidentified_rift_cache", "name": "Unidentified Rift Cache", "type": "lootbox", "effect": { "kind": "roll_item", "zoneId": 2, "minTier": "Uncommon" }, "price": 1500 }
+        {"id": "riftglass_shard", "type": "material", "price": 250, "dailyLimit": 5},
+        {"id": "cinder_warden_core", "type": "material", "price": 2400, "dailyLimit": 1},
+        {
+          "id": "rift_catalyst",
+          "name": "Rift Catalyst",
+          "type": "consumable",
+          "effect": {"kind": "promote_gold_cost_pct", "value": -0.25, "uses": 1},
+          "price": 800
+        },
+        {
+          "id": "unidentified_rift_cache",
+          "name": "Unidentified Rift Cache",
+          "type": "lootbox",
+          "effect": {"kind": "roll_item", "zoneId": 2, "minTier": "Uncommon"},
+          "price": 1500
+        }
       ]
     }
   ],
-
   "crafters": [
     {
       "npcId": "torvald_ashmane",
       "station": "forge",
       "services": [
         {
+          "id": "smelt_cinder_iron",
+          "name": "Smelt: Cinder Iron Ingot",
+          "goldCost": 5,
+          "materials": [{"id": "cinder_iron_ore", "qty": 2}],
+          "outputMaterial": {"id": "cinder_iron_ingot", "qty": 1}
+        },
+        {
           "id": "enhance",
           "name": "Enhance (+1)",
           "appliesTo": "any_equipment",
           "goldCostFormula": "40 * itemLevel * (1 + tier) * 1.45^enhancement",
           "materials": [
-            { "id": "cinder_iron_ore", "qtyFormula": "1 + floor(enhancement / 2)" },
-            { "id": "riftglass_shard", "qtyFormula": "enhancement >= 5 ? 1 : 0" }
+            {"id": "cinder_iron_ingot", "qtyFormula": "1 + floor(enhancement / 3)"},
+            {"id": "riftglass_shard", "qtyFormula": "enhancement >= 5 ? 1 : 0"}
           ],
           "maxEnhancement": 10
         },
         {
           "id": "promote_common_uncommon",
           "name": "Promote: Common → Uncommon",
-          "requires": { "enhancement": 5, "fromTier": "Common" },
+          "requires": {"enhancement": 5, "fromTier": "Common"},
           "goldCostFormula": "400 * itemLevel * (1 + tier)^2",
-          "materials": [{ "id": "cinder_iron_ore", "qty": 5 }, { "id": "ash_wolf_fang", "qty": 10 }]
+          "materials": [{"id": "cinder_iron_ingot", "qty": 3}, {"id": "ash_wolf_fang", "qty": 10}]
         },
         {
           "id": "promote_uncommon_rare",
           "name": "Promote: Uncommon → Rare",
-          "requires": { "enhancement": 5, "fromTier": "Uncommon" },
+          "requires": {"enhancement": 5, "fromTier": "Uncommon"},
           "goldCostFormula": "400 * itemLevel * (1 + tier)^2",
-          "materials": [{ "id": "cinder_iron_ore", "qty": 10 }, { "id": "ghoul_marrow", "qty": 6 }, { "id": "riftglass_shard", "qty": 3 }]
+          "materials": [
+            {"id": "cinder_iron_ingot", "qty": 5},
+            {"id": "ghoul_marrow", "qty": 6},
+            {"id": "riftglass_shard", "qty": 3}
+          ]
         },
         {
           "id": "craft_emberwatch_guard_plate",
           "name": "Craft: Emberwatch Guard Plate",
           "unlockedByQuestId": "ore_for_the_anvil",
           "goldCost": 1200,
-          "materials": [{ "id": "cinder_iron_ore", "qty": 12 }, { "id": "ash_wolf_fang", "qty": 15 }],
-          "output": { "id": "emberwatch_guard_plate", "name": "Emberwatch Guard Plate", "type": "equipment", "slot": "Armor", "tier": "Uncommon", "itemLevel": 6, "baseBonus": { "strength": 4, "agility": 0, "intelligence": 0, "vitality": 16, "luck": 0 }, "baseDefense": 12 }
+          "materials": [{"id": "cinder_iron_ingot", "qty": 6}, {"id": "ash_wolf_fang", "qty": 15}],
+          "output": {
+            "id": "emberwatch_guard_plate",
+            "name": "Emberwatch Guard Plate",
+            "type": "equipment",
+            "slot": "Armor",
+            "tier": "Uncommon",
+            "itemLevel": 6,
+            "baseBonus": {"strength": 4, "agility": 0, "intelligence": 0, "vitality": 16, "luck": 0},
+            "baseDefense": 12
+          }
         }
       ]
     },
@@ -205,28 +546,36 @@
         {
           "id": "promote_rare_epic",
           "name": "Promote: Rare → Epic",
-          "requires": { "enhancement": 5, "fromTier": "Rare" },
+          "requires": {"enhancement": 5, "fromTier": "Rare"},
           "goldCostFormula": "400 * itemLevel * (1 + tier)^2",
-          "materials": [{ "id": "riftglass_shard", "qty": 8 }, { "id": "cinder_warden_core", "qty": 1 }]
+          "materials": [{"id": "riftglass_shard", "qty": 8}, {"id": "cinder_warden_core", "qty": 1}]
         },
         {
           "id": "promote_epic_legendary",
           "name": "Promote: Epic → Legendary",
-          "requires": { "enhancement": 5, "fromTier": "Epic" },
+          "requires": {"enhancement": 5, "fromTier": "Epic"},
           "goldCostFormula": "400 * itemLevel * (1 + tier)^2",
-          "materials": [{ "id": "riftglass_shard", "qty": 15 }, { "id": "rift_warden_heart", "qty": 1 }]
+          "materials": [{"id": "riftglass_shard", "qty": 15}, {"id": "rift_warden_heart", "qty": 1}]
         },
         {
           "id": "craft_signet_of_embers",
           "name": "Craft: Signet of Embers",
           "goldCost": 3000,
-          "materials": [{ "id": "riftglass_shard", "qty": 4 }, { "id": "cinder_iron_ore", "qty": 6 }],
-          "output": { "id": "signet_of_embers", "name": "Signet of Embers", "type": "equipment", "slot": "Ring", "tier": "Rare", "itemLevel": 8, "baseBonus": { "strength": 5, "agility": 5, "intelligence": 5, "vitality": 0, "luck": 10 }, "baseDefense": 0 }
+          "materials": [{"id": "riftglass_shard", "qty": 4}, {"id": "cinder_iron_ingot", "qty": 3}],
+          "output": {
+            "id": "signet_of_embers",
+            "name": "Signet of Embers",
+            "type": "equipment",
+            "slot": "Ring",
+            "tier": "Rare",
+            "itemLevel": 8,
+            "baseBonus": {"strength": 5, "agility": 5, "intelligence": 5, "vitality": 0, "luck": 10},
+            "baseDefense": 0
+          }
         }
       ]
     }
   ],
-
   "quests": [
     {
       "id": "fangs_at_the_palisade",
@@ -236,8 +585,13 @@
       "minLevel": 2,
       "prerequisiteQuestIds": [],
       "description": "Pelenų vilkai naktimis puola rytinį palisadą. Kapitonė Varr nori, kad jų gauja būtų išretinta prieš atvykstant karavanui.",
-      "objectives": [{ "kind": "kill", "monsterId": "ash_wolf", "count": 12, "zoneId": 1 }],
-      "rewards": { "exp": 600, "gold": 150, "reputation": [{ "factionId": "emberwatch_garrison", "amount": 150 }], "items": [{ "id": "minor_healing_draught", "qty": 3 }] }
+      "objectives": [{"kind": "kill", "monsterId": "ash_wolf", "count": 12, "zoneId": 1}],
+      "rewards": {
+        "exp": 600,
+        "gold": 150,
+        "reputation": [{"factionId": "emberwatch_garrison", "amount": 150}],
+        "items": [{"id": "minor_healing_draught", "qty": 3}]
+      }
     },
     {
       "id": "ore_for_the_anvil",
@@ -248,13 +602,26 @@
       "prerequisiteQuestIds": ["fangs_at_the_palisade"],
       "description": "Garnizonui reikia naujų šarvų, bet Torvaldo sandėlis tuščias. Atnešk Cinder Iron Ore iš gyslų Ashen Outskirts dykynėse ir vilkų iltis grūdinimui.",
       "objectives": [
-        { "kind": "collect", "itemId": "cinder_iron_ore", "count": 6 },
-        { "kind": "collect", "itemId": "ash_wolf_fang", "count": 10 }
+        {"kind": "collect", "itemId": "cinder_iron_ore", "count": 6},
+        {"kind": "collect", "itemId": "ash_wolf_fang", "count": 10}
       ],
       "rewards": {
-        "exp": 1500, "gold": 400,
-        "reputation": [{ "factionId": "emberwatch_garrison", "amount": 200 }],
-        "items": [{ "id": "tempered_girdle", "name": "Tempered Girdle", "type": "equipment", "slot": "Belt", "tier": "Uncommon", "itemLevel": 4, "baseBonus": { "strength": 4, "agility": 0, "intelligence": 0, "vitality": 6, "luck": 0 }, "baseDefense": 0, "qty": 1 }],
+        "exp": 1500,
+        "gold": 400,
+        "reputation": [{"factionId": "emberwatch_garrison", "amount": 200}],
+        "items": [
+          {
+            "id": "tempered_girdle",
+            "name": "Tempered Girdle",
+            "type": "equipment",
+            "slot": "Belt",
+            "tier": "Uncommon",
+            "itemLevel": 4,
+            "baseBonus": {"strength": 4, "agility": 0, "intelligence": 0, "vitality": 6, "luck": 0},
+            "baseDefense": 0,
+            "qty": 1
+          }
+        ],
         "unlocks": ["craft_emberwatch_guard_plate"]
       }
     },
@@ -267,18 +634,31 @@
       "prerequisiteQuestIds": [],
       "description": "Sela užsakė užantspauduotą Riftglass pavyzdį iš Vex lūšnynuose, bet pati bijo ten eiti. Paimk siuntinį The Cinders ir neatidaręs pristatyk Ilsai į Anvil Row. Kelyje gali užpulti Cinder Cutthroats.",
       "objectives": [
-        { "kind": "talk", "npcId": "vex_ninefingers", "receivesItemId": "sealed_riftglass_sample" },
-        { "kind": "kill", "monsterId": "cinder_cutthroat", "count": 3, "optional": true },
-        { "kind": "deliver", "itemId": "sealed_riftglass_sample", "toNpcId": "ilsa_moonvane" }
+        {"kind": "talk", "npcId": "vex_ninefingers", "receivesItemId": "sealed_riftglass_sample"},
+        {"kind": "kill", "monsterId": "cinder_cutthroat", "count": 3, "optional": true},
+        {"kind": "deliver", "itemId": "sealed_riftglass_sample", "toNpcId": "ilsa_moonvane"}
       ],
-      "questItems": [{ "id": "sealed_riftglass_sample", "name": "Sealed Riftglass Sample", "type": "quest_item" }],
+      "questItems": [{"id": "sealed_riftglass_sample", "name": "Sealed Riftglass Sample", "type": "quest_item"}],
       "timeLimitSeconds": 900,
       "failConditions": ["quest_item_opened", "time_expired"],
       "rewards": {
-        "exp": 4000, "gold": 900,
-        "reputation": [{ "factionId": "emberwatch_garrison", "amount": 300 }],
-        "items": [{ "id": "riftforged_band", "name": "Riftforged Band", "type": "equipment", "slot": "Ring", "tier": "Rare", "itemLevel": 7, "baseBonus": { "strength": 4, "agility": 4, "intelligence": 4, "vitality": 0, "luck": 9 }, "baseDefense": 0, "qty": 1 }],
-        "bonusIfOptionalDone": { "gold": 250 }
+        "exp": 4000,
+        "gold": 900,
+        "reputation": [{"factionId": "emberwatch_garrison", "amount": 300}],
+        "items": [
+          {
+            "id": "riftforged_band",
+            "name": "Riftforged Band",
+            "type": "equipment",
+            "slot": "Ring",
+            "tier": "Rare",
+            "itemLevel": 7,
+            "baseBonus": {"strength": 4, "agility": 4, "intelligence": 4, "vitality": 0, "luck": 9},
+            "baseDefense": 0,
+            "qty": 1
+          }
+        ],
+        "bonusIfOptionalDone": {"gold": 250}
       }
     }
   ]

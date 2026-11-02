@@ -4,6 +4,12 @@
 `web/index.html` – ta pati logika JavaScript'u, vienas failas, mobiliam ekranui. Progresas saugomas naršyklėje (localStorage), offline progresas skaičiuojamas atidarius iš naujo.
 Regiono duomenys (`data/regions/emberwatch.json`) įterpiami į puslapį: pakeitus JSON paleiskite `python3 tools/embed_region.py`.
 
+Web versijos eiga:
+- **Titulinis ekranas:** Continue / New hero → 5 klasių pasirinkimas (Gladiator, Duelist, Ashmage, Warden, Reaver).
+- **Miestas (Emberwatch):** nieko nevyksta automatiškai. Rajonai → pastatai (parduotuvės su Buy/Sell, Torvald's Forge: rūda → luitai, enhance/promote/kalimas; Moonvane Jewelers; Captain's Hall; Quest Board; Town Gate). Užduotys priimamos ir atiduodamos pas NPC.
+- **Zona:** atvykus renkiesi veiklą – medžioti ar rinkti (Cinder Vein, Ash Bloom). Offline progresas skaičiuojamas tik zonoje.
+- **Inventorius:** 6 slotų apranga aplink herojų, krepšys (Gear / Materials / Potions / Quest), daikto kortelė su palyginimu.
+
 ## Paleidimas
 ```bash
 dotnet run --project src/IdleMMO.Cli                      # interaktyvus režimas (1 tick = 1 s)

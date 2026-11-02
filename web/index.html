@@ -3,7 +3,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya+SC:wght@500;700&family=Alegreya+Sans:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap">
 <style>
-/* Layout: one-column phone game screen — vitals, arena, tabbed panel, fixed action dock. Single dark look by choice. */
+/* Layout: one-column phone game screen — vitals, scene, current view, fixed bottom navigation. Single dark look by choice. */
 :root {
   --bg: #12141f;
   --surface: #1b1e2d;
@@ -44,8 +44,6 @@ p.lead { margin: 0; color: var(--muted); font-size: .9rem; }
 .bar > i { position: absolute; inset: 0 auto 0 0; width: 0; transition: width .2s linear; }
 .bar > span { position: relative; display: flex; justify-content: space-between; padding: 0 6px; font-size: .75rem; line-height: 16px; }
 .bar.hp > i { background: var(--hp); } .bar.mp > i { background: var(--mp); } .bar.xp > i { background: var(--xp); }
-.arena { overflow: hidden; margin-top: 14px; padding: 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; }
-.arena.boss { border-color: var(--hp); box-shadow: inset 0 0 0 1px var(--hp); }
 .foe { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 8px; }
 .foe b { font: 700 1.05rem var(--display); }
 .badge { font: 700 .7rem var(--body); letter-spacing: .08em; text-transform: uppercase; padding: 2px 6px; border-radius: 3px; background: var(--hp); color: var(--bg); }
@@ -58,10 +56,6 @@ p.lead { margin: 0; color: var(--muted); font-size: .9rem; }
 .gate i.on { background: var(--brass); }
 .gatelabel { display: flex; justify-content: space-between; gap: 8px; margin-top: 6px; font-size: .8rem; color: var(--muted); }
 .activity { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
-.tabs { display: grid; grid-template-columns: repeat(6, 1fr); margin-top: 14px; border-bottom: 1px solid var(--line); }
-.tabs button { position: relative; background: none; border: 0; color: var(--muted); font: 500 .86rem var(--body); padding: 10px 0; border-bottom: 2px solid transparent; }
-.tabs button[aria-selected="true"] { color: var(--fg); border-bottom-color: var(--brass); }
-.tabs button.dot::after { content: ""; position: absolute; top: 7px; right: 6px; width: 6px; height: 6px; border-radius: 50%; background: var(--brass); }
 #panel { margin-top: 10px; display: grid; gap: 8px; }
 .attrs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; text-align: center; }
 .attrs div, .derived div { background: var(--surface); padding: 6px 2px; border-radius: 4px; }
@@ -87,7 +81,6 @@ button:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
 .chips { display: flex; gap: 6px; flex-wrap: wrap; }
 .chip { font: 500 .8rem var(--body); padding: 6px 11px; border-radius: 99px; border: 1px solid var(--line); background: none; color: var(--muted); }
 .chip[aria-pressed="true"] { color: var(--brass); border-color: var(--brass); }
-.toggles .chip::before { content: "○ "; } .toggles .chip[aria-pressed="true"]::before { content: "● "; }
 .npc { padding: 10px; background: var(--surface); border-radius: 4px; }
 .npc b { font-family: var(--display); }
 .npc .meta { color: var(--muted); font-size: .8rem; }
@@ -97,22 +90,9 @@ button:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
 .obj { font-size: .85rem; display: grid; gap: 2px; margin-top: 4px; }
 .obj .ok { color: var(--xp); }
 .section { margin-top: 4px; font: 700 .72rem var(--body); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
-.dock {
-  position: fixed; left: 0; right: 0; bottom: 0; z-index: 5;
-  background: var(--surface); border-top: 1px solid var(--line);
-  padding: 10px max(16px, env(safe-area-inset-right, 0px)) calc(10px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
-}
-.dock .in { max-width: 528px; margin: 0 auto; display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 8px; }
-.dock button { font: 700 .95rem var(--body); padding: 12px 6px; border-radius: 6px; border: 1px solid var(--line); background: var(--raised); color: var(--fg); }
-.dock .primary { background: var(--brass); color: var(--bg); border-color: var(--brass); }
-.dock .primary:disabled { background: var(--raised); color: var(--muted); border-color: var(--line); }
-.toggles { max-width: 528px; margin: 8px auto 0; display: flex; gap: 5px; align-items: center; overflow-x: auto; scrollbar-width: none; }
-.toggles > span { color: var(--muted); font-size: .75rem; flex: none; }
-.toggles .chip { flex: none; font-size: .74rem; padding: 4px 8px; }
 .notice { margin-top: 12px; padding: 12px; border: 1px solid var(--brass); border-radius: 6px; background: var(--surface); }
 .notice p { margin: 0 0 8px; }
 .danger { color: var(--hp); }
-#scene { display: block; width: 100%; height: 170px; margin: -14px -14px 12px; width: calc(100% + 28px); border-bottom: 1px solid var(--line); }
 #hName { color: var(--cc, var(--brass)); }
 .icon { width: 30px; height: 30px; flex: none; border-radius: 5px; display: grid; place-items: center; background: color-mix(in srgb, var(--tc, var(--line)) 18%, var(--raised)); border: 1px solid color-mix(in srgb, var(--tc, var(--line)) 60%, transparent); }
 .icon svg { width: 20px; height: 20px; fill: none; stroke: var(--tc, var(--fg)); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
@@ -125,7 +105,7 @@ button:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
   padding: calc(20px + env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) calc(24px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); }
 .start-in { max-width: 560px; margin: 0 auto; display: grid; gap: 12px; }
 .logo { font-size: 2.2rem; text-align: center; letter-spacing: .04em; text-shadow: 0 0 24px color-mix(in srgb, var(--brass) 40%, transparent); }
-.start-in > .lead { text-align: center; font-size: 1rem; }
+.start-in .lead { text-align: center; font-size: 1rem; }
 .classes { display: grid; gap: 10px; }
 .ccard { display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 12px; padding: 10px; text-align: left; font: inherit; color: var(--fg);
   background: var(--surface); border: 1px solid var(--line); border-radius: 8px; cursor: pointer; }
@@ -141,65 +121,130 @@ button:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
 .namefield label { font-size: .8rem; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; }
 .namefield input { font: 500 1rem var(--body); padding: 10px 12px; border-radius: 6px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); }
 .begin { font: 700 1.05rem var(--display); padding: 14px; border-radius: 8px; border: 0; background: var(--brass); color: var(--bg); letter-spacing: .04em; }
+body { padding-bottom: calc(84px + env(safe-area-inset-bottom, 0px)); }
+.stage { position: relative; overflow: hidden; margin-top: 12px; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; }
+.stage.boss { border-color: var(--hp); box-shadow: inset 0 0 0 1px var(--hp); }
+#scene { display: block; width: 100%; height: 170px; border-bottom: 1px solid var(--line); }
+.stage .info { padding: 10px 12px 0; }
+.stage .info:last-child { padding-bottom: 12px; }
+.stage.calm .info:not(.gaterow) { display: none; }
+.stage.calm .gaterow { padding-top: 10px; }
+#view { margin-top: 12px; display: grid; gap: 8px; }
+.nav { position: fixed; left: 0; right: 0; bottom: 0; z-index: 5; display: grid; grid-template-columns: repeat(5, 1fr);
+  background: var(--surface); border-top: 1px solid var(--line);
+  padding: 4px max(8px, env(safe-area-inset-right, 0px)) calc(4px + env(safe-area-inset-bottom, 0px)) max(8px, env(safe-area-inset-left, 0px)); }
+.nav button { position: relative; display: grid; justify-items: center; gap: 2px; background: none; border: 0; color: var(--muted); font: 500 .7rem var(--body); padding: 6px 0; }
+.nav svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.nav button[aria-current="page"] { color: var(--brass); }
+.nav button.dot::after { content: ""; position: absolute; top: 5px; left: calc(50% + 9px); width: 7px; height: 7px; border-radius: 50%; background: var(--brass); }
+.crumb { justify-self: start; background: none; border: 0; padding: 4px 0; color: var(--brass); font: 700 .9rem var(--body); }
+.intro h2 { margin-top: 0; }
+.intro .meta { color: var(--muted); font-size: .82rem; margin: 6px 0 0; }
+.cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.card { display: block; text-align: left; font: inherit; color: var(--fg); background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 12px; min-width: 0; }
+.card h3 { margin: 0 0 2px; font: 700 1rem var(--display); color: var(--brass); }
+.card .meta { color: var(--muted); font-size: .8rem; }
+.card.wide, .card.act { grid-column: 1 / -1; display: flex; gap: 12px; align-items: center; }
+.card.sel { border-color: var(--brass); box-shadow: 0 0 0 1px var(--brass), 0 0 16px color-mix(in srgb, var(--brass) 25%, transparent); }
+.card:disabled { opacity: .5; }
+.gocard { background: color-mix(in srgb, var(--brass) 12%, var(--surface)); border-color: color-mix(in srgb, var(--brass) 55%, var(--line)); }
+.blist { display: grid; gap: 1px; margin-top: 6px; font-size: .78rem; color: var(--fg); }
+.blist span::before { content: "· "; color: var(--muted); }
+.qdot { display: inline-grid; place-items: center; width: 18px; height: 18px; border-radius: 50%; background: var(--brass); color: var(--bg); font: 700 .75rem var(--body); vertical-align: 2px; }
+.btnrow { display: flex; gap: 8px; flex-wrap: wrap; }
+button.big { flex: 1 1 140px; font: 700 .95rem var(--body); padding: 12px 10px; border-radius: 6px; border: 1px solid var(--line); background: var(--raised); color: var(--fg); }
+button.big.go { background: var(--brass); color: var(--bg); border-color: var(--brass); }
+button.big:disabled { opacity: .45; }
+button.danger { color: var(--hp); }
+.chips.seg .chip[aria-pressed="true"] { background: color-mix(in srgb, var(--brass) 14%, transparent); }
+.switches .chip::before { content: "○ "; } .switches .chip[aria-pressed="true"]::before { content: "● "; }
+.doll { display: grid; grid-template-columns: minmax(0, 1fr) 110px minmax(0, 1fr); gap: 8px; align-items: center; }
+.doll .col { display: grid; gap: 8px; }
+#doll { width: 110px; height: 160px; }
+.slot { display: flex; gap: 8px; align-items: center; min-height: 56px; padding: 6px; text-align: left; font: inherit; color: var(--fg); background: var(--surface); border: 1px solid var(--tc, var(--line)); border-radius: 6px; min-width: 0; }
+.slot > span:last-child { min-width: 0; display: grid; }
+.slot .nm { font-size: .78rem; font-weight: 700; line-height: 1.15; color: var(--tc, var(--fg)); overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.slot small { font-size: .66rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.slot.empty { border-style: dashed; color: var(--muted); }
+.slot.empty .nm { color: var(--muted); font-weight: 500; }
+.derived.five { grid-template-columns: repeat(5, 1fr); }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 6px; }
+.tile { position: relative; display: grid; justify-items: center; align-content: start; gap: 6px; min-height: 92px; padding: 10px 4px 6px; font: inherit; color: var(--fg);
+  background: color-mix(in srgb, var(--tc, var(--line)) 9%, var(--surface)); border: 1px solid color-mix(in srgb, var(--tc, var(--line)) 55%, var(--line)); border-radius: 6px; }
+.tile .icon { width: 36px; height: 36px; }
+.tile .tn { font-size: .72rem; line-height: 1.15; text-align: center; color: var(--tc, var(--fg)); overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.tile .n { position: absolute; right: 5px; top: 4px; font-size: .68rem; color: var(--fg); }
+.tile .up { position: absolute; left: 6px; top: 3px; color: var(--xp); font-size: .8rem; }
+#sheet { position: fixed; inset: 0; z-index: 15; }
+.sheet-bg { position: absolute; inset: 0; background: rgba(5, 5, 12, .6); }
+.sheet-in { position: absolute; left: 0; right: 0; bottom: 0; max-width: 560px; margin: 0 auto; max-height: 82vh; overflow-y: auto; display: grid; gap: 10px;
+  background: var(--surface); border: 1px solid var(--line); border-bottom: 0; border-radius: 12px 12px 0 0;
+  padding: 16px max(16px, env(safe-area-inset-right, 0px)) calc(16px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); }
+.sheet-in .itemhead .name { color: var(--tc, var(--fg)); }
+.big-name { font: 700 1.15rem var(--display); }
+.statlist { display: grid; grid-template-columns: 1fr auto 3.5em; gap: 4px 12px; padding: 10px; background: var(--raised); border-radius: 6px; font-size: .9rem; }
+.statlist > :nth-child(3n) { text-align: right; }
+.ccard.cont { width: 100%; }
+#startTitle, #startCreate { display: grid; gap: 12px; }
+#startTitle[hidden], #startCreate[hidden] { display: none; }
 @media (prefers-reduced-motion: reduce) { .bar > i { transition: none; } .hit.crit { animation: none; } }
 </style>
 
-<div class="top">
-  <div><h1 id="hName">Hero · Gladiator</h1><div class="sub" id="hZone">Zone</div></div>
+<header class="top">
+  <div><h1 id="hName">Hero · Gladiator</h1><div class="sub" id="hZone">Emberwatch</div></div>
   <div class="gold"><span class="num" id="hGold">0</span> g<small id="hRep">Neutral</small></div>
-</div>
+</header>
 <div class="bars">
   <div class="bar hp"><i id="bHp"></i><span><b>HP</b><span class="num" id="tHp"></span></span></div>
   <div class="bar mp"><i id="bMp"></i><span><b>MP</b><span class="num" id="tMp"></span></span></div>
   <div class="bar xp"><i id="bXp"></i><span><b id="tLv">Lv 1</b><span class="num" id="tXp"></span></span></div>
 </div>
 <div id="notice"></div>
-<section class="arena" id="arena">
+<section class="stage calm" id="stage">
   <canvas id="scene" aria-hidden="true"></canvas>
-  <div class="foe"><b id="mName">—</b><span id="mBadge"></span></div>
-  <div class="bar hp"><i id="bMon"></i><span><span></span><span class="num" id="tMon"></span></span></div>
-  <div class="hit" id="hit" aria-live="polite"></div>
-  <div class="gate" id="gate"></div>
-  <div class="gatelabel"><span id="gateText"></span><span id="modeText"></span></div>
-  <div class="activity chips" id="activity"></div>
+  <div class="info">
+    <div class="foe"><b id="mName">—</b><span id="mBadge"></span></div>
+    <div class="bar hp"><i id="bMon"></i><span><span></span><span class="num" id="tMon"></span></span></div>
+    <div class="hit" id="hit" aria-live="polite"></div>
+  </div>
+  <div class="info gaterow" id="gateRow" hidden>
+    <div class="gate" id="gate"></div>
+    <div class="gatelabel"><span id="gateText"></span></div>
+  </div>
 </section>
-<nav class="tabs" role="tablist" id="tabs">
-  <button role="tab" data-tab="hero" aria-selected="false">Hero</button>
-  <button role="tab" data-tab="gear" aria-selected="true">Gear</button>
-  <button role="tab" data-tab="town" aria-selected="false">Town</button>
-  <button role="tab" data-tab="quests" aria-selected="false">Quests</button>
-  <button role="tab" data-tab="zones" aria-selected="false">Zones</button>
-  <button role="tab" data-tab="log" aria-selected="false">Log</button>
+<main id="view"></main>
+<nav class="nav" id="nav" aria-label="Main">
+  <button data-tab="world" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2zM9 4v14M15 6v14"/></svg>World</button>
+  <button data-tab="bag"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1 12H6zM9 8V6a3 3 0 0 1 6 0v2"/></svg>Inventory</button>
+  <button data-tab="hero"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21c0-4 4-7 8-7s8 3 8 7"/></svg>Hero</button>
+  <button data-tab="quests"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10v18H7zM10 7h4M10 11h4M10 15h2"/></svg>Quests</button>
+  <button data-tab="log"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6h14M5 12h14M5 18h10"/></svg>Log</button>
 </nav>
-<section id="panel"></section>
-<div class="dock">
-  <div class="in">
-    <button class="primary" id="btnBoss">Challenge boss</button>
-    <button id="btnUp">Upgrade</button>
-    <button id="btnSpeed">Speed 1×</button>
-  </div>
-  <div class="toggles">
-    <span>Auto</span>
-    <button class="chip" id="tgBoss" aria-pressed="true">Boss</button>
-    <button class="chip" id="tgUp" aria-pressed="true">Upgrade</button>
-    <button class="chip" id="tgAdv" aria-pressed="true">Advance</button>
-    <button class="chip" id="tgPot" aria-pressed="true">Potions</button>
-  </div>
-</div>
+<div id="sheet" hidden><div class="sheet-bg"></div><div class="sheet-in" id="sheetIn" role="dialog" aria-modal="true"></div></div>
 
 <section id="start" hidden>
   <div class="start-in">
-    <h1 class="logo">Riftbound Idle</h1>
-    <p class="lead">Emberwatch needs a fighter. Choose your path.</p>
-    <div class="classes" id="classList"></div>
-    <div class="namefield"><label for="heroName">Hero name</label><input id="heroName" maxlength="16" value="Hero" autocomplete="off"></div>
-    <button class="begin" id="btnBegin">Enter Emberwatch</button>
+    <div id="startTitle">
+      <h1 class="logo">Riftbound Idle</h1>
+      <p class="lead">Emberwatch, the last fortress before the Rift.</p>
+      <div id="continueBox"></div>
+      <button class="begin" id="btnNew">New hero</button>
+    </div>
+    <div id="startCreate" hidden>
+      <button class="crumb" id="btnBack">‹ Back</button>
+      <h1 class="logo">Choose your path</h1>
+      <p class="lead">Five fighters, each with their own strengths (▲) and weaknesses (▼).</p>
+      <div class="classes" id="classList"></div>
+      <div class="namefield"><label for="heroName">Hero name</label><input id="heroName" maxlength="16" value="Hero" autocomplete="off"></div>
+      <p class="meta miss" id="overwriteWarn" hidden>This replaces your current hero.</p>
+      <button class="begin" id="btnBegin">Enter Emberwatch</button>
+    </div>
   </div>
 </section>
 
 <!-- Region data: generated from data/regions/emberwatch.json by tools/embed_region.py — edit the JSON, not this block. -->
 <script id="region-data" type="application/json">
-{"schemaVersion":1,"region":{"id":"emberwatch_march","name":"Emberwatch March","levelRange":[1,11],"zoneIds":[1,2],"description":"Pasienio regionas prie Plyšio (the Rift). Prieš 40 metų dangus čia suskilo, ir nuo tada be paliovos krenta pelenai. Gyvenvietė Emberwatch – paskutinė tvirtovė prieš Ashen Outskirts dykynes ir Shattered Rift plyšį."},"settlement":{"id":"emberwatch","name":"Emberwatch","type":"frontier_fortress_town","population":3200,"faction":"emberwatch_garrison","atmosphere":"Tamsi pasienio tvirtovė ant senojo sargybos bokšto griuvėsių. Stogai pilki nuo pelenų, gatvėse dega žarijų žibintai, o naktį Plyšys nušviečia dangų violetine šviesa. Gyventojai pavargę, bet atkaklūs: čia visi kažkam skolingi – garnizonui, kalviui ar kontrabandininkams.","ambience":{"weather":"ash_fall","music":"low_drums_strings","dayNightCycle":true},"respawnPoint":"gatehold_square"},"districts":[{"id":"gatehold_square","name":"Gatehold Square","type":"market","safeZone":true,"description":"Pagrindinė turgaus aikštė prie vartų. Čia stovi užduočių lenta, vaistinė ir karavanų stovykla.","npcIds":["sela_quickmarrow","captain_hedda_varr"],"features":["quest_board","stash","respawn_point"]},{"id":"anvil_row","name":"Anvil Row","type":"craft_quarter","safeZone":true,"description":"Amatininkų kvartalas. Kalvių kūjų dūžiai girdimi per visą miestą, o oras dvokia anglimi ir ištirpusiu metalu.","npcIds":["brakka_ironjaw","torvald_ashmane","ilsa_moonvane"],"features":["forge","jeweler_bench","salvage_station"]},{"id":"the_cinders","name":"The Cinders","type":"slums","safeZone":false,"levelRange":[4,6],"description":"Pavojingieji lūšnynai sudegusiame rytiniame kvartale. Čia valdo kontrabandininkai, o neatsargų keliautoją užpuola Cinder Cutthroats.","npcIds":["vex_ninefingers"],"features":["black_market"],"monsterIds":["cinder_cutthroat"],"events":[{"id":"cutthroat_ambush","chancePerVisit":0.2,"spawn":{"monsterId":"cinder_cutthroat","count":3}}]},{"id":"wardtower_keep","name":"Wardtower Keep","type":"garrison","safeZone":true,"description":"Garnizono štabas. Čia saugomi bosų vartai į Ashen Outskirts gilumą ir reputacijos kvartirmeisteris.","npcIds":["captain_hedda_varr"],"features":["boss_gate","reputation_vendor"]},{"id":"riftside_gate","name":"Riftside Gate","type":"zone_exit","safeZone":true,"description":"Užantspauduoti vartai į Shattered Rift. Atsidaro nugalėjus Kharn, the Cinder Warden.","unlock":{"type":"boss_defeated","monsterId":"ashen_outskirts_warden"},"leadsToZoneId":2}],"factions":[{"id":"emberwatch_garrison","name":"Emberwatch Garrison","ranks":[{"rank":"Neutral","minRep":0,"shopDiscount":0.0},{"rank":"Friendly","minRep":500,"shopDiscount":0.05},{"rank":"Honored","minRep":1500,"shopDiscount":0.1},{"rank":"Revered","minRep":4000,"shopDiscount":0.15}]}],"materials":[{"id":"ash_wolf_fang","name":"Ash Wolf Fang","tier":"Common","sellPrice":4,"sources":[{"monsterId":"ash_wolf","dropChance":0.35}]},{"id":"ghoul_marrow","name":"Ghoul Marrow","tier":"Common","sellPrice":8,"sources":[{"monsterId":"cinder_ghoul","dropChance":0.25}]},{"id":"ash_bloom","name":"Ash Bloom","tier":"Common","sellPrice":3,"sources":[{"nodeId":"ash_bloom_patch","zoneId":1,"gatherSeconds":5}]},{"id":"cinder_iron_ore","name":"Cinder Iron Ore","tier":"Uncommon","sellPrice":10,"sources":[{"nodeId":"cinder_vein","zoneId":1,"gatherSeconds":8},{"monsterId":"cinder_ghoul","dropChance":0.15}]},{"id":"riftglass_shard","name":"Riftglass Shard","tier":"Rare","sellPrice":60,"sources":[{"monsterId":"rift_stalker","dropChance":0.12},{"monsterId":"shardback_crawler","dropChance":0.12}]},{"id":"cinder_warden_core","name":"Cinder Warden Core","tier":"Epic","sellPrice":600,"sources":[{"monsterId":"ashen_outskirts_warden","dropChance":1.0}]},{"id":"rift_warden_heart","name":"Rift Warden Heart","tier":"Legendary","sellPrice":1500,"sources":[{"monsterId":"shattered_rift_warden","dropChance":1.0}]}],"monsters":[{"id":"ash_wolf","name":"Ash Wolf","zoneId":1,"level":[1,3],"hp":100,"damage":12,"defense":5,"exp":18,"gold":7},{"id":"cinder_ghoul","name":"Cinder Ghoul","zoneId":1,"level":[3,5],"hp":140,"damage":16,"defense":5,"exp":22,"gold":9},{"id":"cinder_cutthroat","name":"Cinder Cutthroat","zoneId":1,"level":[5,5],"elite":true,"hp":300,"damage":22,"defense":10,"exp":60,"gold":25},{"id":"ashen_outskirts_warden","name":"Kharn, the Cinder Warden","zoneId":1,"boss":true,"level":[6,6],"hp":2400,"damage":42,"defense":10,"exp":300,"gold":120},{"id":"rift_stalker","name":"Rift Stalker","zoneId":2,"level":[6,9],"hp":220,"damage":24,"defense":20,"exp":40,"gold":15},{"id":"shardback_crawler","name":"Shardback Crawler","zoneId":2,"level":[8,11],"hp":260,"damage":26,"defense":20,"exp":44,"gold":17},{"id":"shattered_rift_warden","name":"Ysolde of the Broken Sky","zoneId":2,"boss":true,"level":[12,12],"hp":4800,"damage":75,"defense":40,"exp":630,"gold":240}],"npcs":[{"id":"brakka_ironjaw","name":"Brakka Ironjaw","race":"Dwarf","role":"merchant","districtId":"anvil_row","trait":"Niurzgus ir tiesmukas. Niekada nesiderėja, bet už kiekvieną savo kalavijo dūžį garantuoja galva."},{"id":"sela_quickmarrow","name":"Sela Quickmarrow","race":"Half-Elf","role":"merchant","districtId":"gatehold_square","trait":"Nervinga plepė. Kalba greičiau, nei verda jos katilai, ir viską užsirašo į sudegusį sąsiuvinį."},{"id":"vex_ninefingers","name":"Vex \"Nine-Fingers\"","race":"Ashborn","role":"merchant","districtId":"the_cinders","trait":"Mandagus, šaltas kontrabandininkas. Dešimto piršto neteko per derybas ir nuo tada nemėgsta skolininkų."},{"id":"torvald_ashmane","name":"Torvald Ashmane","race":"Human","role":"crafter","profession":"Blacksmith","districtId":"anvil_row","trait":"Buvęs garnizono veteranas su perdega ranka. Kantrus mokytojas, bet nepakenčia prastos rūdos."},{"id":"ilsa_moonvane","name":"Ilsa Moonvane","race":"Elf","role":"crafter","profession":"Jeweler / Runesmith","districtId":"anvil_row","trait":"Tyli perfekcionistė. Riftglass skeveldras tyrinėja su lupa ir šnabžda joms kaip gyvoms."},{"id":"captain_hedda_varr","name":"Captain Hedda Varr","race":"Human","role":"quest_giver","districtId":"wardtower_keep","trait":"Griežta garnizono kapitonė. Vertina rezultatus, ne žodžius."}],"shops":[{"id":"split_anvil_armory","name":"The Split Anvil Armory","ownerNpcId":"brakka_ironjaw","districtId":"anvil_row","specialization":"Ginklai ir šarvai","currency":"gold","items":[{"id":"worn_hauberk","name":"Worn Hauberk","type":"equipment","slot":"Armor","tier":"Common","itemLevel":3,"baseBonus":{"strength":2,"agility":0,"intelligence":0,"vitality":10,"luck":0},"baseDefense":6,"price":350},{"id":"tempered_claymore","name":"Tempered Claymore","type":"equipment","slot":"Weapon","tier":"Uncommon","itemLevel":4,"baseBonus":{"strength":12,"agility":3,"intelligence":0,"vitality":0,"luck":2},"baseDefense":0,"price":900},{"id":"tempered_greaves","name":"Tempered Greaves","type":"equipment","slot":"Boots","tier":"Uncommon","itemLevel":5,"baseBonus":{"strength":0,"agility":7,"intelligence":0,"vitality":4,"luck":0},"baseDefense":10,"price":1100},{"id":"riftforged_warblade","name":"Riftforged Warblade","type":"equipment","slot":"Weapon","tier":"Rare","itemLevel":8,"baseBonus":{"strength":20,"agility":5,"intelligence":0,"vitality":0,"luck":3},"baseDefense":0,"price":6500,"requires":{"factionId":"emberwatch_garrison","rank":"Friendly"}}]},{"id":"embervial_apothecary","name":"Embervial Apothecary","ownerNpcId":"sela_quickmarrow","districtId":"gatehold_square","specialization":"Eliksyrai ir laikini sustiprinimai","currency":"gold","items":[{"id":"minor_healing_draught","name":"Minor Healing Draught","type":"consumable","effect":{"kind":"heal_pct","value":0.25},"cooldownSeconds":30,"price":40},{"id":"mana_tonic","name":"Mana Tonic","type":"consumable","effect":{"kind":"mana_flat","value":60},"cooldownSeconds":30,"price":35},{"id":"ironhide_elixir","name":"Ironhide Elixir","type":"consumable","effect":{"kind":"defense_pct","value":0.15,"durationSeconds":300},"price":220},{"id":"elixir_of_fortune","name":"Elixir of Fortune","type":"consumable","effect":{"kind":"luck_flat","value":10,"durationSeconds":600},"price":450}]},{"id":"rift_curio","name":"The Rift Curio","ownerNpcId":"vex_ninefingers","districtId":"the_cinders","specialization":"Reti komponentai ir juodoji rinka","currency":"gold","dailyRestock":true,"items":[{"id":"riftglass_shard","type":"material","price":250,"dailyLimit":5},{"id":"cinder_warden_core","type":"material","price":2400,"dailyLimit":1},{"id":"rift_catalyst","name":"Rift Catalyst","type":"consumable","effect":{"kind":"promote_gold_cost_pct","value":-0.25,"uses":1},"price":800},{"id":"unidentified_rift_cache","name":"Unidentified Rift Cache","type":"lootbox","effect":{"kind":"roll_item","zoneId":2,"minTier":"Uncommon"},"price":1500}]}],"crafters":[{"npcId":"torvald_ashmane","station":"forge","services":[{"id":"enhance","name":"Enhance (+1)","appliesTo":"any_equipment","goldCostFormula":"40 * itemLevel * (1 + tier) * 1.45^enhancement","materials":[{"id":"cinder_iron_ore","qtyFormula":"1 + floor(enhancement / 2)"},{"id":"riftglass_shard","qtyFormula":"enhancement >= 5 ? 1 : 0"}],"maxEnhancement":10},{"id":"promote_common_uncommon","name":"Promote: Common → Uncommon","requires":{"enhancement":5,"fromTier":"Common"},"goldCostFormula":"400 * itemLevel * (1 + tier)^2","materials":[{"id":"cinder_iron_ore","qty":5},{"id":"ash_wolf_fang","qty":10}]},{"id":"promote_uncommon_rare","name":"Promote: Uncommon → Rare","requires":{"enhancement":5,"fromTier":"Uncommon"},"goldCostFormula":"400 * itemLevel * (1 + tier)^2","materials":[{"id":"cinder_iron_ore","qty":10},{"id":"ghoul_marrow","qty":6},{"id":"riftglass_shard","qty":3}]},{"id":"craft_emberwatch_guard_plate","name":"Craft: Emberwatch Guard Plate","unlockedByQuestId":"ore_for_the_anvil","goldCost":1200,"materials":[{"id":"cinder_iron_ore","qty":12},{"id":"ash_wolf_fang","qty":15}],"output":{"id":"emberwatch_guard_plate","name":"Emberwatch Guard Plate","type":"equipment","slot":"Armor","tier":"Uncommon","itemLevel":6,"baseBonus":{"strength":4,"agility":0,"intelligence":0,"vitality":16,"luck":0},"baseDefense":12}}]},{"npcId":"ilsa_moonvane","station":"jeweler_bench","services":[{"id":"promote_rare_epic","name":"Promote: Rare → Epic","requires":{"enhancement":5,"fromTier":"Rare"},"goldCostFormula":"400 * itemLevel * (1 + tier)^2","materials":[{"id":"riftglass_shard","qty":8},{"id":"cinder_warden_core","qty":1}]},{"id":"promote_epic_legendary","name":"Promote: Epic → Legendary","requires":{"enhancement":5,"fromTier":"Epic"},"goldCostFormula":"400 * itemLevel * (1 + tier)^2","materials":[{"id":"riftglass_shard","qty":15},{"id":"rift_warden_heart","qty":1}]},{"id":"craft_signet_of_embers","name":"Craft: Signet of Embers","goldCost":3000,"materials":[{"id":"riftglass_shard","qty":4},{"id":"cinder_iron_ore","qty":6}],"output":{"id":"signet_of_embers","name":"Signet of Embers","type":"equipment","slot":"Ring","tier":"Rare","itemLevel":8,"baseBonus":{"strength":5,"agility":5,"intelligence":5,"vitality":0,"luck":10},"baseDefense":0}}]}],"quests":[{"id":"fangs_at_the_palisade","name":"Fangs at the Palisade","giverNpcId":"captain_hedda_varr","type":"hunt","minLevel":2,"prerequisiteQuestIds":[],"description":"Pelenų vilkai naktimis puola rytinį palisadą. Kapitonė Varr nori, kad jų gauja būtų išretinta prieš atvykstant karavanui.","objectives":[{"kind":"kill","monsterId":"ash_wolf","count":12,"zoneId":1}],"rewards":{"exp":600,"gold":150,"reputation":[{"factionId":"emberwatch_garrison","amount":150}],"items":[{"id":"minor_healing_draught","qty":3}]}},{"id":"ore_for_the_anvil","name":"Ore for the Anvil","giverNpcId":"torvald_ashmane","type":"gather","minLevel":4,"prerequisiteQuestIds":["fangs_at_the_palisade"],"description":"Garnizonui reikia naujų šarvų, bet Torvaldo sandėlis tuščias. Atnešk Cinder Iron Ore iš gyslų Ashen Outskirts dykynėse ir vilkų iltis grūdinimui.","objectives":[{"kind":"collect","itemId":"cinder_iron_ore","count":6},{"kind":"collect","itemId":"ash_wolf_fang","count":10}],"rewards":{"exp":1500,"gold":400,"reputation":[{"factionId":"emberwatch_garrison","amount":200}],"items":[{"id":"tempered_girdle","name":"Tempered Girdle","type":"equipment","slot":"Belt","tier":"Uncommon","itemLevel":4,"baseBonus":{"strength":4,"agility":0,"intelligence":0,"vitality":6,"luck":0},"baseDefense":0,"qty":1}],"unlocks":["craft_emberwatch_guard_plate"]}},{"id":"a_shard_too_bright","name":"A Shard Too Bright","giverNpcId":"sela_quickmarrow","type":"delivery","minLevel":5,"prerequisiteQuestIds":[],"description":"Sela užsakė užantspauduotą Riftglass pavyzdį iš Vex lūšnynuose, bet pati bijo ten eiti. Paimk siuntinį The Cinders ir neatidaręs pristatyk Ilsai į Anvil Row. Kelyje gali užpulti Cinder Cutthroats.","objectives":[{"kind":"talk","npcId":"vex_ninefingers","receivesItemId":"sealed_riftglass_sample"},{"kind":"kill","monsterId":"cinder_cutthroat","count":3,"optional":true},{"kind":"deliver","itemId":"sealed_riftglass_sample","toNpcId":"ilsa_moonvane"}],"questItems":[{"id":"sealed_riftglass_sample","name":"Sealed Riftglass Sample","type":"quest_item"}],"timeLimitSeconds":900,"failConditions":["quest_item_opened","time_expired"],"rewards":{"exp":4000,"gold":900,"reputation":[{"factionId":"emberwatch_garrison","amount":300}],"items":[{"id":"riftforged_band","name":"Riftforged Band","type":"equipment","slot":"Ring","tier":"Rare","itemLevel":7,"baseBonus":{"strength":4,"agility":4,"intelligence":4,"vitality":0,"luck":9},"baseDefense":0,"qty":1}],"bonusIfOptionalDone":{"gold":250}}}]}
+{"schemaVersion":1,"region":{"id":"emberwatch_march","name":"Emberwatch March","levelRange":[1,11],"zoneIds":[1,2],"description":"Pasienio regionas prie Plyšio (the Rift). Prieš 40 metų dangus čia suskilo, ir nuo tada be paliovos krenta pelenai. Gyvenvietė Emberwatch – paskutinė tvirtovė prieš Ashen Outskirts dykynes ir Shattered Rift plyšį."},"settlement":{"id":"emberwatch","name":"Emberwatch","type":"frontier_fortress_town","population":3200,"faction":"emberwatch_garrison","atmosphere":"Tamsi pasienio tvirtovė ant senojo sargybos bokšto griuvėsių. Stogai pilki nuo pelenų, gatvėse dega žarijų žibintai, o naktį Plyšys nušviečia dangų violetine šviesa. Gyventojai pavargę, bet atkaklūs: čia visi kažkam skolingi – garnizonui, kalviui ar kontrabandininkams.","ambience":{"weather":"ash_fall","music":"low_drums_strings","dayNightCycle":true},"respawnPoint":"gatehold_square"},"districts":[{"id":"gatehold_square","name":"Gatehold Square","type":"market","safeZone":true,"description":"Pagrindinė turgaus aikštė prie vartų. Čia stovi užduočių lenta, vaistinė ir karavanų stovykla.","npcIds":["sela_quickmarrow","captain_hedda_varr"],"features":["quest_board","stash","respawn_point"],"buildings":[{"id":"town_gate","name":"Town Gate","type":"gate","description":"Išvykimas į zonas. Čia renkiesi, kur keliauti."},{"id":"quest_board","name":"Quest Board","type":"board","description":"Visi miesto darbai ir kur rasti jų davėjus."},{"id":"embervial_apothecary","name":"Embervial Apothecary","type":"shop","shopId":"embervial_apothecary","npcId":"sela_quickmarrow"}]},{"id":"anvil_row","name":"Anvil Row","type":"craft_quarter","safeZone":true,"description":"Amatininkų kvartalas. Kalvių kūjų dūžiai girdimi per visą miestą, o oras dvokia anglimi ir ištirpusiu metalu.","npcIds":["brakka_ironjaw","torvald_ashmane","ilsa_moonvane"],"features":["forge","jeweler_bench","salvage_station"],"buildings":[{"id":"torvald_forge","name":"Torvald's Forge","type":"forge","npcId":"torvald_ashmane","description":"Rūdos lydymas į luitus, enhance, promote (Common→Rare) ir kalimas."},{"id":"moonvane_jewelers","name":"Moonvane Jewelers","type":"jeweler","npcId":"ilsa_moonvane","description":"Promote Rare→Legendary ir žiedų kūrimas."},{"id":"split_anvil_armory","name":"The Split Anvil Armory","type":"shop","shopId":"split_anvil_armory","npcId":"brakka_ironjaw"}]},{"id":"the_cinders","name":"The Cinders","type":"slums","safeZone":false,"levelRange":[4,6],"description":"Pavojingieji lūšnynai sudegusiame rytiniame kvartale. Čia valdo kontrabandininkai, o neatsargų keliautoją užpuola Cinder Cutthroats.","npcIds":["vex_ninefingers"],"features":["black_market"],"monsterIds":["cinder_cutthroat"],"events":[{"id":"cutthroat_ambush","chancePerVisit":0.2,"spawn":{"monsterId":"cinder_cutthroat","count":3}}],"buildings":[{"id":"rift_curio","name":"The Rift Curio","type":"shop","shopId":"rift_curio","npcId":"vex_ninefingers"}]},{"id":"wardtower_keep","name":"Wardtower Keep","type":"garrison","safeZone":true,"description":"Garnizono štabas. Čia saugomi bosų vartai į Ashen Outskirts gilumą ir reputacijos kvartirmeisteris.","npcIds":["captain_hedda_varr"],"features":["boss_gate","reputation_vendor"],"buildings":[{"id":"captains_hall","name":"Captain's Hall","type":"garrison","npcId":"captain_hedda_varr","description":"Kapitonės užduotys, garnizono reputacija ir bosų vartų žinios."}]},{"id":"riftside_gate","name":"Riftside Gate","type":"zone_exit","safeZone":true,"description":"Užantspauduoti vartai į Shattered Rift. Atsidaro nugalėjus Kharn, the Cinder Warden.","unlock":{"type":"boss_defeated","monsterId":"ashen_outskirts_warden"},"leadsToZoneId":2,"buildings":[{"id":"riftside_portal","name":"Riftside Gate","type":"gate","zoneIds":[2],"description":"Tiesus kelias į Shattered Rift."}]}],"factions":[{"id":"emberwatch_garrison","name":"Emberwatch Garrison","ranks":[{"rank":"Neutral","minRep":0,"shopDiscount":0.0},{"rank":"Friendly","minRep":500,"shopDiscount":0.05},{"rank":"Honored","minRep":1500,"shopDiscount":0.1},{"rank":"Revered","minRep":4000,"shopDiscount":0.15}]}],"materials":[{"id":"ash_wolf_fang","name":"Ash Wolf Fang","tier":"Common","sellPrice":4,"sources":[{"monsterId":"ash_wolf","dropChance":0.35}]},{"id":"ghoul_marrow","name":"Ghoul Marrow","tier":"Common","sellPrice":8,"sources":[{"monsterId":"cinder_ghoul","dropChance":0.25}]},{"id":"ash_bloom","name":"Ash Bloom","tier":"Common","sellPrice":3,"sources":[{"nodeId":"ash_bloom_patch","zoneId":1,"gatherSeconds":5}]},{"id":"cinder_iron_ore","name":"Cinder Iron Ore","tier":"Uncommon","sellPrice":10,"sources":[{"nodeId":"cinder_vein","zoneId":1,"gatherSeconds":8},{"monsterId":"cinder_ghoul","dropChance":0.15}]},{"id":"cinder_iron_ingot","name":"Cinder Iron Ingot","tier":"Uncommon","sellPrice":30,"description":"Išlydyta Cinder geležis. Naudojama daiktų stiprinimui (enhance), promote ir kalimui.","sources":[{"crafterNpcId":"torvald_ashmane","serviceId":"smelt_cinder_iron"}]},{"id":"riftglass_shard","name":"Riftglass Shard","tier":"Rare","sellPrice":60,"sources":[{"monsterId":"rift_stalker","dropChance":0.12},{"monsterId":"shardback_crawler","dropChance":0.12}]},{"id":"cinder_warden_core","name":"Cinder Warden Core","tier":"Epic","sellPrice":600,"sources":[{"monsterId":"ashen_outskirts_warden","dropChance":1.0}]},{"id":"rift_warden_heart","name":"Rift Warden Heart","tier":"Legendary","sellPrice":1500,"sources":[{"monsterId":"shattered_rift_warden","dropChance":1.0}]}],"monsters":[{"id":"ash_wolf","name":"Ash Wolf","zoneId":1,"level":[1,3],"hp":100,"damage":12,"defense":5,"exp":18,"gold":7},{"id":"cinder_ghoul","name":"Cinder Ghoul","zoneId":1,"level":[3,5],"hp":140,"damage":16,"defense":5,"exp":22,"gold":9},{"id":"cinder_cutthroat","name":"Cinder Cutthroat","zoneId":1,"level":[5,5],"elite":true,"hp":300,"damage":22,"defense":10,"exp":60,"gold":25},{"id":"ashen_outskirts_warden","name":"Kharn, the Cinder Warden","zoneId":1,"boss":true,"level":[6,6],"hp":2400,"damage":42,"defense":10,"exp":300,"gold":120},{"id":"rift_stalker","name":"Rift Stalker","zoneId":2,"level":[6,9],"hp":220,"damage":24,"defense":20,"exp":40,"gold":15},{"id":"shardback_crawler","name":"Shardback Crawler","zoneId":2,"level":[8,11],"hp":260,"damage":26,"defense":20,"exp":44,"gold":17},{"id":"shattered_rift_warden","name":"Ysolde of the Broken Sky","zoneId":2,"boss":true,"level":[12,12],"hp":4800,"damage":75,"defense":40,"exp":630,"gold":240}],"npcs":[{"id":"brakka_ironjaw","name":"Brakka Ironjaw","race":"Dwarf","role":"merchant","districtId":"anvil_row","trait":"Niurzgus ir tiesmukas. Niekada nesiderėja, bet už kiekvieną savo kalavijo dūžį garantuoja galva."},{"id":"sela_quickmarrow","name":"Sela Quickmarrow","race":"Half-Elf","role":"merchant","districtId":"gatehold_square","trait":"Nervinga plepė. Kalba greičiau, nei verda jos katilai, ir viską užsirašo į sudegusį sąsiuvinį."},{"id":"vex_ninefingers","name":"Vex \"Nine-Fingers\"","race":"Ashborn","role":"merchant","districtId":"the_cinders","trait":"Mandagus, šaltas kontrabandininkas. Dešimto piršto neteko per derybas ir nuo tada nemėgsta skolininkų."},{"id":"torvald_ashmane","name":"Torvald Ashmane","race":"Human","role":"crafter","profession":"Blacksmith","districtId":"anvil_row","trait":"Buvęs garnizono veteranas su perdega ranka. Kantrus mokytojas, bet nepakenčia prastos rūdos."},{"id":"ilsa_moonvane","name":"Ilsa Moonvane","race":"Elf","role":"crafter","profession":"Jeweler / Runesmith","districtId":"anvil_row","trait":"Tyli perfekcionistė. Riftglass skeveldras tyrinėja su lupa ir šnabžda joms kaip gyvoms."},{"id":"captain_hedda_varr","name":"Captain Hedda Varr","race":"Human","role":"quest_giver","districtId":"wardtower_keep","trait":"Griežta garnizono kapitonė. Vertina rezultatus, ne žodžius."}],"shops":[{"id":"split_anvil_armory","name":"The Split Anvil Armory","ownerNpcId":"brakka_ironjaw","districtId":"anvil_row","specialization":"Ginklai ir šarvai","currency":"gold","items":[{"id":"worn_hauberk","name":"Worn Hauberk","type":"equipment","slot":"Armor","tier":"Common","itemLevel":3,"baseBonus":{"strength":2,"agility":0,"intelligence":0,"vitality":10,"luck":0},"baseDefense":6,"price":350},{"id":"tempered_claymore","name":"Tempered Claymore","type":"equipment","slot":"Weapon","tier":"Uncommon","itemLevel":4,"baseBonus":{"strength":12,"agility":3,"intelligence":0,"vitality":0,"luck":2},"baseDefense":0,"price":900},{"id":"tempered_greaves","name":"Tempered Greaves","type":"equipment","slot":"Boots","tier":"Uncommon","itemLevel":5,"baseBonus":{"strength":0,"agility":7,"intelligence":0,"vitality":4,"luck":0},"baseDefense":10,"price":1100},{"id":"riftforged_warblade","name":"Riftforged Warblade","type":"equipment","slot":"Weapon","tier":"Rare","itemLevel":8,"baseBonus":{"strength":20,"agility":5,"intelligence":0,"vitality":0,"luck":3},"baseDefense":0,"price":6500,"requires":{"factionId":"emberwatch_garrison","rank":"Friendly"}}]},{"id":"embervial_apothecary","name":"Embervial Apothecary","ownerNpcId":"sela_quickmarrow","districtId":"gatehold_square","specialization":"Eliksyrai ir laikini sustiprinimai","currency":"gold","items":[{"id":"minor_healing_draught","name":"Minor Healing Draught","type":"consumable","effect":{"kind":"heal_pct","value":0.25},"cooldownSeconds":30,"price":40},{"id":"mana_tonic","name":"Mana Tonic","type":"consumable","effect":{"kind":"mana_flat","value":60},"cooldownSeconds":30,"price":35},{"id":"ironhide_elixir","name":"Ironhide Elixir","type":"consumable","effect":{"kind":"defense_pct","value":0.15,"durationSeconds":300},"price":220},{"id":"elixir_of_fortune","name":"Elixir of Fortune","type":"consumable","effect":{"kind":"luck_flat","value":10,"durationSeconds":600},"price":450}]},{"id":"rift_curio","name":"The Rift Curio","ownerNpcId":"vex_ninefingers","districtId":"the_cinders","specialization":"Reti komponentai ir juodoji rinka","currency":"gold","dailyRestock":true,"items":[{"id":"riftglass_shard","type":"material","price":250,"dailyLimit":5},{"id":"cinder_warden_core","type":"material","price":2400,"dailyLimit":1},{"id":"rift_catalyst","name":"Rift Catalyst","type":"consumable","effect":{"kind":"promote_gold_cost_pct","value":-0.25,"uses":1},"price":800},{"id":"unidentified_rift_cache","name":"Unidentified Rift Cache","type":"lootbox","effect":{"kind":"roll_item","zoneId":2,"minTier":"Uncommon"},"price":1500}]}],"crafters":[{"npcId":"torvald_ashmane","station":"forge","services":[{"id":"smelt_cinder_iron","name":"Smelt: Cinder Iron Ingot","goldCost":5,"materials":[{"id":"cinder_iron_ore","qty":2}],"outputMaterial":{"id":"cinder_iron_ingot","qty":1}},{"id":"enhance","name":"Enhance (+1)","appliesTo":"any_equipment","goldCostFormula":"40 * itemLevel * (1 + tier) * 1.45^enhancement","materials":[{"id":"cinder_iron_ingot","qtyFormula":"1 + floor(enhancement / 3)"},{"id":"riftglass_shard","qtyFormula":"enhancement >= 5 ? 1 : 0"}],"maxEnhancement":10},{"id":"promote_common_uncommon","name":"Promote: Common → Uncommon","requires":{"enhancement":5,"fromTier":"Common"},"goldCostFormula":"400 * itemLevel * (1 + tier)^2","materials":[{"id":"cinder_iron_ingot","qty":3},{"id":"ash_wolf_fang","qty":10}]},{"id":"promote_uncommon_rare","name":"Promote: Uncommon → Rare","requires":{"enhancement":5,"fromTier":"Uncommon"},"goldCostFormula":"400 * itemLevel * (1 + tier)^2","materials":[{"id":"cinder_iron_ingot","qty":5},{"id":"ghoul_marrow","qty":6},{"id":"riftglass_shard","qty":3}]},{"id":"craft_emberwatch_guard_plate","name":"Craft: Emberwatch Guard Plate","unlockedByQuestId":"ore_for_the_anvil","goldCost":1200,"materials":[{"id":"cinder_iron_ingot","qty":6},{"id":"ash_wolf_fang","qty":15}],"output":{"id":"emberwatch_guard_plate","name":"Emberwatch Guard Plate","type":"equipment","slot":"Armor","tier":"Uncommon","itemLevel":6,"baseBonus":{"strength":4,"agility":0,"intelligence":0,"vitality":16,"luck":0},"baseDefense":12}}]},{"npcId":"ilsa_moonvane","station":"jeweler_bench","services":[{"id":"promote_rare_epic","name":"Promote: Rare → Epic","requires":{"enhancement":5,"fromTier":"Rare"},"goldCostFormula":"400 * itemLevel * (1 + tier)^2","materials":[{"id":"riftglass_shard","qty":8},{"id":"cinder_warden_core","qty":1}]},{"id":"promote_epic_legendary","name":"Promote: Epic → Legendary","requires":{"enhancement":5,"fromTier":"Epic"},"goldCostFormula":"400 * itemLevel * (1 + tier)^2","materials":[{"id":"riftglass_shard","qty":15},{"id":"rift_warden_heart","qty":1}]},{"id":"craft_signet_of_embers","name":"Craft: Signet of Embers","goldCost":3000,"materials":[{"id":"riftglass_shard","qty":4},{"id":"cinder_iron_ingot","qty":3}],"output":{"id":"signet_of_embers","name":"Signet of Embers","type":"equipment","slot":"Ring","tier":"Rare","itemLevel":8,"baseBonus":{"strength":5,"agility":5,"intelligence":5,"vitality":0,"luck":10},"baseDefense":0}}]}],"quests":[{"id":"fangs_at_the_palisade","name":"Fangs at the Palisade","giverNpcId":"captain_hedda_varr","type":"hunt","minLevel":2,"prerequisiteQuestIds":[],"description":"Pelenų vilkai naktimis puola rytinį palisadą. Kapitonė Varr nori, kad jų gauja būtų išretinta prieš atvykstant karavanui.","objectives":[{"kind":"kill","monsterId":"ash_wolf","count":12,"zoneId":1}],"rewards":{"exp":600,"gold":150,"reputation":[{"factionId":"emberwatch_garrison","amount":150}],"items":[{"id":"minor_healing_draught","qty":3}]}},{"id":"ore_for_the_anvil","name":"Ore for the Anvil","giverNpcId":"torvald_ashmane","type":"gather","minLevel":4,"prerequisiteQuestIds":["fangs_at_the_palisade"],"description":"Garnizonui reikia naujų šarvų, bet Torvaldo sandėlis tuščias. Atnešk Cinder Iron Ore iš gyslų Ashen Outskirts dykynėse ir vilkų iltis grūdinimui.","objectives":[{"kind":"collect","itemId":"cinder_iron_ore","count":6},{"kind":"collect","itemId":"ash_wolf_fang","count":10}],"rewards":{"exp":1500,"gold":400,"reputation":[{"factionId":"emberwatch_garrison","amount":200}],"items":[{"id":"tempered_girdle","name":"Tempered Girdle","type":"equipment","slot":"Belt","tier":"Uncommon","itemLevel":4,"baseBonus":{"strength":4,"agility":0,"intelligence":0,"vitality":6,"luck":0},"baseDefense":0,"qty":1}],"unlocks":["craft_emberwatch_guard_plate"]}},{"id":"a_shard_too_bright","name":"A Shard Too Bright","giverNpcId":"sela_quickmarrow","type":"delivery","minLevel":5,"prerequisiteQuestIds":[],"description":"Sela užsakė užantspauduotą Riftglass pavyzdį iš Vex lūšnynuose, bet pati bijo ten eiti. Paimk siuntinį The Cinders ir neatidaręs pristatyk Ilsai į Anvil Row. Kelyje gali užpulti Cinder Cutthroats.","objectives":[{"kind":"talk","npcId":"vex_ninefingers","receivesItemId":"sealed_riftglass_sample"},{"kind":"kill","monsterId":"cinder_cutthroat","count":3,"optional":true},{"kind":"deliver","itemId":"sealed_riftglass_sample","toNpcId":"ilsa_moonvane"}],"questItems":[{"id":"sealed_riftglass_sample","name":"Sealed Riftglass Sample","type":"quest_item"}],"timeLimitSeconds":900,"failConditions":["quest_item_opened","time_expired"],"rewards":{"exp":4000,"gold":900,"reputation":[{"factionId":"emberwatch_garrison","amount":300}],"items":[{"id":"riftforged_band","name":"Riftforged Band","type":"equipment","slot":"Ring","tier":"Rare","itemLevel":7,"baseBonus":{"strength":4,"agility":4,"intelligence":4,"vitality":0,"luck":9},"baseDefense":0,"qty":1}],"bonusIfOptionalDone":{"gold":250}}}]}
 </script>
 
 <script>
@@ -314,8 +359,11 @@ for (const s of SHOPS) for (const it of s.items) if (it.type === 'consumable' ||
 const DROPS = {};  // monsterId -> [{id, chance}]
 for (const m of R.materials || []) for (const src of m.sources) if (src.monsterId) (DROPS[src.monsterId] ||= []).push({ id: m.id, chance: src.dropChance });
 const NODES = {};  // nodeId -> {mat, seconds}
-for (const m of R.materials || []) for (const src of m.sources) if (src.nodeId) NODES[src.nodeId] = { mat: m.id, seconds: src.gatherSeconds };
-const NODE_LABEL = { cinder_vein: 'Mine ore', ash_bloom_patch: 'Pick bloom' };
+for (const m of R.materials || []) for (const src of m.sources) if (src.nodeId) NODES[src.nodeId] = { mat: m.id, seconds: src.gatherSeconds, zone: src.zoneId };
+const NODE_INFO = { cinder_vein: { name: 'Cinder Vein', verb: 'Mine ore' }, ash_bloom_patch: { name: 'Ash Bloom Patch', verb: 'Pick flowers' } };
+const BLD = {};    // buildingId -> building (with districtId)
+for (const d of R.districts || []) for (const b of d.buildings || []) BLD[b.id] = { ...b, districtId: d.id };
+const npcBuilding = nid => Object.values(BLD).find(b => b.npcId === nid);
 // Zones beyond the region keep feeding the crafting economy.
 const GENERIC_DROPS = [{ id: 'riftglass_shard', chance: .12 }, { id: 'cinder_iron_ore', chance: .2 }];
 const CRAFT = {};  // service id -> {svc, npc}
@@ -333,7 +381,7 @@ const rankIx = name => FACTION ? FACTION.ranks.findIndex(r => r.rank === name) :
 
 // Crafting material requirements (formulas from the forge service in the JSON).
 function enhMats(it) {
-  const m = [{ id: 'cinder_iron_ore', n: 1 + Math.floor(it.enh / 2) }];
+  const m = [{ id: 'cinder_iron_ingot', n: 1 + Math.floor(it.enh / 3) }];
   if (it.enh >= 5) m.push({ id: 'riftglass_shard', n: 1 });
   return m;
 }
@@ -406,8 +454,8 @@ function equip(p, it) {
 }
 function receive(p, it) {
   const cur = p.eq[it.slot];
-  if (!cur || power(it) > power(cur)) { equip(p, it); return 'equipped'; }
-  if (p.inv.length >= INV_CAP) { p.gold += salv(it); return 'salvaged'; }
+  if ((!G || G.autoUp) && (!cur || power(it) > power(cur))) { equip(p, it); return 'equipped'; }
+  if (p.inv.length >= INV_CAP) { p.gold += salv(it); return 'bag full, sold'; }
   p.inv.push(it); return 'stored';
 }
 function enhance(p, slot) {
@@ -468,6 +516,7 @@ function genItem(z, boss) {
 }
 
 // ===== Session =====
+// G.loc: 'town' (nothing runs automatically) | 'zone' (G.activity: null = choosing, 'fight', or a gather node id)
 let G;
 function newGame(classId = 'gladiator', name = 'Hero') {
   const p = {
@@ -476,15 +525,20 @@ function newGame(classId = 'gladiator', name = 'Hero') {
   };
   restore(p);
   return {
-    p, zone: 1, kills: 0, autoBoss: true, autoUp: true, autoAdv: true, autoPot: true, speed: 1, mode: 'farm', mon: null,
-    ticks: 0, log: [], hit: null, loot: true, activity: 'fight', gather: 0, queue: [], district: 'gatehold_square',
+    p, loc: 'town', zone: 1, kills: 0, autoBoss: true, autoUp: true, autoAdv: false, autoPot: true, speed: 1, mode: 'farm', mon: null,
+    ticks: 0, log: [], hit: null, loot: true, activity: null, gather: 0, queue: [], district: null, building: null,
   };
 }
 const Z = () => ZONES[G.zone - 1];
-const bossAvail = () => G.kills >= Z().kills && G.mode === 'farm';
+const inTown = () => G.loc === 'town';
+const ambush = () => inTown() && G.queue.length > 0;
+const fighting = () => ambush() || (G.loc === 'zone' && (G.activity === 'fight' || G.mode === 'boss'));
+const gathering = () => G.loc === 'zone' && G.mode !== 'boss' && !!NODES[G.activity];
+const bossAvail = () => G.loc === 'zone' && G.kills >= Z().kills && G.mode === 'farm';
 function emit(msg, cls = '') { G.log.push({ msg, cls }); if (G.log.length > LOG_CAP) G.log.shift(); }
 const regionFoes = id => (R.monsters || []).filter(m => m.zoneId === id && !m.boss && !m.elite);
 const regionBoss = id => (R.monsters || []).find(m => m.zoneId === id && m.boss);
+const zoneNodes = id => Object.keys(NODES).filter(k => NODES[k].zone === id);
 function fromDef(d, boss) {
   const v = boss ? 1 : .9 + Math.random() * .2, hp = Math.trunc(d.hp * v);
   return { mid: d.id, name: d.name, max: hp, hp, dmg: d.damage, def: d.defense, exp: d.exp, gold: d.gold, boss: !!boss, elite: !!d.elite };
@@ -503,12 +557,20 @@ function startBoss() {
   emit(`Boss challenge: ${G.mon.name}`, 'boss');
   return true;
 }
-function travel(id) {
-  if (id < 1 || id > ZONES.length || id > G.p.hz || G.p.level < ZONES[id - 1].req) return false;
-  G.zone = id; G.mode = 'farm'; G.kills = 0; G.mon = null;
-  emit(`Entered ${ZONES[id - 1].name}`);
+const canTravel = id => id >= 1 && id <= ZONES.length && id <= G.p.hz && G.p.level >= ZONES[id - 1].req;
+function travel(id, activity = null) {
+  if (!canTravel(id)) return false;
+  if (G.zone !== id) G.kills = 0;
+  G.loc = 'zone'; G.zone = id; G.mode = 'farm'; G.mon = null; G.activity = activity; G.gather = 0; G.queue = [];
+  emit(`Left Emberwatch for ${ZONES[id - 1].name}.`);
   return true;
 }
+function goTown() {
+  G.loc = 'town'; G.mode = 'farm'; G.mon = null; G.activity = null; G.gather = 0; G.queue = [];
+  G.district = null; G.building = null; restore(G.p);
+  emit('Back in Emberwatch. You rest and recover.');
+}
+function setActivity(a) { if (G.loc !== 'zone' || G.mode === 'boss') return; G.activity = a; G.gather = 0; G.mon = null; G.hit = null; }
 function act(m) {
   const p = G.p, s = decide(p), st = stats(p);
   if (s) { p.mp -= s.mp; p.cd[s.id] = s.cd; }
@@ -544,33 +606,38 @@ function questKill(mid) {
   }
 }
 function killed(m) {
-  const p = G.p, z = Z();
+  const p = G.p, z = Z(), wasAmbush = ambush() || inTown();
   fx('kill', { mon: m });
   if (gainExp(p, m.exp)) { emit(`Level up! Level ${p.level}`, 'up'); fx('level'); }
   p.gold += m.gold;
   if (m.mid) { p.killsBy[m.mid] = (p.killsBy[m.mid] || 0) + 1; questKill(m.mid); }
   dropMats(m);
-  if (G.loot && (m.boss || Math.random() < z.loot)) {
+  if (G.loot && !wasAmbush && (m.boss || Math.random() < z.loot)) {
     const it = genItem(z, m.boss), out = receive(p, it);
     emit(`${TIERS[it.tier]} ${it.name} (${it.slot}) — ${out}`, 'loot t' + it.tier);
     fx('loot', { tier: it.tier });
   }
+  G.mon = null;
+  if (wasAmbush) { if (!G.queue.length) { emit('The ambushers are dead. The Cinders are quiet again.', 'quest'); restore(p); } return; }
   if (m.boss) {
     G.mode = 'farm'; emit(`Boss defeated: ${m.name}`, 'boss');
     const next = z.id + 1;
     if (next <= ZONES.length) {
-      if (p.hz < next && next === 2) emit('Riftside Gate is open: the Shattered Rift awaits.', 'quest');
+      if (p.hz < next) emit(next === 2 ? 'Riftside Gate is open: the Shattered Rift awaits.' : `New zone unlocked: ${ZONES[next - 1].name}.`, 'quest');
       p.hz = Math.max(p.hz, next);
-      if (G.autoAdv && p.level >= ZONES[next - 1].req) travel(next);
+      if (G.autoAdv && p.level >= ZONES[next - 1].req) { travel(next, 'fight'); return; }
     }
     G.kills = 0;
   } else if (!m.elite) G.kills++;
-  G.mon = null;
 }
 function defeated() {
-  emit(G.mon && G.mon.boss ? `Defeated by ${G.mon.name}. Re-farm and retry.` : 'You fell. Respawning in Gatehold Square.', 'bad');
+  const boss = G.mon && G.mon.boss;
+  if (ambush()) {
+    G.queue = []; G.mon = null; G.district = 'gatehold_square'; G.building = null; restore(G.p);
+    emit('The cutthroats left you in the ash. You wake up in Gatehold Square.', 'bad'); return;
+  }
+  emit(boss ? `Defeated by ${G.mon.name}. Re-farm and retry.` : 'You fell, but crawl back to the camp and keep going.', 'bad');
   if (G.mode === 'boss') { G.mode = 'farm'; G.kills = Math.trunc(Z().kills / 2); }
-  G.queue = [];
   restore(G.p); G.mon = null;
 }
 function questTimers() {
@@ -581,17 +648,17 @@ function questTimers() {
 }
 function tick() {
   const p = G.p; G.ticks++; ptick(p); questTimers();
-  if (G.activity !== 'fight' && !G.queue.length && G.mode !== 'boss') {
+  if (gathering()) {
     const node = NODES[G.activity];
     if (++G.gather >= node.seconds) {
       G.gather = 0; addMat(p, node.mat); fx('gather', { name: matName(node.mat) });
       G.hit = { text: `+1 ${matName(node.mat)} (${p.mats[node.mat]})` };
-    } else G.hit = { text: `Gathering ${matName(node.mat)} ${G.gather}/${node.seconds}s` };
-    G.mon = null;
+    } else G.hit = { text: `${NODE_INFO[G.activity]?.verb || 'Gathering'}… ${G.gather}/${node.seconds}s` };
     return;
   }
+  if (!fighting()) return; // town or choosing: nothing happens on its own
   if (!G.mon || G.mon.hp <= 0) {
-    if (G.autoBoss && bossAvail() && p.level >= Z().req && !G.queue.length) startBoss(); else G.mon = spawn();
+    if (!ambush() && G.autoBoss && p.hz <= G.zone && bossAvail() && p.level >= Z().req) startBoss(); else G.mon = spawn();
   }
   const m = G.mon;
   autoPotions(p);
@@ -604,35 +671,28 @@ function tick() {
   if (p.hp <= 0) defeated();
   else if (m.hp <= 0) killed(m);
 }
-// Materials that active "collect" quests still need are kept out of auto-upgrade's reach.
+// Materials that active "collect" quests still need are kept out of the forge's "improve all".
 function questReserve(p) {
   const r = {};
   for (const [qid, st] of Object.entries(p.q)) if (st.state === 'active')
     for (const o of QST[qid].objectives) if (o.kind === 'collect') r[o.itemId] = (r[o.itemId] || 0) + o.count;
   return r;
 }
-function autoUpgrade() {
+// Forge "Improve all": cheapest enhance/promote first, only services this crafter offers.
+function improveAll(npcId) {
   const p = G.p, res = questReserve(p);
   for (const k in res) { res[k] = Math.min(res[k], p.mats[k] || 0); p.mats[k] -= res[k]; }
-  try { return autoUpgradeInner(p); } finally { for (const k in res) p.mats[k] += res[k]; }
-}
-function autoUpgradeInner(p) {
   let n = 0;
-  for (const slot of SLOTS) {
-    const best = maxBy(p.inv.filter(i => i.slot === slot), power);
-    if (best && (!p.eq[slot] || power(best) > power(p.eq[slot]))) { equip(p, best); n++; }
-  }
-  for (const it of p.inv.filter(i => p.eq[i.slot] && power(i) <= power(p.eq[i.slot]))) {
-    p.inv.splice(p.inv.indexOf(it), 1); p.gold += salv(it);
-  }
-  for (let prog = true; prog;) {
-    prog = false;
-    const order = Object.values(p.eq).sort((a, b) => (canPro(a) ? proCost(p)(a) : enhCost(a)) - (canPro(b) ? proCost(p)(b) : enhCost(b)));
-    for (const it of order) {
-      if (canPro(it) && promote(p, it.slot)) { n++; prog = true; break; }
-      if ((it.enh < PROMOTE_AT || it.tier === 4) && enhance(p, it.slot)) { n++; prog = true; break; }
+  try {
+    for (let prog = true; prog;) {
+      prog = false;
+      const order = Object.values(p.eq).sort((a, b) => (canPro(a) ? proCost(p)(a) : enhCost(a)) - (canPro(b) ? proCost(p)(b) : enhCost(b)));
+      for (const it of order) {
+        if (canPro(it) && PROMO[it.tier] && PROMO[it.tier].npc.id === npcId && promote(p, it.slot)) { n++; prog = true; break; }
+        if (npcId === 'torvald_ashmane' && (it.enh < PROMOTE_AT || it.tier === 4) && enhance(p, it.slot)) { n++; prog = true; break; }
+      }
     }
-  }
+  } finally { for (const k in res) p.mats[k] += res[k]; }
   return n;
 }
 
@@ -657,18 +717,28 @@ function buy(p, shopId, idx) {
 }
 function craft(p, svcId) {
   const c = CRAFT[svcId], s = c.svc, ms = s.materials.map(x => ({ id: x.id, n: x.qty }));
-  if (s.unlockedByQuestId && !p.unlocks.includes(svcId)) return;
-  if (p.gold < s.goldCost || !hasMats(p, ms)) return;
+  if (s.unlockedByQuestId && !p.unlocks.includes(svcId)) return false;
+  if (p.gold < s.goldCost || !hasMats(p, ms)) return false;
   p.gold -= s.goldCost; takeMats(p, ms);
+  if (s.outputMaterial) { addMat(p, s.outputMaterial.id, s.outputMaterial.qty); fx('smelt'); return true; }
   const it = toItem(s.output);
   emit(`${c.npc.name} crafted ${it.name} — ${receive(p, it)}`, 'loot t' + it.tier);
+  return true;
 }
+function smeltAll(p) {
+  let n = 0; const res = questReserve(p).cinder_iron_ore || 0;
+  while ((p.mats.cinder_iron_ore || 0) - 2 >= res && p.gold >= CRAFT.smelt_cinder_iron.svc.goldCost && craft(p, 'smelt_cinder_iron')) n++;
+  return n;
+}
+const sellMatPrice = id => (MAT[id] ? MAT[id].sellPrice : 0);
+function sellMat(p, id, n) { n = Math.min(n, p.mats[id] || 0); if (n <= 0) return; p.mats[id] -= n; p.gold += n * sellMatPrice(id); emit(`Sold ${n}× ${matName(id)} for ${n * sellMatPrice(id)} g.`); }
+function sellItem(p, id) { const it = p.inv.find(i => i.id === id); if (!it) return; p.inv.splice(p.inv.indexOf(it), 1); p.gold += salv(it); emit(`Sold ${it.name} for ${salv(it)} g.`); }
 function visit(id) {
-  G.district = id;
+  G.district = id; G.building = null;
   const d = DIST[id];
   for (const ev of d.events || []) if (Math.random() < ev.chancePerVisit) {
     for (let i = 0; i < ev.spawn.count; i++) G.queue.push(ev.spawn.monsterId);
-    G.activity = 'fight'; G.mon = null;
+    G.mon = null; fx('ambush');
     emit(`Ambush in ${d.name}! ${ev.spawn.count}× ${MON[ev.spawn.monsterId].name}`, 'bad');
   }
 }
@@ -698,14 +768,12 @@ function failQuest(qid, why) {
 function questAction(qid, i) {
   const q = QST[qid], st = qState(qid), o = q.objectives[i];
   if (o.kind === 'talk') {
-    visit(NPC[o.npcId].districtId);
     st.prog[i] = 1;
     if (o.receivesItemId) G.p.qitems[o.receivesItemId] = 1;
     emit(`${NPC[o.npcId].name} hands you the ${(q.questItems || []).find(x => x.id === o.receivesItemId)?.name || 'package'}.`, 'quest');
   } else if (o.kind === 'deliver') {
     const prev = q.objectives.slice(0, i).every((x, j) => x.optional || objDone(q, st, j));
     if (!prev || !G.p.qitems[o.itemId]) return;
-    visit(NPC[o.toNpcId].districtId);
     delete G.p.qitems[o.itemId]; st.prog[i] = 1;
     emit(`Delivered to ${NPC[o.toNpcId].name}.`, 'quest');
   }
@@ -727,15 +795,21 @@ function turnIn(qid) {
   emit(`Quest complete: ${q.name} — +${r.exp} exp, +${r.gold + (opt && r.bonusIfOptionalDone ? r.bonusIfOptionalDone.gold : 0)} gold`, 'quest');
 }
 
-// ===== Offline progress (sample 300 ticks, extrapolate at 60%, cap 12h) =====
+// ===== Offline progress: only while out in a zone (town = nothing happens). Fight: sample 300 ticks, extrapolate at 60%. Cap 12h. =====
 const totalExp = p => { let s = p.exp; for (let l = 1; l < p.level; l++) s += expToNext(l); return s; };
 function offline(seconds) {
   const sec = Math.min(Math.floor(seconds), 12 * 3600);
   if (sec <= 0) return null;
-  const p = G.p, e0 = totalExp(p), g0 = p.gold, l0 = p.level, sample = Math.min(sec, 300);
-  const ab = G.autoBoss, act0 = G.activity; G.autoBoss = false; G.loot = false; G.activity = 'fight'; G.queue = [];
+  const p = G.p;
+  if (G.loc !== 'zone' || !G.activity) return { sec, idle: true };
+  if (NODES[G.activity] && G.mode !== 'boss') {
+    const n = NODES[G.activity], k = Math.floor(sec * .6 / n.seconds); addMat(p, n.mat, k);
+    return { sec, exp: 0, gold: 0, lv: 0, mat: k ? `${k}× ${matName(n.mat)}` : '' };
+  }
+  const e0 = totalExp(p), g0 = p.gold, l0 = p.level, sample = Math.min(sec, 300);
+  const ab = G.autoBoss; G.autoBoss = false; G.loot = false; G.mode = 'farm'; G.activity = 'fight'; G.mon = null;
   for (let i = 0; i < sample; i++) tick();
-  G.autoBoss = ab; G.loot = true; G.activity = act0;
+  G.autoBoss = ab; G.loot = true;
   const rest = sec - sample;
   if (rest > 0) {
     const k = rest / sample * .6;
@@ -747,16 +821,22 @@ function offline(seconds) {
 
 // ===== Save =====
 const KEY = 'riftbound.save.v1';
-const snapshot = () => ({
-  v: 2, t: Date.now(), p: { ...G.p, cd: {} }, zone: G.zone, kills: G.kills, autoBoss: G.autoBoss, autoUp: G.autoUp,
-  autoAdv: G.autoAdv, autoPot: G.autoPot, speed: G.speed, activity: G.activity, district: G.district, ticks: G.ticks,
-});
-function save() { try { localStorage.setItem(KEY, JSON.stringify(snapshot())); } catch (e) { /* storage unavailable */ } }
+const SAVE_KEYS = ['loc', 'zone', 'kills', 'autoBoss', 'autoUp', 'autoAdv', 'autoPot', 'speed', 'activity', 'district', 'building', 'ticks', 'log'];
+const snapshot = () => {
+  const o = { v: 3, t: Date.now(), p: { ...G.p, cd: {} } };
+  for (const k of SAVE_KEYS) o[k] = G[k];
+  if (o.loc === 'town') { o.district = G.queue.length ? 'gatehold_square' : o.district; }
+  return o;
+};
+function save() { if (!G) return; try { localStorage.setItem(KEY, JSON.stringify(snapshot())); } catch (e) { /* storage unavailable */ } }
+function loadSave() { try { const d = JSON.parse(localStorage.getItem(KEY)); return d && d.p ? d : null; } catch (e) { return null; } }
 function fromSnap(d) {
   const g = newGame();
-  for (const k of ['zone', 'kills', 'autoBoss', 'autoUp', 'autoAdv', 'autoPot', 'speed', 'activity', 'district', 'ticks']) if (d[k] !== undefined) g[k] = d[k];
+  for (const k of SAVE_KEYS) if (d[k] !== undefined) g[k] = d[k];
+  if (!d.v || d.v < 3) { g.loc = 'zone'; if (!NODES[g.activity]) g.activity = 'fight'; g.district = null; g.building = null; }
   g.p = Object.assign(g.p, d.p); g.p.cd = {};
-  if (!NODES[g.activity]) g.activity = 'fight';
+  if (g.activity && g.activity !== 'fight' && !NODES[g.activity]) g.activity = null;
+  if (!Array.isArray(g.log)) g.log = [];
   return g;
 }
 
@@ -764,15 +844,320 @@ function fromSnap(d) {
 const $ = id => document.getElementById(id);
 const fmt = n => n >= 1e6 ? (n / 1e6).toFixed(2) + 'M' : n >= 1e4 ? (n / 1e3).toFixed(1) + 'k' : String(Math.floor(n));
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-let tab = 'gear', lastPanel = '', resetPending = false;
+let tab = 'world', lastView = '', lastSheet = '', resetPending = false, bagFilter = 'gear', shopMode = 'buy', sheet = null;
 const setBar = (id, v, max) => { $(id).style.width = Math.max(0, Math.min(100, v / max * 100)) + '%'; };
 const matsText = (p, ms) => ms.map(m => { const h = p.mats[m.id] || 0; return `<span class="${h < m.n ? 'miss' : ''}">${m.n}× ${matName(m.id)} (${h})</span>`; }).join(', ');
 const btn = (label, data, enabled = true, cls = 'sm') => `<button class="${cls}" ${data} ${enabled ? '' : 'disabled'}>${label}</button>`;
 const statBox = (pairs, cls) => `<div class="${cls}">${pairs.map(([k, v]) => `<div><small>${k}</small><span class="num">${v}</span></div>`).join('')}</div>`;
+const itemName = it => esc(it.name) + (it.enh ? ' +' + it.enh : '');
+const ATTR_LBL = [['s', 'STR'], ['a', 'AGI'], ['i', 'INT'], ['v', 'VIT'], ['l', 'LUK']];
+const DTYPE = { market: 'Market square', craft_quarter: 'Crafting quarter', slums: 'Slums', garrison: 'Garrison', zone_exit: 'Gate to the Rift' };
+const BICON = { gate: 'Gate', board: 'Board', shop: 'Shop', forge: 'Forge', jeweler: 'Ring', garrison: 'Banner' };
+const MAT_ICON = { cinder_iron_ingot: 'Ingot', cinder_iron_ore: 'Ore', ash_bloom: 'Flower', ash_wolf_fang: 'Fang' };
+const crumb = (act, label) => `<button class="crumb" data-act="${act}">‹ ${esc(label)}</button>`;
 
+function whereText() {
+  if (inTown()) {
+    if (ambush()) return `Emberwatch · ${DIST[G.district].name} · ambush!`;
+    return ['Emberwatch', G.district && DIST[G.district].name, G.building && BLD[G.building].name].filter(Boolean).join(' · ');
+  }
+  const a = G.mode === 'boss' ? 'Boss fight' : G.activity === 'fight' ? 'Hunting' : NODES[G.activity] ? NODE_INFO[G.activity].verb : 'Choosing what to do';
+  return `Zone ${Z().id}: ${Z().name} · ${a}`;
+}
+
+// --- material knowledge: where it comes from, what it is for ---
+function matSources(id) {
+  const out = [], m = MAT[id];
+  for (const s of (m && m.sources) || []) {
+    if (s.nodeId) out.push(`${NODE_INFO[s.nodeId]?.verb || 'Gather'} at ${NODE_INFO[s.nodeId]?.name || s.nodeId} (${ZONES[s.zoneId - 1].name}) — ${s.gatherSeconds}s each`);
+    else if (s.monsterId) out.push(`Drops from ${MON[s.monsterId].name} (${Math.round(s.dropChance * 100)}%)`);
+    else if (s.crafterNpcId) { const b = npcBuilding(s.crafterNpcId); out.push(`Smelt at ${b.name}, ${DIST[b.districtId].name}: ${CRAFT[s.serviceId].svc.materials.map(x => `${x.qty}× ${matName(x.id)}`).join(' + ')} + ${CRAFT[s.serviceId].svc.goldCost} g`); }
+  }
+  for (const sh of SHOPS) if (sh.items.some(i => i.id === id)) out.push(`Buy at ${sh.name} (${DIST[sh.districtId].name})`);
+  if (GENERIC_DROPS.some(g => g.id === id)) out.push('Drops from monsters in zones 3–6');
+  return out;
+}
+function matUses(id) {
+  const out = [];
+  for (const k in CRAFT) {
+    const { svc, npc } = CRAFT[k], b = npcBuilding(npc.id);
+    const uses = (svc.materials || []).some(x => x.id === id);
+    if (uses) out.push(`${svc.name} — ${b.name}`);
+  }
+  for (const q of Object.values(QST)) if (q.objectives.some(o => o.kind === 'collect' && o.itemId === id)) out.push(`Quest “${q.name}”`);
+  return out;
+}
+const srcHint = id => { const s = matSources(id)[0]; return s ? ` — ${s.split(' — ')[0]}` : ''; };
+
+// --- quests ---
+const canDeliver = (q, st, i) => q.objectives.slice(0, i).every((x, j) => x.optional || objDone(q, st, j)) && !!G.p.qitems[q.objectives[i].itemId];
+function npcAlert(nid) {
+  if (!nid) return false;
+  return Object.values(QST).some(q => {
+    const st = qState(q.id);
+    if (q.giverNpcId === nid && (qAvailable(q) || (st && st.state === 'active' && qComplete(q, st)))) return true;
+    return !!(st && st.state === 'active' && q.objectives.some((o, i) => !objDone(q, st, i) && ((o.kind === 'talk' && o.npcId === nid) || (o.kind === 'deliver' && o.toNpcId === nid && canDeliver(q, st, i)))));
+  });
+}
+const bldAlert = b => npcAlert(b.npcId) || (b.type === 'board' && Object.values(QST).some(q => qAvailable(q)));
+function rewardText(q) {
+  const r = q.rewards;
+  return esc([`${fmt(r.exp)} exp`, `${fmt(r.gold)} g`, ...(r.reputation || []).map(x => `${x.amount} rep`), ...(r.items || []).map(i => `${i.qty > 1 ? i.qty + '× ' : ''}${i.name || matName(i.id)}`), ...(r.unlocks || []).map(u => `unlocks ${CRAFT[u].svc.output.name}`)].join(' · '))
+    + (r.bonusIfOptionalDone ? ` · +${r.bonusIfOptionalDone.gold} g bonus` : '');
+}
+function objHtml(q, st, here) {
+  const p = G.p;
+  let h = `<div class="obj">` + q.objectives.map((o, i) => {
+    const done = objDone(q, st, i); let label, extra = '';
+    if (o.kind === 'kill') label = `Kill ${MON[o.monsterId].name} ${Math.min(st.prog[i], o.count)}/${o.count}${o.zoneId ? ` (${ZONES[o.zoneId - 1].name})` : MON[o.monsterId].elite ? ' (ambush in The Cinders)' : ''}`;
+    else if (o.kind === 'collect') label = `Bring ${matName(o.itemId)} ${Math.min(p.mats[o.itemId] || 0, o.count)}/${o.count}${done ? '' : srcHint(o.itemId)}`;
+    else if (o.kind === 'talk') { label = `Meet ${NPC[o.npcId].name} (${DIST[NPC[o.npcId].districtId].name})`; if (!done && here === o.npcId) extra = btn('Take package', `data-act="qact" data-q="${q.id}" data-i="${i}"`, true, 'sm go'); }
+    else { label = `Deliver to ${NPC[o.toNpcId].name} (${DIST[NPC[o.toNpcId].districtId].name})`; if (!done && here === o.toNpcId) extra = btn('Deliver', `data-act="qact" data-q="${q.id}" data-i="${i}"`, canDeliver(q, st, i), 'sm go'); }
+    return `<div class="${done ? 'ok' : ''}">${done ? '✓' : '○'} ${esc(label)}${o.optional ? ' (optional)' : ''} ${extra}</div>`;
+  }).join('') + `</div>`;
+  if (q.timeLimitSeconds) {
+    const left = Math.max(0, q.timeLimitSeconds - (G.ticks - st.t));
+    h += `<div class="meta">Time left: <span class="num">${Math.floor(left / 60)}:${String(left % 60).padStart(2, '0')}</span></div><div class="cd q"><i style="width:${left / q.timeLimitSeconds * 100}%"></i></div>`;
+  }
+  return h;
+}
+const questCard = (q, body, act, cls = 't4') => `<div class="row ${cls}"><div><div class="name">${esc(q.name)}</div><div class="meta">${esc(q.type)} · Lv ${q.minLevel}+</div>${body}</div><div class="acts">${act}</div></div>`;
+function npcQuestsHtml(p, nid) {
+  let h = '';
+  for (const q of Object.values(QST)) {
+    const st = qState(q.id);
+    if (q.giverNpcId === nid && qAvailable(q))
+      h += questCard(q, `<p class="lead">${esc(q.description)}</p>${st && st.state === 'failed' ? '<div class="meta miss">Failed earlier — you can try again.</div>' : ''}<div class="meta">Reward: ${rewardText(q)}</div>`, btn('Accept', `data-act="accept" data-q="${q.id}"`, true, 'sm go'));
+    else if (q.giverNpcId === nid && st && st.state === 'active')
+      h += questCard(q, objHtml(q, st, nid) + `<div class="meta">Reward: ${rewardText(q)}</div>`, btn('Turn in', `data-act="turnin" data-q="${q.id}"`, qComplete(q, st), 'sm go'));
+    else if (st && st.state === 'active' && q.objectives.some(o => o.npcId === nid || o.toNpcId === nid))
+      h += questCard(q, objHtml(q, st, nid), '');
+  }
+  return h ? `<div class="section">Quests</div>` + h : '';
+}
+
+// --- town ---
+function townHtml(p) {
+  if (ambush()) {
+    const n = G.queue.length + (G.mon && G.mon.hp > 0 ? 1 : 0);
+    return `<div class="notice"><p><b>Ambush in The Cinders!</b> ${n} cutthroat${n === 1 ? '' : 's'} left. Your hero fights back automatically.</p>${btn('Flee to Gatehold Square', 'data-act="flee"', true, 'big')}</div>`;
+  }
+  if (G.building) return buildingHtml(p, BLD[G.building]);
+  if (G.district) return districtHtml(p, DIST[G.district]);
+  const set = R.settlement;
+  let h = `<div class="intro"><h2>${esc(set.name)}</h2><p class="lead">${esc(set.atmosphere)}</p><p class="meta">In town nothing happens on its own: shop, forge, take quests. Fighting and gathering happen out in the zones.</p></div>`;
+  h += `<button class="card wide gocard" data-act="bld" data-id="town_gate">${icon('Gate')}<div><h3>Leave town</h3><div class="meta">Town Gate · choose a zone, then hunt or gather</div></div></button>`;
+  h += `<div class="section">Districts</div><div class="cards">` + R.districts.map(d => `<button class="card" data-act="district" data-id="${d.id}">
+      <h3>${esc(d.name)}${d.buildings.some(bldAlert) ? ' <b class="qdot">!</b>' : ''}</h3><div class="meta">${esc(DTYPE[d.type] || d.type)}${d.safeZone ? '' : ' · <span class="miss">unsafe</span>'}</div>
+      <div class="blist">${d.buildings.map(b => `<span>${esc(b.name)}</span>`).join('')}</div></button>`).join('') + `</div>`;
+  return h;
+}
+const bldDesc = b => b.description || (b.shopId ? SHOPS.find(s => s.id === b.shopId).specialization : '');
+function districtHtml(p, d) {
+  let h = crumb('totown', 'Emberwatch');
+  h += `<h2>${esc(d.name)}</h2><p class="lead">${esc(d.description)}${d.safeZone ? '' : ' <span class="miss">Unsafe: cutthroats may ambush you here.</span>'}</p>`;
+  h += `<div class="cards">` + d.buildings.map(b => {
+    const n = b.npcId && NPC[b.npcId];
+    return `<button class="card wide bcard" data-act="bld" data-id="${b.id}">${icon(BICON[b.type])}<div><h3>${esc(b.name)}${bldAlert(b) ? ' <b class="qdot">!</b>' : ''}</h3><div class="meta">${n ? esc(n.name) + ' · ' : ''}${esc(bldDesc(b))}</div></div></button>`;
+  }).join('') + `</div>`;
+  return h;
+}
+function buildingHtml(p, b) {
+  let h = crumb('todistrict', DIST[b.districtId].name) + `<h2>${esc(b.name)}</h2>`;
+  if (b.npcId) { const n = NPC[b.npcId]; h += `<div class="npc"><b>${esc(n.name)}</b> <span class="meta">${esc(n.race)} · ${esc(n.profession || n.role.replace('_', ' '))}</span><p>${esc(n.trait)}</p></div>` + npcQuestsHtml(p, b.npcId); }
+  else if (b.description) h += `<p class="lead">${esc(b.description)}</p>`;
+  if (b.type === 'shop') h += shopHtml(p, SHOPS.find(s => s.id === b.shopId));
+  if (b.type === 'forge' || b.type === 'jeweler') h += crafterHtml(p, b.npcId);
+  if (b.type === 'garrison') h += garrisonHtml(p);
+  if (b.type === 'gate') h += gateHtml(p, b.zoneIds);
+  if (b.type === 'board') h += boardHtml(p);
+  return h;
+}
+function shopHtml(p, s) {
+  let h = `<div class="section">${esc(s.specialization)}</div><div class="chips seg">${btn('Buy', `data-act="shopmode" data-id="buy" aria-pressed="${shopMode === 'buy'}"`, true, 'chip')}${btn('Sell', `data-act="shopmode" data-id="sell" aria-pressed="${shopMode === 'sell'}"`, true, 'chip')}</div>`;
+  if (shopMode === 'buy') return h + s.items.map((it, i) => {
+    const name = it.name || matName(it.id), t = it.tier ? TIER_IX[it.tier] : (it.type === 'material' ? TIER_IX[MAT[it.id].tier] : '');
+    const lock = it.requires && rankIx(rankOf(p.rep).rank) < rankIx(it.requires.rank) ? `Requires ${it.requires.rank} reputation` : '';
+    const lim = it.dailyLimit ? ` · ${it.dailyLimit - dailyBought(p, it.id)}/${it.dailyLimit} left today` : '';
+    const owned = it.type === 'material' ? ` · have ${p.mats[it.id] || 0}` : CONS[it.id] ? ` · have ${p.cons[it.id] || 0}` : '';
+    return `<div class="row ${t !== '' ? 't' + t : ''}"><div class="itemhead">${icon(it.slot || (it.type === 'material' ? MAT_ICON[it.id] || 'Material' : 'Potion'))}<div><div class="name">${esc(name)}</div><div class="meta">${esc(itemLine(it))}${lim}${owned}</div>${lock ? `<div class="meta miss">${lock}</div>` : ''}</div></div>
+      <div class="acts">${btn(`Buy<br><span class="num">${fmt(price(p, it))} g</span>`, `data-act="buy" data-shop="${s.id}" data-i="${i}"`, canBuy(p, it))}</div></div>`;
+  }).join('');
+  const res = questReserve(p), weak = p.inv.filter(i => p.eq[i.slot] && power(i) <= power(p.eq[i.slot]));
+  h += `<div class="section">Gear in your bag <span class="num">${p.inv.length}/${INV_CAP}</span></div>`;
+  h += p.inv.length ? p.inv.slice().sort((a, b) => power(b) - power(a)).map(it => `<div class="row t${it.tier}"><div class="itemhead">${icon(it.slot)}<div><div class="name">${itemName(it)}</div><div class="meta">${it.slot} · ${TIERS[it.tier]} · power <span class="num">${power(it)}</span>${p.eq[it.slot] ? ` (worn ${power(p.eq[it.slot])})` : ''}</div></div></div>
+      <div class="acts">${btn(`Sell<br><span class="num">${fmt(salv(it))} g</span>`, `data-act="sellitem" data-id="${it.id}"`)}</div></div>`).join('') : '<div class="meta">No spare gear.</div>';
+  if (weak.length) h += `<div class="btnrow">${btn(`Sell ${weak.length} weaker than worn (${fmt(weak.reduce((t, i) => t + salv(i), 0))} g)`, 'data-act="sellweak"', true, 'big')}</div>`;
+  const mats = (R.materials || []).filter(m => (p.mats[m.id] || 0) > 0);
+  h += `<div class="section">Materials</div>`;
+  h += mats.length ? mats.map(m => {
+    const have = p.mats[m.id], keep = res[m.id] || 0;
+    return `<div class="row t${TIER_IX[m.tier]}"><div class="itemhead">${icon(MAT_ICON[m.id] || 'Material')}<div><div class="name">${esc(m.name)} ×${have}</div><div class="meta">${m.sellPrice} g each${keep ? ` · <span class="miss">quest needs ${keep}</span>` : ''}</div></div></div>
+      <div class="acts">${btn('Sell 1', `data-act="sellmat" data-id="${m.id}" data-n="1"`)}${btn('All', `data-act="sellmat" data-id="${m.id}" data-n="${have}"`)}</div></div>`;
+  }).join('') : '<div class="meta">No materials.</div>';
+  return h;
+}
+function crafterHtml(p, nid) {
+  const cr = (R.crafters || []).find(c => c.npcId === nid); let h = '';
+  for (const s of cr.services.filter(s => s.outputMaterial)) {
+    const inp = s.materials[0], have = p.mats[inp.id] || 0, out = s.outputMaterial, n = Math.min(Math.floor(have / inp.qty), Math.floor(p.gold / Math.max(1, s.goldCost)));
+    h += `<div class="section">Smelting</div><div class="row t1"><div class="itemhead">${icon('Ingot')}<div><div class="name">${esc(matName(inp.id))} → ${esc(matName(out.id))}</div>
+      <div class="meta">${inp.qty} ore + ${s.goldCost} g = ${out.qty} ingot · you have <span class="num">${have}</span> ore, <span class="num">${p.mats[out.id] || 0}</span> ingots</div>
+      <div class="meta">Ingots are what enhancing, promoting and crafting use.</div></div></div>
+      <div class="acts">${btn('Smelt 1', `data-act="craft" data-id="${s.id}"`, n > 0)}${btn(`All (${n})`, 'data-act="smeltall"', n > 0)}</div></div>`;
+  }
+  const enh = cr.services.find(s => s.id === 'enhance'), worn = SLOTS.filter(s => p.eq[s]);
+  const pros = worn.filter(s => canPro(p.eq[s]) && PROMO[p.eq[s].tier] && PROMO[p.eq[s].tier].npc.id === nid);
+  if (enh || pros.length) h += `<div class="section">Upgrade worn gear</div><div class="btnrow">${btn('Improve all (cheapest first)', `data-act="improve" data-npc="${nid}"`, true, 'big')}</div>`;
+  for (const slot of worn) {
+    const it = p.eq[slot], pro = pros.includes(slot);
+    if (!pro && !enh) continue;
+    const cost = pro ? proCost(p)(it) : enhCost(it), ms = pro ? proMats(it) : enhMats(it), can = pro || canEnh(it);
+    h += `<div class="row t${it.tier}"><div class="itemhead">${icon(slot)}<div><div class="name">${itemName(it)}</div><div class="meta">${slot} · ${TIERS[it.tier]} · +${it.enh}/${MAX_ENH}${!pro && canPro(it) ? ` · ready to promote at ${esc(PROMO[it.tier].npc.name)}` : ''}</div>
+      ${can ? `<div class="meta need">${pro ? 'Promote to ' + TIERS[it.tier + 1] : 'Enhance +1'}: ${matsText(p, ms)}</div>` : ''}</div></div>
+      <div class="acts">${can ? btn(`${pro ? 'Promote' : 'Enhance'}<br><span class="num">${fmt(cost)} g</span>`, `data-act="${pro ? 'pro' : 'enh'}" data-slot="${slot}"`, p.gold >= cost && hasMats(p, ms), pro ? 'sm go' : 'sm') : '<span class="meta">Max</span>'}</div></div>`;
+  }
+  if (!worn.length && enh) h += '<div class="meta">Equip some gear first.</div>';
+  const promos = cr.services.filter(s => s.requires && s.requires.fromTier);
+  if (promos.length) h += `<div class="section">Promotion services</div>` + promos.map(s => `<div class="row"><div><div class="name">${esc(s.name)}</div><div class="meta">Item at +${s.requires.enhancement} · ${s.materials.map(x => `${x.qty}× ${esc(matName(x.id))}`).join(', ')}</div></div></div>`).join('');
+  const crafts = cr.services.filter(s => s.output);
+  if (crafts.length) h += `<div class="section">Crafting</div>` + crafts.map(s => {
+    const ms = s.materials.map(x => ({ id: x.id, n: x.qty })), locked = s.unlockedByQuestId && !p.unlocks.includes(s.id);
+    return `<div class="row t${TIER_IX[s.output.tier]}"><div class="itemhead">${icon(s.output.slot)}<div><div class="name">${esc(s.output.name)}</div><div class="meta">${esc(itemLine(s.output))}</div>
+      <div class="meta need">${matsText(p, ms)}</div>${locked ? `<div class="meta miss">Unlocked by quest “${esc(QST[s.unlockedByQuestId].name)}”</div>` : ''}</div></div>
+      <div class="acts">${btn(`Craft<br><span class="num">${fmt(s.goldCost)} g</span>`, `data-act="craft" data-id="${s.id}"`, !locked && p.gold >= s.goldCost && hasMats(p, ms), 'sm go')}</div></div>`;
+  }).join('');
+  return h;
+}
+function garrisonHtml(p) {
+  const rk = rankOf(p.rep);
+  let h = `<div class="section">Garrison reputation · <span class="num">${p.rep}</span></div>` + FACTION.ranks.map(r => `<div class="row ${r.rank === rk.rank ? 't4' : ''}"><div><div class="name">${r.rank}</div><div class="meta">${r.minRep} rep · ${Math.round(r.shopDiscount * 100)}% off in all shops</div></div></div>`).join('');
+  h += `<div class="section">Boss gates</div>` + ZONES.filter(z => z.id <= p.hz).map(z => {
+    const rb = regionBoss(z.id), beaten = p.hz > z.id;
+    return `<div class="row t3"><div><div class="name">${esc(rb ? rb.name : z.name + ' Warden')}</div><div class="meta">${z.name} · ${beaten ? 'defeated' : `kill ${z.kills} monsters there to challenge`}</div></div></div>`;
+  }).join('');
+  return h;
+}
+function gateHtml(p, only) {
+  return `<div class="section">Where to?</div>` + ZONES.filter(z => !only || only.includes(z.id)).map(z => {
+    const open = z.id <= p.hz, lvl = p.level >= z.req, rb = regionBoss(z.id), foes = regionFoes(z.id), nodes = zoneNodes(z.id);
+    return `<div class="row ${open && lvl ? 't1' : ''}"><div><div class="name">${z.id}. ${esc(z.name)}</div>
+      <div class="meta">Lv ${z.req}+ · ${foes.length ? esc(foes.map(f => f.name).join(', ')) : 'zone prowlers'}${nodes.length ? ' · gather: ' + nodes.map(n => esc(matName(NODES[n].mat))).join(', ') : ''}</div>
+      <div class="meta">Boss: ${esc(rb ? rb.name : z.name + ' Warden')}${!open ? ' · <span class="miss">locked: beat the previous boss</span>' : ''}</div></div>
+      <div class="acts">${btn(!open ? 'Locked' : !lvl ? 'Lv ' + z.req : 'Travel', `data-act="travel" data-zone="${z.id}"`, open && lvl, 'sm go')}</div></div>`;
+  }).join('');
+}
+function boardHtml(p) {
+  const qs = Object.values(QST).filter(q => !(qState(q.id) && qState(q.id).state === 'done'));
+  return `<div class="section">Open work</div>` + (qs.map(q => {
+    const g = NPC[q.giverNpcId], b = npcBuilding(q.giverNpcId), st = qState(q.id), active = st && st.state === 'active';
+    const status = active ? 'In progress' : qAvailable(q) ? 'Available' : `Requires ${[p.level < q.minLevel ? `Lv ${q.minLevel}` : '', ...q.prerequisiteQuestIds.filter(x => !(qState(x) && qState(x).state === 'done')).map(x => `“${QST[x].name}”`)].filter(Boolean).join(', ')}`;
+    return questCard(q, `<div class="meta">${esc(status)} · ask ${esc(g.name)}, ${esc(b.name)} (${esc(DIST[b.districtId].name)})</div>`, btn('Go there', `data-act="bld" data-id="${b.id}"`), qAvailable(q) || active ? 't4' : '');
+  }).join('') || '<div class="meta">All work is done. The garrison thanks you.</div>');
+}
+
+// --- zone ---
+function zoneHtml(p) {
+  const z = Z(), foes = regionFoes(z.id), nodes = zoneNodes(z.id), rb = regionBoss(z.id), boss = G.mode === 'boss';
+  let h = `<div class="section">${G.activity ? 'Activity — tap to switch' : 'You are at the camp. What do you want to do?'}</div><div class="cards">`;
+  h += `<button class="card act ${G.activity === 'fight' || boss ? 'sel' : ''}" data-act="activity" data-id="fight" ${boss ? 'disabled' : ''}>${icon('Fight')}<div><h3>Hunt monsters</h3><div class="meta">${foes.length ? esc(foes.map(f => f.name).join(', ')) : 'Zone prowlers'} · exp, gold, gear, materials</div></div></button>`;
+  for (const id of nodes) {
+    const n = NODES[id];
+    h += `<button class="card act ${G.activity === id ? 'sel' : ''}" data-act="activity" data-id="${id}" ${boss ? 'disabled' : ''}>${icon(MAT_ICON[n.mat] || 'Material')}<div><h3>${esc(NODE_INFO[id]?.verb || id)}</h3><div class="meta">${esc(NODE_INFO[id]?.name || id)} → ${esc(matName(n.mat))}, ${n.seconds}s each · have ${p.mats[n.mat] || 0}</div></div></button>`;
+  }
+  h += `</div>`;
+  if (!nodes.length) h += `<div class="meta">No gathering spots in this zone — monsters here drop ore and Riftglass.</div>`;
+  const k = Math.min(G.kills, z.kills), beaten = p.hz > z.id;
+  h += `<div class="row t3"><div><div class="name">Boss: ${esc(rb ? rb.name : z.name + ' Warden')}</div><div class="meta">${boss ? 'Fight in progress!' : `${beaten ? 'Beaten before · ' : ''}${k}/${z.kills} hunting kills to challenge${p.level < z.req ? ` · needs Lv ${z.req}` : ''}`}</div></div>
+    <div class="acts">${btn('Challenge', 'data-act="boss"', bossAvail() && p.level >= z.req, 'sm go')}</div></div>`;
+  h += `<div class="section">Automation</div><div class="chips switches">` + [['autoBoss', 'Auto boss (first win)'], ['autoUp', 'Auto-equip better drops'], ['autoPot', 'Auto potions'], ['autoAdv', 'Next zone after boss']]
+    .map(([key, l]) => `<button class="chip" data-act="toggle" data-k="${key}" aria-pressed="${G[key]}">${l}</button>`).join('') + `</div>`;
+  h += `<div class="btnrow">${btn(`Speed ${G.speed}×`, 'data-act="speed"', true, 'big')}${btn('Return to Emberwatch', 'data-act="town"', true, 'big go')}</div>`;
+  h += `<div class="meta">Smelting ore, enhancing and selling happen in town — Torvald's Forge is in Anvil Row.</div>`;
+  return h;
+}
+
+// --- bag (inventory) ---
+const better = (p, it) => !p.eq[it.slot] || power(it) > power(p.eq[it.slot]);
+function bagHtml(p) {
+  const st = stats(p);
+  const slotBtn = s => { const it = p.eq[s]; return it ? `<button class="slot t${it.tier}" data-act="sheet" data-k="worn" data-id="${s}">${icon(s)}<span><span class="nm">${itemName(it)}</span><small>${s} · ${TIERS[it.tier]}</small></span></button>`
+    : `<div class="slot empty">${icon(s)}<span><span class="nm">${s}</span><small>empty</small></span></div>`; };
+  let h = `<div class="doll"><div class="col">${['Helmet', 'Armor', 'Belt'].map(slotBtn).join('')}</div><canvas id="doll" width="220" height="320" aria-hidden="true"></canvas><div class="col">${['Weapon', 'Ring', 'Boots'].map(slotBtn).join('')}</div></div>`;
+  h += statBox([['HP', st.maxHp], ['DMG', st.dmg], ['DEF', st.def], ['CRIT', Math.round(st.crit * 100) + '%'], ['SPD', st.as.toFixed(2)]], 'derived five');
+  const cons = Object.entries(p.cons).filter(([, n]) => n > 0), mats = (R.materials || []).filter(m => (p.mats[m.id] || 0) > 0), qi = Object.keys(p.qitems);
+  const counts = { gear: p.inv.length, mats: mats.length, cons: cons.length, quest: qi.length };
+  h += `<div class="chips seg">` + [['gear', 'Gear'], ['mats', 'Materials'], ['cons', 'Potions'], ['quest', 'Quest']].map(([k, l]) => `<button class="chip" data-act="bagf" data-id="${k}" aria-pressed="${bagFilter === k}">${l} <span class="num">${counts[k]}</span></button>`).join('') + `</div>`;
+  const tile = (cls, data, ic, name, badge = '', up = '') => `<button class="tile ${cls}" ${data}>${icon(ic)}${badge ? `<span class="n num">${badge}</span>` : ''}${up ? '<span class="up">▲</span>' : ''}<span class="tn">${name}</span></button>`;
+  if (bagFilter === 'gear') {
+    h += `<div class="section">Bag <span class="num">${p.inv.length}/${INV_CAP}</span> · ▲ = better than worn</div>`;
+    const list = p.inv.slice().sort((a, b) => SLOTS.indexOf(a.slot) - SLOTS.indexOf(b.slot) || power(b) - power(a));
+    h += list.length ? `<div class="grid">${list.map(it => tile('t' + it.tier, `data-act="sheet" data-k="item" data-id="${it.id}"`, it.slot, itemName(it), it.enh ? '+' + it.enh : '', better(p, it))).join('')}</div>` : '<div class="meta">Empty. Spare drops land here; sell them at any shop in town.</div>';
+  } else if (bagFilter === 'mats') {
+    h += mats.length ? `<div class="grid">${mats.map(m => tile('t' + TIER_IX[m.tier], `data-act="sheet" data-k="mat" data-id="${m.id}"`, MAT_ICON[m.id] || 'Material', esc(m.name), '×' + p.mats[m.id])).join('')}</div>` : '<div class="meta">No materials yet. Gather or hunt in Ashen Outskirts.</div>';
+  } else if (bagFilter === 'cons') {
+    h += cons.length ? `<div class="grid">${cons.map(([id, n]) => tile('', `data-act="sheet" data-k="cons" data-id="${id}"`, 'Potion', esc(CONS[id].name), '×' + n)).join('')}</div>` : '<div class="meta">No potions. Sela sells them in Gatehold Square.</div>';
+  } else {
+    h += qi.length ? `<div class="grid">${qi.map(id => tile('t3', `data-act="sheet" data-k="qitem" data-id="${id}"`, 'Material', esc(questItem(id).item.name))).join('')}</div>` : '<div class="meta">No quest items.</div>';
+  }
+  return h;
+}
+function questItem(id) { const q = Object.values(QST).find(x => (x.questItems || []).some(y => y.id === id)); return { q, item: q.questItems.find(y => y.id === id) }; }
+function drawDoll() {
+  const cv = $('doll'); if (!cv) return;
+  const ctx = cv.getContext('2d'), c = cls(G.p); ctx.setTransform(2, 0, 0, 2, 0, 0); ctx.clearRect(0, 0, 110, 160);
+  const g = ctx.createRadialGradient(55, 90, 4, 55, 90, 80); g.addColorStop(0, c.color + '55'); g.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, 110, 160);
+  const best = Math.max(-1, ...Object.values(G.p.eq).map(i => i.tier));
+  if (best >= 2) { ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--t' + best).trim(); ctx.globalAlpha = .5; ctx.lineWidth = 2; ctx.beginPath(); ctx.ellipse(52, 148, 34, 8, 0, 0, 7); ctx.stroke(); ctx.globalAlpha = 1; }
+  drawHero(ctx, 52, 148, c, 0, { scale: 1.75, swing: .25 });
+}
+
+// --- detail sheet ---
+function sheetHtml() {
+  const p = G.p, s = sheet;
+  if (s.k === 'worn' || s.k === 'item') {
+    const it = s.k === 'worn' ? p.eq[s.id] : p.inv.find(i => i.id === s.id);
+    if (!it) return '';
+    const worn = s.k === 'worn', cur = worn ? null : p.eq[it.slot], b = effB(it), cb = cur ? effB(cur) : null;
+    const diff = (v, c) => cb === null || worn ? '' : v === c ? '<span class="meta">=</span>' : `<span class="${v > c ? 'buff' : 'debuff'}">${v > c ? '+' : ''}${v - c}</span>`;
+    let h = `<div class="itemhead t${it.tier}">${icon(it.slot)}<div><div class="name big-name">${itemName(it)}</div><div class="meta">${TIERS[it.tier]} ${it.slot} · iLvl ${it.ilvl} · +${it.enh}/${MAX_ENH}${worn ? ' · <b>worn</b>' : ''}</div></div></div>`;
+    h += `<div class="statlist">${ATTR_LBL.filter(([k]) => b[k] || (cb && cb[k])).map(([k, l]) => `<span>${l}</span><span class="num">${b[k]}</span>${diff(b[k], cb ? cb[k] : 0)}`).join('')}
+      ${effD(it) || (cur && effD(cur)) ? `<span>DEF</span><span class="num">${effD(it)}</span>${diff(effD(it), cur ? effD(cur) : 0)}` : ''}
+      <span><b>Power</b></span><span class="num">${power(it)}</span>${diff(power(it), cur ? power(cur) : 0)}</div>`;
+    if (!worn) h += `<div class="meta">${cur ? `Compared with worn ${itemName(cur)}.` : 'Nothing worn in this slot.'}</div>`;
+    else h += `<div class="meta">${canPro(it) ? `Ready to promote to ${TIERS[it.tier + 1]} at ${esc(PROMO[it.tier].npc.name)}'s ${PROMO[it.tier].npc.id === 'ilsa_moonvane' ? 'bench' : 'forge'}.` : canEnh(it) ? `Next enhance at Torvald's Forge: ${fmt(enhCost(it))} g + ${enhMats(it).map(m => `${m.n}× ${matName(m.id)}`).join(', ')}.` : 'Fully enhanced.'}</div>`;
+    const acts = worn ? btn('Unequip', `data-act="unequip" data-id="${it.slot}"`, p.inv.length < INV_CAP, 'big')
+      : btn('Equip', `data-act="equip" data-id="${it.id}"`, true, 'big go') + btn(inTown() && !ambush() ? `Sell ${fmt(salv(it))} g` : 'Sell in town', `data-act="sellitem" data-id="${it.id}"`, inTown() && !ambush(), 'big');
+    return h + `<div class="btnrow">${acts}${btn('Close', 'data-act="close"', true, 'big')}</div>`;
+  }
+  if (s.k === 'mat') {
+    const m = MAT[s.id], have = p.mats[s.id] || 0, src = matSources(s.id), use = matUses(s.id);
+    return `<div class="itemhead t${TIER_IX[m.tier]}">${icon(MAT_ICON[m.id] || 'Material')}<div><div class="name big-name">${esc(m.name)} ×${have}</div><div class="meta">${m.tier} material · sells for ${m.sellPrice} g</div></div></div>
+      ${m.description ? `<p class="lead">${esc(m.description)}</p>` : ''}
+      <div class="section">Where to get</div><div class="obj">${src.map(x => `<div>• ${esc(x)}</div>`).join('') || '<div>—</div>'}</div>
+      <div class="section">Used for</div><div class="obj">${use.map(x => `<div>• ${esc(x)}</div>`).join('') || '<div>Selling.</div>'}</div>
+      <div class="btnrow">${s.id === 'cinder_iron_ore' ? btn('Go to the forge', 'data-act="goto" data-id="torvald_forge"', true, 'big go') : ''}${btn('Close', 'data-act="close"', true, 'big')}</div>`;
+  }
+  if (s.k === 'cons') {
+    const d = CONS[s.id], n = p.cons[s.id] || 0, cd = p.ccd[s.id] || 0;
+    if (!n) return '';
+    return `<div class="itemhead">${icon('Potion')}<div><div class="name big-name">${esc(d.name)} ×${n}</div><div class="meta">${esc(effectText(d))}</div></div></div>
+      <div class="btnrow">${btn(cd > 0 ? `Ready in ${cd}s` : 'Use', `data-act="use" data-id="${s.id}"`, cd <= 0 && !(d.effect.kind === 'promote_gold_cost_pct' && p.catalyst), 'big go')}${btn('Close', 'data-act="close"', true, 'big')}</div>`;
+  }
+  if (s.k === 'qitem') {
+    if (!p.qitems[s.id]) return '';
+    const { q, item } = questItem(s.id);
+    return `<div class="itemhead t3">${icon('Material')}<div><div class="name big-name">${esc(item.name)}</div><div class="meta">Quest item for “${esc(q.name)}”</div></div></div>
+      <p class="lead">Sealed. Deliver it unopened — opening it fails the quest.</p>
+      <div class="btnrow">${btn('Open it anyway', `data-act="open" data-q="${q.id}"`, true, 'big danger')}${btn('Close', 'data-act="close"', true, 'big')}</div>`;
+  }
+  return '';
+}
+
+// --- hero, journal, log ---
 function heroHtml(p) {
-  const a = attrs(p), st = stats(p), rk = rankOf(p.rep), nx = nextRank(p.rep);
-  const c = cls(p);
+  const a = attrs(p), st = stats(p), rk = rankOf(p.rep), nx = nextRank(p.rep), c = cls(p);
   let h = `<div class="row" style="--tc:${c.color}"><div><div class="name">${esc(p.name)} · ${c.name}</div><div class="meta">${c.role}</div>
     <div class="passive">${c.buffs.map(b => `<div class="buff">▲ ${b}</div>`).join('')}${c.debuffs.map(b => `<div class="debuff">▼ ${b}</div>`).join('')}</div></div></div>`;
   h += statBox([['STR', a.s], ['AGI', a.a], ['INT', a.i], ['VIT', a.v], ['LUK', a.l]], 'attrs')
@@ -782,8 +1167,7 @@ function heroHtml(p) {
     ${nx ? `<div class="cd q"><i style="width:${(p.rep - rk.minRep) / (nx.minRep - rk.minRep) * 100}%"></i></div>` : ''}</div></div>`;
   if (p.buffs.length || p.catalyst) h += `<div class="section">Active effects</div>` + p.buffs.map(b => `<div class="row"><div><div class="name">${esc(CONS[b.id].name)}</div><div class="meta">${b.kind === 'defense_pct' ? `+${b.value * 100}% DEF` : `+${b.value} LUK`} · ${b.left}s left</div></div></div>`).join('')
     + (p.catalyst ? `<div class="row"><div><div class="name">Rift Catalyst armed</div><div class="meta">Next promote costs 25% less gold</div></div></div>` : '');
-  h += `<div class="section">Skills</div>`;
-  h += c.skills.map(s => {
+  h += `<div class="section">Skills</div>` + c.skills.map(s => {
     const locked = s.lvl > p.level, cd = p.cd[s.id] || 0;
     const kind = s.kind === 'dmg' ? `${s.pow}× damage` : s.kind === 'heal' ? `heal ${s.pow * 100}% HP` : `shield ${s.pow * 100}% HP`;
     return `<div class="row"><div><div class="name" ${locked ? 'style="color:var(--muted)"' : ''}>${s.name}</div>
@@ -791,46 +1175,141 @@ function heroHtml(p) {
       ${locked ? '' : `<div class="cd"><i style="width:${(1 - cd / s.cd) * 100}%"></i></div>`}</div>
       <div class="meta">${locked ? 'Locked' : cd > 0 ? cd + 's' : 'Ready'}</div></div>`;
   }).join('');
-  return h + `<div class="meta">Your fighter heals below 30% HP, shields below 50%, otherwise uses the strongest ready skill. Auto potions drink a Healing Draught below 30% HP and a Mana Tonic below 20% MP.</div>`;
+  h += `<div class="meta">In combat your hero heals below 30% HP, shields below 50%, otherwise uses the strongest ready skill.</div>`;
+  return h + `<div class="section">Game</div><div class="row"><div><div class="name">New hero</div><div class="meta">Erases this hero and returns to class selection.</div></div><div class="acts">${resetPending ? btn('Erase', 'data-act="reset-yes"', true, 'sm danger') + btn('Keep', 'data-act="reset-no"') : btn('New hero', 'data-act="reset"')}</div></div>`;
+}
+function journalHtml(p) {
+  const all = Object.values(QST), st = q => qState(q.id);
+  const goBtn = q => { const b = npcBuilding(q.giverNpcId); return btn(inTown() ? 'Go there' : 'Go (to town)', `data-act="goto" data-id="${b.id}"`); };
+  const where = q => { const b = npcBuilding(q.giverNpcId); return `${esc(NPC[q.giverNpcId].name)} · ${esc(b.name)}, ${esc(DIST[b.districtId].name)}`; };
+  let h = '';
+  const active = all.filter(q => st(q) && st(q).state === 'active'), avail = all.filter(q => qAvailable(q)), locked = all.filter(q => !st(q) && !qAvailable(q)), done = all.filter(q => st(q) && st(q).state === 'done');
+  if (active.length) h += `<div class="section">Active</div>` + active.map(q => questCard(q, objHtml(q, st(q), null) + `<div class="meta">${qComplete(q, st(q)) ? '<b class="buff">Ready — turn in to</b> ' : 'Turn in to '}${where(q)}</div>`, goBtn(q))).join('');
+  if (avail.length) h += `<div class="section">Available</div>` + avail.map(q => questCard(q, `<div class="meta">Offered by ${where(q)}</div><div class="meta">Reward: ${rewardText(q)}</div>`, goBtn(q))).join('');
+  if (locked.length) h += `<div class="section">Locked</div>` + locked.map(q => questCard(q, `<div class="meta miss">Requires ${esc([p.level < q.minLevel ? `Lv ${q.minLevel}` : '', ...q.prerequisiteQuestIds.filter(x => !(qState(x) && qState(x).state === 'done')).map(x => `“${QST[x].name}”`)].filter(Boolean).join(', '))}</div>`, '', '')).join('');
+  if (done.length) h += `<div class="section">Completed</div>` + done.map(q => `<div class="row"><div><div class="name">✓ ${esc(q.name)}</div></div></div>`).join('');
+  return h;
+}
+const logHtml = () => `<div class="log">${G.log.slice().reverse().map(l => `<div class="${l.cls}">${esc(l.msg)}</div>`).join('') || '<div>Events will appear here.</div>'}</div>`;
+
+function viewHtml() {
+  const p = G.p;
+  if (tab === 'world') return inTown() ? townHtml(p) : zoneHtml(p);
+  if (tab === 'bag') return bagHtml(p);
+  if (tab === 'hero') return heroHtml(p);
+  if (tab === 'quests') return journalHtml(p);
+  return logHtml();
+}
+function renderTop() {
+  const p = G.p, st = stats(p), z = Z(), m = G.mon;
+  $('hName').textContent = `${p.name} · ${cls(p).name}`; $('hName').style.setProperty('--cc', cls(p).color);
+  $('hZone').textContent = whereText();
+  $('hGold').textContent = fmt(p.gold);
+  $('hRep').textContent = `${rankOf(p.rep).rank} · ${p.rep} rep`;
+  setBar('bHp', p.hp, st.maxHp); $('tHp').textContent = `${p.hp}/${st.maxHp}${p.shield ? ' +' + p.shield : ''}`;
+  setBar('bMp', p.mp, st.maxMp); $('tMp').textContent = `${p.mp}/${st.maxMp}`;
+  setBar('bXp', p.exp, expToNext(p.level)); $('tLv').textContent = `Lv ${p.level}`; $('tXp').textContent = `${fmt(p.exp)}/${fmt(expToNext(p.level))}`;
+  const stage = $('stage'), wasHidden = stage.hidden;
+  stage.hidden = tab !== 'world';
+  if (wasHidden && !stage.hidden) sceneSize();
+  const gat = gathering(), fight = fighting(), active = gat || fight;
+  stage.classList.toggle('calm', !active);
+  stage.classList.toggle('boss', !!(m && m.boss));
+  if (gat) { const n = NODES[G.activity]; $('mName').textContent = NODE_INFO[G.activity]?.name || G.activity; $('mBadge').innerHTML = ''; setBar('bMon', G.gather, n.seconds); $('tMon').textContent = `${G.gather}/${n.seconds}s`; }
+  else if (fight) {
+    $('mName').textContent = m ? m.name : 'Searching…';
+    $('mBadge').innerHTML = m && m.boss ? '<span class="badge">Boss</span>' : m && m.elite ? '<span class="badge elite">Elite</span>' : '';
+    if (m) { setBar('bMon', m.hp, m.max); $('tMon').textContent = `${fmt(m.hp)}/${fmt(m.max)}`; }
+  }
+  const hit = $('hit');
+  if (G.hit && active) { hit.textContent = G.hit.text; hit.className = 'hit' + (G.hit.crit ? ' crit' : ''); } else if (!active) hit.textContent = '';
+  $('gateRow').hidden = G.loc !== 'zone';
+  if (G.loc === 'zone') {
+    const k = Math.min(G.kills, z.kills), gh = `${z.kills}:${k}`;
+    if ($('gate').dataset.h !== gh) { $('gate').innerHTML = Array.from({ length: z.kills }, (_, i) => `<i class="${i < k ? 'on' : ''}"></i>`).join(''); $('gate').dataset.h = gh; }
+    $('gateText').textContent = G.mode === 'boss' ? 'Boss fight in progress' : bossAvail() ? (p.level < z.req ? `Boss needs Lv ${z.req}` : 'Boss ready') : `Boss gate ${k}/${z.kills} kills`;
+  }
+  const qReady = Object.entries(p.q).some(([id, s]) => s.state === 'active' && qComplete(QST[id], s)) || Object.values(QST).some(q => qAvailable(q));
+  document.querySelectorAll('#nav button').forEach(b => {
+    b.setAttribute('aria-current', b.dataset.tab === tab ? 'page' : 'false');
+    b.classList.toggle('dot', (b.dataset.tab === 'quests' && qReady) || (b.dataset.tab === 'bag' && p.inv.some(i => better(p, i))));
+  });
+}
+function render() {
+  renderTop();
+  const html = viewHtml();
+  if (html !== lastView) { $('view').innerHTML = html; lastView = html; drawDoll(); }
+  let sh = sheet ? sheetHtml() : '';
+  if (sheet && !sh) sheet = null;
+  $('sheet').hidden = !sheet;
+  if (sh !== lastSheet) { $('sheetIn').innerHTML = sh; lastSheet = sh; }
 }
 
-function gearHtml(p) {
-  let h = '';
-  for (const slot of SLOTS) {
-    const it = p.eq[slot];
-    if (!it) { h += `<div class="row"><div class="itemhead">${icon(slot)}<div><div class="name">${slot}</div><div class="meta">Empty — drops from monsters or buy at the Armory</div></div></div></div>`; continue; }
-    const pro = canPro(it), cost = pro ? proCost(p)(it) : enhCost(it), ms = pro ? proMats(it) : enhMats(it);
-    const can = pro || canEnh(it), who = pro ? (PROMO[it.tier] ? PROMO[it.tier].npc.name : '') : 'Torvald Ashmane';
-    h += `<div class="row t${it.tier}"><div class="itemhead">${icon(slot)}<div><div class="name">${esc(it.name)}${it.enh ? ' +' + it.enh : ''}</div>
-      <div class="meta">${slot} · ${TIERS[it.tier]} · iLvl ${it.ilvl} · power <span class="num">${power(it)}</span></div>
-      ${can ? `<div class="meta need">${pro ? 'Promote' : 'Enhance'} (${esc(who)}): ${matsText(p, ms)}</div>` : ''}</div></div>
-      <div class="acts">${can ? btn(`${pro ? 'Promote' : 'Enhance'}<br><span class="num">${fmt(cost)} g</span>`, `data-act="${pro ? 'pro' : 'enh'}" data-slot="${slot}"`, p.gold >= cost && hasMats(p, ms)) : '<span class="meta">Max</span>'}</div></div>`;
-  }
-  const cons = Object.entries(p.cons).filter(([, n]) => n > 0);
-  h += `<div class="section">Consumables</div>`;
-  h += cons.length ? cons.map(([id, n]) => {
-    const d = CONS[id], cd = p.ccd[id] || 0;
-    return `<div class="row"><div><div class="name">${esc(d.name)} ×${n}</div><div class="meta">${effectText(d)}</div></div>
-      <div class="acts">${btn(cd > 0 ? cd + 's' : 'Use', `data-act="use" data-id="${id}"`, cd <= 0 && !(d.effect.kind === 'promote_gold_cost_pct' && p.catalyst))}</div></div>`;
-  }).join('') : '<div class="meta">None. Sela sells potions in Gatehold Square.</div>';
-  const qi = Object.keys(p.qitems);
-  if (qi.length) {
-    h += `<div class="section">Quest items</div>`;
-    for (const id of qi) {
-      const q = Object.values(QST).find(x => (x.questItems || []).some(y => y.id === id));
-      const name = q.questItems.find(y => y.id === id).name;
-      h += `<div class="row t3"><div><div class="name">${esc(name)}</div><div class="meta">For “${esc(q.name)}”. Opening it fails the quest.</div></div>
-        <div class="acts">${btn('Open', `data-act="open" data-q="${q.id}"`)}</div></div>`;
-    }
-  }
-  h += `<div class="section">Materials</div><div class="mats">${(R.materials || []).map(m => `<div class="t${TIER_IX[m.tier]}"><span>${esc(m.name)}</span><span class="num">${p.mats[m.id] || 0}</span></div>`).join('')}</div>`;
-  h += `<div class="section">Bag <span class="num">${p.inv.length}/${INV_CAP}</span></div>`;
-  h += p.inv.slice().sort((a, b) => power(b) - power(a)).slice(0, 12).map(it => `<div class="row t${it.tier}"><div class="itemhead">${icon(it.slot)}<div><div class="name">${esc(it.name)}${it.enh ? ' +' + it.enh : ''}</div>
-      <div class="meta">${it.slot} · ${TIERS[it.tier]} · power <span class="num">${power(it)}</span>${p.eq[it.slot] ? ` (worn ${power(p.eq[it.slot])})` : ''}</div></div></div>
-      <div class="acts">${btn('Equip', `data-act="equip" data-id="${it.id}"`)}${btn(`Sell ${fmt(salv(it))}`, `data-act="sell" data-id="${it.id}"`)}</div></div>`).join('');
-  if (p.inv.length > 12) h += `<div class="meta">${p.inv.length - 12} weaker items not shown.</div>`;
-  if (p.inv.length) h += `<div class="acts" style="display:flex;justify-content:flex-end">${btn(`Salvage all (${fmt(p.inv.reduce((t, i) => t + salv(i), 0))} g)`, 'data-act="salvage"')}</div>`;
-  return h;
+function goBuilding(id) {
+  const b = BLD[id];
+  if (!inTown()) goTown();
+  if (G.district !== b.districtId) visit(b.districtId);
+  if (!ambush()) G.building = id;
+}
+function onAct(e) {
+  const b = e.target.closest('button'); if (!b || b.disabled || !b.dataset.act) return;
+  const p = G.p, a = b.dataset.act, ds = b.dataset;
+  let nav = false;
+  if (a === 'district') { visit(ds.id); nav = true; }
+  else if (a === 'bld') { goBuilding(ds.id); nav = true; }
+  else if (a === 'goto') { goBuilding(ds.id); tab = 'world'; sheet = null; nav = true; }
+  else if (a === 'totown') { G.district = null; G.building = null; nav = true; }
+  else if (a === 'todistrict') { G.building = null; nav = true; }
+  else if (a === 'flee') { G.queue = []; G.mon = null; G.district = 'gatehold_square'; G.building = null; emit('You slip away to Gatehold Square.'); nav = true; }
+  else if (a === 'travel') { travel(+ds.zone); nav = true; }
+  else if (a === 'town') { goTown(); nav = true; }
+  else if (a === 'activity') setActivity(ds.id);
+  else if (a === 'boss') startBoss();
+  else if (a === 'toggle') G[ds.k] = !G[ds.k];
+  else if (a === 'speed') G.speed = G.speed === 1 ? 5 : G.speed === 5 ? 20 : 1;
+  else if (a === 'shopmode') shopMode = ds.id;
+  else if (a === 'buy') buy(p, ds.shop, +ds.i);
+  else if (a === 'craft') { const ok = craft(p, ds.id); if (ok && CRAFT[ds.id].svc.outputMaterial) emit(`Torvald smelts 1× ${matName(CRAFT[ds.id].svc.outputMaterial.id)}.`); }
+  else if (a === 'smeltall') { const n = smeltAll(p); emit(n ? `Torvald smelts ${n}× Cinder Iron Ingot.` : 'Nothing to smelt (ore needed by quests is kept).'); }
+  else if (a === 'enh') { if (enhance(p, ds.slot)) emit(`Torvald enhanced ${p.eq[ds.slot].name} to +${p.eq[ds.slot].enh}.`, 'up'); }
+  else if (a === 'pro') promote(p, ds.slot);
+  else if (a === 'improve') { const n = improveAll(ds.npc); emit(n ? `${NPC[ds.npc].name}: ${n} upgrades done.` : 'Nothing affordable right now (check gold and materials).'); }
+  else if (a === 'sellitem') { sellItem(p, ds.id); if (sheet && sheet.id === ds.id) sheet = null; }
+  else if (a === 'sellweak') { for (const it of p.inv.filter(i => p.eq[i.slot] && power(i) <= power(p.eq[i.slot]))) sellItem(p, it.id); }
+  else if (a === 'sellmat') sellMat(p, ds.id, +ds.n);
+  else if (a === 'bagf') bagFilter = ds.id;
+  else if (a === 'sheet') sheet = { k: ds.k, id: ds.id };
+  else if (a === 'close') sheet = null;
+  else if (a === 'equip') { const it = p.inv.find(i => i.id === ds.id); if (it) equip(p, it); sheet = { k: 'worn', id: it.slot }; }
+  else if (a === 'unequip') { const it = p.eq[ds.id]; if (it && p.inv.length < INV_CAP) { delete p.eq[ds.id]; p.inv.push(it); p.hp = Math.min(p.hp, stats(p).maxHp); } sheet = null; }
+  else if (a === 'use') useCons(p, ds.id);
+  else if (a === 'open') { failQuest(ds.q, 'you opened the sealed package'); sheet = null; }
+  else if (a === 'accept') acceptQuest(ds.q);
+  else if (a === 'qact') questAction(ds.q, +ds.i);
+  else if (a === 'turnin') turnIn(ds.q);
+  else if (a === 'reset') resetPending = true;
+  else if (a === 'reset-no') resetPending = false;
+  else if (a === 'reset-yes') { resetPending = false; save(); openStart(true); return; }
+  lastView = ''; render(); save();
+  if (nav) window.scrollTo(0, 0);
+}
+$('view').addEventListener('click', onAct);
+$('sheetIn').addEventListener('click', onAct);
+$('sheet').querySelector('.sheet-bg').addEventListener('click', () => { sheet = null; render(); });
+$('nav').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  if (tab === b.dataset.tab && tab === 'world' && inTown() && !ambush()) { G.district = null; G.building = null; }
+  tab = b.dataset.tab; resetPending = false; sheet = null;
+  lastView = ''; render(); window.scrollTo(0, 0);
+});
+
+function showReport(r) {
+  if (!r || r.sec < 60) return;
+  const h = Math.floor(r.sec / 3600), mnt = Math.floor(r.sec % 3600 / 60);
+  const body = r.idle ? 'You were resting in town, so nothing happened. Leave through the Town Gate to earn while away.'
+    : `+${fmt(r.exp)} exp, +${fmt(r.gold)} gold${r.lv ? `, +${r.lv} levels` : ''}${r.mat ? `, ${r.mat}` : ''}.`;
+  $('notice').innerHTML = `<div class="notice"><p><b>Welcome back.</b> Away ${h}h ${mnt}m: ${body}</p><button class="sm" id="dismiss">OK</button></div>`;
+  $('dismiss').onclick = () => { $('notice').innerHTML = ''; };
 }
 
 function effectText(d) {
@@ -848,199 +1327,6 @@ function itemLine(it) {
   return effectText(it);
 }
 
-function townHtml(p) {
-  const d = DIST[G.district];
-  let h = `<div class="chips">${R.districts.map(x => `<button class="chip" data-act="district" data-id="${x.id}" aria-pressed="${x.id === G.district}">${esc(x.name)}</button>`).join('')}</div>`;
-  h += `<h2>${esc(d.name)}</h2><p class="lead">${esc(d.description)}${d.safeZone ? '' : ' <span class="miss">Unsafe district.</span>'}</p>`;
-  for (const nid of d.npcIds || []) {
-    const n = NPC[nid];
-    h += `<div class="npc"><b>${esc(n.name)}</b> <span class="meta">${esc(n.race)} · ${esc(n.profession || n.role.replace('_', ' '))}</span><p>${esc(n.trait)}</p></div>`;
-    for (const s of SHOPS.filter(s => s.ownerNpcId === nid)) {
-      h += `<div class="section">${esc(s.name)} — ${esc(s.specialization)}</div>`;
-      h += s.items.map((it, i) => {
-        const name = it.name || matName(it.id), t = it.tier ? TIER_IX[it.tier] : (it.type === 'material' ? TIER_IX[MAT[it.id].tier] : '');
-        const lock = it.requires && rankIx(rankOf(p.rep).rank) < rankIx(it.requires.rank) ? `Requires ${it.requires.rank}` : '';
-        const lim = it.dailyLimit ? ` · ${it.dailyLimit - dailyBought(p, it.id)}/${it.dailyLimit} left today` : '';
-        const owned = it.type === 'material' ? ` · have ${p.mats[it.id] || 0}` : CONS[it.id] ? ` · have ${p.cons[it.id] || 0}` : '';
-        return `<div class="row ${t !== '' ? 't' + t : ''}"><div class="itemhead">${icon(it.slot || (it.type === 'material' ? 'Material' : 'Potion'))}<div><div class="name">${esc(name)}</div><div class="meta">${esc(itemLine(it))}${lim}${owned}</div>${lock ? `<div class="meta miss">${lock}</div>` : ''}</div></div>
-          <div class="acts">${btn(`Buy<br><span class="num">${fmt(price(p, it))} g</span>`, `data-act="buy" data-shop="${s.id}" data-i="${i}"`, canBuy(p, it))}</div></div>`;
-      }).join('');
-    }
-    const cr = (R.crafters || []).find(c => c.npcId === nid);
-    if (cr) {
-      h += `<div class="section">${esc(n.profession)} services</div>`;
-      for (const s of cr.services) {
-        if (s.output) {
-          const ms = s.materials.map(x => ({ id: x.id, n: x.qty })), locked = s.unlockedByQuestId && !p.unlocks.includes(s.id);
-          h += `<div class="row t${TIER_IX[s.output.tier]}"><div><div class="name">${esc(s.output.name)}</div><div class="meta">${esc(itemLine(s.output))}</div>
-            <div class="meta need">${matsText(p, ms)}</div>${locked ? `<div class="meta miss">Unlocked by quest “${esc(QST[s.unlockedByQuestId].name)}”</div>` : ''}</div>
-            <div class="acts">${btn(`Craft<br><span class="num">${fmt(s.goldCost)} g</span>`, `data-act="craft" data-id="${s.id}"`, !locked && p.gold >= s.goldCost && hasMats(p, ms))}</div></div>`;
-        } else {
-          const ms = s.id === 'enhance' ? 'Cinder Iron Ore ×(1 + enh/2); from +5 also 1 Riftglass Shard' : s.materials.map(x => `${x.qty}× ${matName(x.id)}`).join(', ');
-          h += `<div class="row"><div><div class="name">${esc(s.name)}</div><div class="meta">${esc(ms)} · use the Gear tab</div></div></div>`;
-        }
-      }
-    }
-  }
-  if (d.features && d.features.includes('reputation_vendor')) {
-    const rk = rankOf(p.rep);
-    h += `<div class="section">Quartermaster</div>` + FACTION.ranks.map(r => `<div class="row ${r.rank === rk.rank ? 't4' : ''}"><div><div class="name">${r.rank}</div><div class="meta">${r.minRep} rep · ${Math.round(r.shopDiscount * 100)}% shop discount</div></div></div>`).join('');
-  }
-  if (d.features && d.features.includes('boss_gate')) {
-    const rb = regionBoss(G.zone);
-    h += `<div class="row t3"><div><div class="name">Boss gate</div><div class="meta">${rb ? esc(rb.name) : esc(Z().name) + ' Warden'} · ${Math.min(G.kills, Z().kills)}/${Z().kills} kills</div></div></div>`;
-  }
-  if (d.leadsToZoneId) {
-    const open = p.hz >= d.leadsToZoneId;
-    h += `<div class="row ${open ? 't1' : ''}"><div><div class="name">${open ? 'Gate open' : 'Sealed'}</div><div class="meta">${open ? 'Travel from the Zones tab.' : `Defeat ${esc(MON[d.unlock.monsterId].name)} to open it.`}</div></div>
-      <div class="acts">${open && G.zone !== d.leadsToZoneId ? btn('Travel', `data-act="go" data-zone="${d.leadsToZoneId}"`, p.level >= ZONES[d.leadsToZoneId - 1].req) : ''}</div></div>`;
-  }
-  return h;
-}
-
-function questsHtml(p) {
-  const all = Object.values(QST);
-  const list = all.filter(q => qState(q.id) && qState(q.id).state === 'active')
-    .concat(all.filter(q => qAvailable(q)))
-    .concat(all.filter(q => !qState(q.id) && !qAvailable(q)))
-    .concat(all.filter(q => qState(q.id) && qState(q.id).state === 'done'));
-  return list.map(q => {
-    const st = qState(q.id), r = q.rewards, g = NPC[q.giverNpcId];
-    const rew = [`${fmt(r.exp)} exp`, `${fmt(r.gold)} g`, ...(r.reputation || []).map(x => `${x.amount} rep`), ...(r.items || []).map(i => `${i.qty > 1 ? i.qty + '× ' : ''}${i.name || matName(i.id)}`)].join(' · ');
-    let body = `<div class="meta">${q.type} · Lv ${q.minLevel}+ · from ${esc(g.name)} (${esc(DIST[g.districtId].name)})</div>`;
-    let actBtn = '';
-    if (st && st.state === 'active') {
-      body += `<div class="obj">${q.objectives.map((o, i) => {
-        const done = objDone(q, st, i);
-        let label, extra = '';
-        if (o.kind === 'kill') label = `Kill ${MON[o.monsterId].name} ${Math.min(st.prog[i], o.count)}/${o.count}`;
-        else if (o.kind === 'collect') label = `Bring ${matName(o.itemId)} ${Math.min(p.mats[o.itemId] || 0, o.count)}/${o.count}`;
-        else if (o.kind === 'talk') { label = `Meet ${NPC[o.npcId].name} in ${DIST[NPC[o.npcId].districtId].name}`; if (!done) extra = btn('Go', `data-act="qact" data-q="${q.id}" data-i="${i}"`); }
-        else { label = `Deliver to ${NPC[o.toNpcId].name} in ${DIST[NPC[o.toNpcId].districtId].name}`; if (!done) extra = btn('Deliver', `data-act="qact" data-q="${q.id}" data-i="${i}"`, !!p.qitems[o.itemId]); }
-        return `<div class="${done ? 'ok' : ''}">${done ? '✓' : '○'} ${esc(label)}${o.optional ? ' (optional)' : ''} ${extra}</div>`;
-      }).join('')}</div>`;
-      if (q.timeLimitSeconds) {
-        const left = q.timeLimitSeconds - (G.ticks - st.t);
-        body += `<div class="meta">Time left: <span class="num">${Math.floor(left / 60)}:${String(left % 60).padStart(2, '0')}</span> (game time)</div><div class="cd q"><i style="width:${left / q.timeLimitSeconds * 100}%"></i></div>`;
-      }
-      actBtn = btn('Turn in', `data-act="turnin" data-q="${q.id}"`, qComplete(q, st), 'sm go');
-    } else if (qAvailable(q)) {
-      body += `<p class="lead" style="margin-top:4px">${esc(q.description)}</p>`;
-      if (st && st.state === 'failed') body += `<div class="meta miss">Failed earlier — you can try again.</div>`;
-      actBtn = btn('Accept', `data-act="accept" data-q="${q.id}"`, true, 'sm go');
-    } else if (st && st.state === 'done') {
-      actBtn = '<span class="meta">Done</span>';
-    } else {
-      const need = [p.level < q.minLevel ? `Lv ${q.minLevel}` : '', ...q.prerequisiteQuestIds.filter(x => !(qState(x) && qState(x).state === 'done')).map(x => `“${QST[x].name}”`)].filter(Boolean).join(', ');
-      body += `<div class="meta miss">Requires ${esc(need)}</div>`;
-      actBtn = '<span class="meta">Locked</span>';
-    }
-    body += `<div class="meta">Reward: ${esc(rew)}${r.bonusIfOptionalDone ? ` · +${r.bonusIfOptionalDone.gold} g bonus` : ''}</div>`;
-    return `<div class="row ${st && st.state === 'done' ? '' : 't4'}"><div><div class="name">${esc(q.name)}</div>${body}</div><div class="acts">${actBtn}</div></div>`;
-  }).join('');
-}
-
-function zonesHtml(p) {
-  return ZONES.map(z => {
-    const open = z.id <= p.hz, lvlOk = p.level >= z.req, here = z.id === G.zone, rb = regionBoss(z.id), foes = regionFoes(z.id);
-    return `<div class="row"><div><div class="name">${z.id}. ${z.name}</div>
-      <div class="meta">Lv ${z.req}+ · ${foes.length ? esc(foes.map(f => f.name).join(', ')) : `foe HP ${fmt(z.hp)}`}</div>
-      <div class="meta">Boss: ${rb ? esc(rb.name) : esc(z.name) + ' Warden'}</div></div>
-      <div class="acts">${here ? '<span class="meta">Here</span>' : btn(!open ? 'Locked' : !lvlOk ? 'Lv ' + z.req : 'Travel', `data-act="go" data-zone="${z.id}"`, open && lvlOk)}</div></div>`;
-  }).join('') + `<div class="row"><div><div class="name">New game</div><div class="meta">Erases this hero.</div></div><div class="acts" id="resetBox">${resetPending ? btn('Erase', 'data-act="reset-yes"', true, 'sm danger') + btn('Keep', 'data-act="reset-no"') : btn('Reset', 'data-act="reset"')}</div></div>`;
-}
-
-function panelHtml() {
-  const p = G.p;
-  if (tab === 'hero') return heroHtml(p);
-  if (tab === 'gear') return gearHtml(p);
-  if (tab === 'town') return townHtml(p);
-  if (tab === 'quests') return questsHtml(p);
-  if (tab === 'zones') return zonesHtml(p);
-  return `<div class="log">${G.log.slice().reverse().map(l => `<div class="${l.cls}">${esc(l.msg)}</div>`).join('') || '<div>Fights will appear here.</div>'}</div>`;
-}
-
-function render() {
-  const p = G.p, st = stats(p), z = Z(), m = G.mon;
-  $('hName').textContent = `${p.name} · ${cls(p).name}`; $('hName').style.setProperty('--cc', cls(p).color);
-  $('hZone').textContent = `Zone ${z.id}: ${z.name}`;
-  $('hGold').textContent = fmt(p.gold);
-  $('hRep').textContent = `${rankOf(p.rep).rank} · ${p.rep} rep`;
-  setBar('bHp', p.hp, st.maxHp); $('tHp').textContent = `${p.hp}/${st.maxHp}${p.shield ? ' +' + p.shield : ''}`;
-  setBar('bMp', p.mp, st.maxMp); $('tMp').textContent = `${p.mp}/${st.maxMp}`;
-  setBar('bXp', p.exp, expToNext(p.level)); $('tLv').textContent = `Lv ${p.level}`; $('tXp').textContent = `${fmt(p.exp)}/${fmt(expToNext(p.level))}`;
-  const gathering = G.activity !== 'fight' && !G.queue.length && G.mode !== 'boss';
-  $('mName').textContent = gathering ? (G.activity === 'cinder_vein' ? 'Cinder Vein' : 'Ash Bloom patch') : m ? m.name : 'Searching…';
-  $('mBadge').innerHTML = m && m.boss ? '<span class="badge">Boss</span>' : m && m.elite ? '<span class="badge elite">Elite</span>' : '';
-  $('arena').classList.toggle('boss', !!(m && m.boss));
-  if (gathering) { const n = NODES[G.activity]; setBar('bMon', G.gather, n.seconds); $('tMon').textContent = `${G.gather}/${n.seconds}s`; }
-  else if (m) { setBar('bMon', m.hp, m.max); $('tMon').textContent = `${fmt(m.hp)}/${fmt(m.max)}`; }
-  const hit = $('hit');
-  if (G.hit) { hit.textContent = G.hit.text; hit.className = 'hit' + (G.hit.crit ? ' crit' : ''); }
-  const k = Math.min(G.kills, z.kills);
-  $('gate').innerHTML = Array.from({ length: z.kills }, (_, i) => `<i class="${i < k ? 'on' : ''}"></i>`).join('');
-  $('gateText').textContent = G.mode === 'boss' ? 'Boss fight in progress' : bossAvail() ? (p.level < z.req ? `Boss needs Lv ${z.req}` : 'Boss ready') : `Boss gate ${k}/${z.kills} kills`;
-  $('modeText').textContent = G.queue.length ? `${G.queue.length} ambushers left` : '';
-  const acts = [['fight', 'Fight'], ...Object.keys(NODES).map(id => [id, NODE_LABEL[id] || id])];
-  const ah = acts.map(([id, l]) => `<button class="chip" data-activity="${id}" aria-pressed="${G.activity === id}">${l}</button>`).join('');
-  if ($('activity').dataset.h !== ah) { $('activity').innerHTML = ah; $('activity').dataset.h = ah; }
-  $('btnBoss').disabled = !(bossAvail() && p.level >= z.req);
-  $('btnSpeed').textContent = `Speed ${G.speed}×`;
-  $('tgBoss').setAttribute('aria-pressed', G.autoBoss); $('tgUp').setAttribute('aria-pressed', G.autoUp);
-  $('tgAdv').setAttribute('aria-pressed', G.autoAdv); $('tgPot').setAttribute('aria-pressed', G.autoPot);
-  const qReady = Object.entries(p.q).some(([id, s]) => s.state === 'active' && qComplete(QST[id], s)) || Object.values(QST).some(q => qAvailable(q));
-  document.querySelector('[data-tab="quests"]').classList.toggle('dot', qReady && tab !== 'quests');
-  const html = panelHtml();
-  if (html !== lastPanel) { $('panel').innerHTML = html; lastPanel = html; }
-}
-
-$('panel').addEventListener('click', e => {
-  const b = e.target.closest('button'); if (!b || b.disabled) return;
-  const p = G.p, a = b.dataset.act, ds = b.dataset;
-  if (a === 'enh') enhance(p, ds.slot);
-  else if (a === 'pro') promote(p, ds.slot);
-  else if (a === 'salvage') { p.gold += p.inv.reduce((t, i) => t + salv(i), 0); p.inv = []; }
-  else if (a === 'equip') { const it = p.inv.find(i => i.id === ds.id); if (it) equip(p, it); }
-  else if (a === 'sell') { const it = p.inv.find(i => i.id === ds.id); if (it) { p.inv.splice(p.inv.indexOf(it), 1); p.gold += salv(it); } }
-  else if (a === 'use') useCons(p, ds.id);
-  else if (a === 'open') failQuest(ds.q, 'you opened the sealed package');
-  else if (a === 'buy') buy(p, ds.shop, +ds.i);
-  else if (a === 'craft') craft(p, ds.id);
-  else if (a === 'district') visit(ds.id);
-  else if (a === 'accept') acceptQuest(ds.q);
-  else if (a === 'qact') questAction(ds.q, +ds.i);
-  else if (a === 'turnin') turnIn(ds.q);
-  else if (a === 'go') travel(+ds.zone);
-  else if (a === 'reset') resetPending = true;
-  else if (a === 'reset-no') resetPending = false;
-  else if (a === 'reset-yes') { resetPending = false; openStart(); return; }
-  lastPanel = ''; render(); save();
-});
-$('tabs').addEventListener('click', e => {
-  const b = e.target.closest('button'); if (!b) return;
-  tab = b.dataset.tab; resetPending = false;
-  document.querySelectorAll('#tabs button').forEach(x => x.setAttribute('aria-selected', x === b));
-  lastPanel = ''; render();
-});
-$('activity').addEventListener('click', e => {
-  const b = e.target.closest('button'); if (!b) return;
-  G.activity = b.dataset.activity; G.gather = 0; G.mon = null; render();
-});
-$('btnBoss').onclick = () => { G.activity = 'fight'; startBoss(); render(); };
-$('btnUp').onclick = () => { const n = autoUpgrade(); emit(n ? `Upgrade: ${n} improvements` : 'Upgrade: nothing affordable (check gold and materials)'); lastPanel = ''; render(); save(); };
-$('btnSpeed').onclick = () => { G.speed = G.speed === 1 ? 5 : G.speed === 5 ? 20 : 1; render(); };
-$('tgBoss').onclick = () => { G.autoBoss = !G.autoBoss; render(); };
-$('tgUp').onclick = () => { G.autoUp = !G.autoUp; render(); };
-$('tgAdv').onclick = () => { G.autoAdv = !G.autoAdv; render(); };
-$('tgPot').onclick = () => { G.autoPot = !G.autoPot; render(); };
-
-function showReport(r) {
-  if (!r || r.sec < 60) return;
-  const h = Math.floor(r.sec / 3600), mnt = Math.floor(r.sec % 3600 / 60);
-  $('notice').innerHTML = `<div class="notice"><p><b>Welcome back.</b> Away ${h}h ${mnt}m: +${fmt(r.exp)} exp, +${fmt(r.gold)} gold${r.lv ? `, +${r.lv} levels` : ''}.</p><button class="sm" id="dismiss">Continue</button></div>`;
-  $('dismiss').onclick = () => { $('notice').innerHTML = ''; };
-}
-
 
 // ===== Icons (inline SVG, stroke = tier color) =====
 const ICON_PATHS = {
@@ -1052,7 +1338,23 @@ const ICON_PATHS = {
   Ring: 'M12 9a6 6 0 1 0 0.01 0zM9 4h6l-3 4z',
   Material: 'M12 3 4 9l3 11h10l3-11zM4 9h16M12 3l-3 6 3 11 3-11z',
   Potion: 'M10 3h4M10 3v5L6 15a4 4 0 0 0 4 6h4a4 4 0 0 0 4-6l-4-7V3M8 15h8',
+  Ore: 'M4 17l3-8 5-3 6 2 2 7-6 4zM9 11l3 2 4-2M12 13v5',
+  Ingot: 'M3 17l3-7h12l3 7zM6 10l2-4h8l2 4M3 17h18',
+  Flower: 'M12 21v-8M12 13a3 3 0 1 1 0-6 3 3 0 0 1 0 6zM9 10H6M18 10h-3M12 7V4M8 18c1 0 3-1 4-3M16 18c-1 0-3-1-4-3',
+  Fang: 'M6 4c6 2 10 7 11 16-3-3-6-5-8-9z',
+  Gate: 'M4 21V9l8-6 8 6v12M9 21v-6a3 3 0 0 1 6 0v6M3 21h18',
+  Board: 'M4 4h16v11H4zM8 20l2-5M16 20l-2-5M7 8h6M7 11h10',
+  Shop: 'M4 9l2-5h12l2 5M5 9v11h14V9M4 9h16M10 20v-5h4v5',
+  Forge: 'M4 8h14c0 3-2 5-5 5h-1v3l3 4H7l3-4v-3H9C6 13 4 11 4 8zM19 4l-2 2M15 3v2',
+  Banner: 'M6 3v18M6 4h12l-3 4 3 4H6',
+  Fight: 'M4 4l10 10M4 4h4M4 4v4M20 4 10 14M20 4h-4M20 4v4M7 17l-3 3M17 17l3 3M8 14l2 2M16 14l-2 2',
+  Map: 'M9 4 3 6v14l6-2 6 2 6-2V4l-6 2zM9 4v14M15 6v14',
+  Bag: 'M5 8h14l-1 12H6zM9 8V6a3 3 0 0 1 6 0v2',
+  Hero: 'M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21c0-4 4-7 8-7s8 3 8 7',
+  Quest: 'M7 3h10v18H7zM10 7h4M10 11h4M10 15h2',
+  Log: 'M5 6h14M5 12h14M5 18h10',
 };
+const svgIcon = k => `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="${ICON_PATHS[k]}"/></svg>`;
 const icon = slot => `<span class="icon"><svg viewBox="0 0 24 24"><path d="${ICON_PATHS[slot] || ICON_PATHS.Material}"/></svg></span>`;
 
 // ===== Battle scene (canvas) =====
@@ -1068,6 +1370,67 @@ const ZONE_ART = [
   { sky: ['#2a0e0c', '#82341a'], far: '#4c1e14', ground: '#2a1410', p: 'ember', pc: '#ffb060' },
   { sky: ['#04050d', '#1a1c40'], far: '#1e2250', ground: '#0c0d1b', p: 'star', pc: '#e8e6ff' },
 ];
+const TOWN_ART = { sky: ['#191327', '#5a2c28'], far: '#2a2030', ground: '#251d1e', p: 'ash', pc: '#b9aaa0' };
+const hash = (i, k) => { const x = Math.sin(i * 127.1 + k * 311.7) * 43758.5453; return x - Math.floor(x); };
+// Emberwatch skyline; the district picks the accent (forge sparks, slum haze, keep tower, rift portal, market stalls).
+function drawTown(ctx, w, h, gy, t, dist) {
+  const g = ctx.createLinearGradient(0, 0, 0, gy); g.addColorStop(0, TOWN_ART.sky[0]); g.addColorStop(1, dist === 'the_cinders' ? '#6a2420' : TOWN_ART.sky[1]);
+  ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
+  const rg = ctx.createRadialGradient(w * .78, h * .12, 2, w * .78, h * .12, 80); rg.addColorStop(0, 'rgba(200,150,255,.35)'); rg.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = rg; ctx.fillRect(0, 0, w, h);
+  // palisade
+  ctx.fillStyle = '#211a28';
+  for (let x = 0; x < w; x += 9) { const top = gy - 40 - hash(x, 2) * 6; ctx.beginPath(); ctx.moveTo(x, gy); ctx.lineTo(x, top + 5); ctx.lineTo(x + 4.5, top); ctx.lineTo(x + 9, top + 5); ctx.lineTo(x + 9, gy); ctx.fill(); }
+  // keep tower
+  const tx = w * (dist === 'wardtower_keep' ? .5 : .84), th = dist === 'wardtower_keep' ? 110 : 84;
+  ctx.fillStyle = '#2c2433'; ctx.fillRect(tx - 14, gy - th, 28, th);
+  for (let i = 0; i < 4; i++) ctx.fillRect(tx - 16 + i * 9, gy - th - 7, 6, 7);
+  ctx.fillStyle = `rgba(255,190,90,${RM ? .8 : .6 + .3 * Math.sin(t * 2)})`; ctx.fillRect(tx - 3, gy - th + 16, 6, 9);
+  if (dist === 'wardtower_keep') { ctx.fillStyle = '#7fa2e0'; ctx.beginPath(); ctx.moveTo(tx, gy - th - 7); ctx.lineTo(tx, gy - th - 30); ctx.lineTo(tx + 16, gy - th - 24); ctx.lineTo(tx, gy - th - 18); ctx.fill(); }
+  // houses
+  const step = 48, tall = dist === 'anvil_row' ? 12 : 0;
+  for (let i = 0, x = -10; x < w; i++, x += step) {
+    if (dist === 'wardtower_keep' && Math.abs(x + 20 - tx) < 40) continue;
+    const bw = 34 + hash(i, 1) * 12, bh = 24 + hash(i, 3) * 26 + tall, bx = x + hash(i, 5) * 8, by = gy - bh;
+    ctx.fillStyle = i % 2 ? '#30262e' : '#382b30'; ctx.fillRect(bx, by, bw, bh);
+    const broken = dist === 'the_cinders' && hash(i, 7) > .45;
+    ctx.fillStyle = '#1f1820'; ctx.beginPath(); ctx.moveTo(bx - 4, by); ctx.lineTo(bx + bw / 2, by - (broken ? 6 : 16)); ctx.lineTo(bx + bw + 4, by); ctx.fill();
+    for (let j = 0; j < 2; j++) {
+      if (hash(i, 9 + j) < .35) continue;
+      const fl = RM ? .7 : .5 + .35 * Math.sin(t * 3 + i * 2 + j);
+      ctx.fillStyle = dist === 'the_cinders' ? `rgba(255,90,60,${fl * .7})` : `rgba(255,175,80,${fl})`;
+      ctx.fillRect(bx + 6 + j * (bw - 18), by + 8, 6, 7);
+    }
+  }
+  if (dist === 'anvil_row' || !dist) { // forge chimney
+    const fx_ = w * .6; ctx.fillStyle = '#2a2026'; ctx.fillRect(fx_ - 5, gy - 76, 10, 40);
+    const fg = ctx.createRadialGradient(fx_, gy - 24, 2, fx_, gy - 24, 40); fg.addColorStop(0, 'rgba(255,140,50,.55)'); fg.addColorStop(1, 'rgba(255,100,40,0)');
+    ctx.fillStyle = fg; ctx.fillRect(fx_ - 40, gy - 64, 80, 64);
+    if (!RM && Math.random() < .35) S.parts.push({ x: fx_ + (Math.random() - .5) * 6, y: gy - 78, vx: (Math.random() - .5) * 10, vy: -25 - Math.random() * 25, r: 1 + Math.random(), a: .9, life: 1, c: '#ffb060' });
+  }
+  if (dist === 'riftside_gate') {
+    const px = w * .7, py = gy - 40, open = G.p.hz >= 2;
+    ctx.strokeStyle = '#3a3048'; ctx.lineWidth = 10; ctx.beginPath(); ctx.arc(px, py + 10, 34, Math.PI, 0); ctx.lineTo(px + 34, gy); ctx.moveTo(px - 34, py + 10); ctx.lineTo(px - 34, gy); ctx.stroke();
+    if (open) { const pg = ctx.createRadialGradient(px, py + 14, 2, px, py + 14, 30); pg.addColorStop(0, '#f0d8ff'); pg.addColorStop(.4, `rgba(170,110,255,${RM ? .7 : .55 + .2 * Math.sin(t * 4)})`); pg.addColorStop(1, 'rgba(90,40,160,.2)');
+      ctx.fillStyle = pg; ctx.beginPath(); ctx.arc(px, py + 10, 29, Math.PI, 0); ctx.lineTo(px + 29, gy); ctx.lineTo(px - 29, gy); ctx.fill(); }
+    else { ctx.fillStyle = '#1a1520'; ctx.beginPath(); ctx.arc(px, py + 10, 29, Math.PI, 0); ctx.lineTo(px + 29, gy); ctx.lineTo(px - 29, gy); ctx.fill(); }
+  }
+  if (dist === 'gatehold_square' || !dist) { // market stalls
+    for (const [sx, col] of [[w * .45, '#a8483c'], [w * .66, '#3c6aa8'], [w * .9, '#8a7a3c']]) {
+      ctx.fillStyle = '#2a2024'; ctx.fillRect(sx - 16, gy - 18, 32, 18);
+      for (let k = 0; k < 4; k++) { ctx.fillStyle = k % 2 ? '#e6dccc' : col; ctx.beginPath(); ctx.moveTo(sx - 20 + k * 10, gy - 24); ctx.lineTo(sx - 10 + k * 10, gy - 24); ctx.lineTo(sx - 10 + k * 10, gy - 16); ctx.lineTo(sx - 20 + k * 10, gy - 18); ctx.fill(); }
+    }
+  }
+  if (dist === 'the_cinders') { ctx.fillStyle = 'rgba(160,40,30,.18)'; ctx.fillRect(0, 0, w, h); }
+  // lanterns
+  for (let x = 30; x < w; x += 120) {
+    ctx.strokeStyle = '#14101a'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x, gy); ctx.lineTo(x, gy - 34); ctx.stroke();
+    const lg = ctx.createRadialGradient(x, gy - 36, 1, x, gy - 36, 18); lg.addColorStop(0, 'rgba(255,200,110,.9)'); lg.addColorStop(1, 'rgba(255,160,60,0)');
+    ctx.fillStyle = lg; ctx.fillRect(x - 18, gy - 54, 36, 36);
+  }
+  ctx.fillStyle = TOWN_ART.ground; ctx.fillRect(0, gy - 2, w, h - gy + 2);
+  ctx.fillStyle = 'rgba(255,255,255,.05)'; ctx.fillRect(0, gy - 2, w, 2);
+}
 const MON_SHAPE = { ash_wolf: 'wolf', cinder_ghoul: 'ghoul', cinder_cutthroat: 'rogue', rift_stalker: 'stalker', shardback_crawler: 'crawler' };
 const S = { t: 0, parts: [], floats: [], heroLunge: 0, heroShake: 0, monShake: 0, monLunge: 0, flash: 0, flashC: '#fff', dying: null, dieT: 0, ring: 0, shieldT: 0, last: 0 };
 
@@ -1224,7 +1587,7 @@ function frame(ts) {
   const c = $('scene'); if (!c || !S.w) { sceneSize(); return; }
   const dt = Math.min(0.05, (ts - (S.last || ts)) / 1000); S.last = ts; S.t += dt;
   const ctx = c.getContext('2d'); ctx.setTransform(S.dpr, 0, 0, S.dpr, 0, 0);
-  const w = S.w, h = S.h, gy = h * 0.8, zi = G.zone - 1, art = ZONE_ART[zi], hx = w * 0.28, mx = w * 0.72;
+  const town = inTown() && !ambush(), w = S.w, h = S.h, gy = h * 0.8, zi = inTown() ? 0 : G.zone - 1, art = town ? TOWN_ART : ZONE_ART[zi], hx = w * 0.28, mx = w * 0.72;
   // events
   while (FX.length) {
     const e = FX.shift();
@@ -1235,8 +1598,12 @@ function frame(ts) {
     else if (e.type === 'kill') { S.dying = e.mon; S.dieT = 1; burst(mx, gy - 25, e.mon.boss ? '#ffd040' : '#c8c0b8', e.mon.boss ? 40 : 12, e.mon.boss ? 110 : 60); if (e.mon.boss) { S.flash = .8; S.flashC = '#ffd040'; } }
     else if (e.type === 'loot') { const col = getComputedStyle(document.documentElement).getPropertyValue('--t' + e.tier).trim(); burst(mx, gy - 20, col, 10 + e.tier * 6, 50 + e.tier * 15); floatText(mx, gy - 84, TIERS[e.tier] + '!', col, e.tier >= 3); }
     else if (e.type === 'level') { S.ring = 1; floatText(hx, gy - 92, 'LEVEL UP', '#8fe07a', true); burst(hx, gy - 30, '#8fe07a', 24, 90); }
+    else if (e.type === 'smelt') { burst(w * .6, gy - 30, '#ffb060', 16, 70); S.flash = .3; S.flashC = '#ff9040'; }
+    else if (e.type === 'ambush') { S.flash = .9; S.flashC = '#ff3030'; }
     else if (e.type === 'gather') { S.heroLunge = 1; floatText(mx, gy - 46, '+1 ' + e.name, '#ffd8a0'); burst(mx, gy - 16, '#ffb060', 6, 40); }
   }
+  if (town) drawTown(ctx, w, h, gy, S.t, G.district);
+  else {
   // sky
   const g = ctx.createLinearGradient(0, 0, 0, gy); g.addColorStop(0, art.sky[0]); g.addColorStop(1, art.sky[1]);
   ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
@@ -1251,6 +1618,7 @@ function frame(ts) {
   ctx.lineTo(w, gy); ctx.closePath(); ctx.fill();
   ctx.fillStyle = art.ground; ctx.fillRect(0, gy - 2, w, h - gy + 2);
   ctx.fillStyle = 'rgba(255,255,255,.04)'; ctx.fillRect(0, gy - 2, w, 2);
+  }
   // ambient particles
   if (!RM) {
     while (S.parts.filter(p => !p.burst).length < 26) S.parts.push(spawnPart(art));
@@ -1266,16 +1634,23 @@ function frame(ts) {
   ctx.globalAlpha = 1;
   S.parts = S.parts.filter(p => p.life > 0);
   // actors
-  const gathering = G.activity !== 'fight' && !G.queue.length && G.mode !== 'boss';
+  const gat = gathering(), idle = town || (!fighting() && !gat);
   const ease = v => v * v;
   const hl = ease(S.heroLunge) * 22, hs = S.heroShake * (Math.random() - .5) * 6;
   if (S.ring > 0) { ctx.strokeStyle = `rgba(143,224,122,${S.ring})`; ctx.lineWidth = 3; ctx.beginPath(); ctx.ellipse(hx, gy, 30 * (2 - S.ring), 8 * (2 - S.ring), 0, 0, 7); ctx.stroke(); }
-  drawHero(ctx, hx + hl + hs, gy, cls(G.p), S.t, { swing: S.heroLunge });
+  drawHero(ctx, (town ? w * .2 : hx) + hl + hs, gy, cls(G.p), S.t, { swing: S.heroLunge });
   if (G.p.shield > 0 || S.shieldT > 0) {
     ctx.strokeStyle = 'rgba(180,200,255,.7)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(hx + hl, gy - 28, 32, -1.2, 1.2); ctx.stroke();
   }
-  if (gathering) drawNode(ctx, G.activity, mx, gy, S.t, G.gather / NODES[G.activity].seconds);
-  else {
+  if (gat) drawNode(ctx, G.activity, mx, gy, S.t, G.gather / NODES[G.activity].seconds);
+  else if (idle) {
+    if (!town) { // camp fire while choosing
+      const fl = RM ? 1 : .8 + .2 * Math.sin(S.t * 9);
+      ctx.fillStyle = '#3a2a22'; ctx.fillRect(w * .5 - 12, gy - 3, 24, 4);
+      const cg = ctx.createRadialGradient(w * .5, gy - 8, 1, w * .5, gy - 8, 26 * fl); cg.addColorStop(0, '#fff0b0'); cg.addColorStop(.35, '#ff9a40'); cg.addColorStop(1, 'rgba(255,90,30,0)');
+      ctx.fillStyle = cg; ctx.beginPath(); ctx.arc(w * .5, gy - 8, 26 * fl, 0, 7); ctx.fill();
+    }
+  } else {
     if (G.mon && G.mon.hp > 0) {
       const ms = S.monShake * (Math.random() - .5) * 8, ml = -ease(S.monLunge) * 18;
       drawMonster(ctx, G.mon, mx + ms + ml, gy, S.t, zi);
@@ -1296,7 +1671,7 @@ function frame(ts) {
   if (S.flash > 0) { ctx.globalAlpha = S.flash * .35; ctx.fillStyle = S.flashC; ctx.fillRect(0, 0, w, h); ctx.globalAlpha = 1; }
   // zone label
   ctx.font = '700 11px "Alegreya Sans", system-ui, sans-serif'; ctx.textAlign = 'left'; ctx.fillStyle = 'rgba(255,255,255,.55)';
-  ctx.fillText(`${G.zone}. ${Z().name.toUpperCase()}`, 10, 16);
+  ctx.fillText(town ? `EMBERWATCH${G.district ? ' · ' + DIST[G.district].name.toUpperCase() : ''}` : inTown() ? 'THE CINDERS · AMBUSH' : `${G.zone}. ${Z().name.toUpperCase()}${idle ? ' · CAMP' : ''}`, 10, 16);
   // decay
   const d = dt * 5;
   S.heroLunge = Math.max(0, S.heroLunge - d); S.monLunge = Math.max(0, S.monLunge - d); S.heroShake = Math.max(0, S.heroShake - d);
@@ -1304,8 +1679,14 @@ function frame(ts) {
   S.ring = Math.max(0, S.ring - dt * 1.2); S.shieldT = Math.max(0, S.shieldT - dt);
 }
 
-// ===== Start screen =====
-let startOpen = false, pickClass = 'gladiator';
+// ===== Title screen: Continue / New hero → class selection =====
+let startOpen = false, pickClass = 'gladiator', SAVE = null;
+function portrait(cv, c) {
+  const ctx = cv.getContext('2d'); ctx.setTransform(2, 0, 0, 2, 0, 0);
+  const g = ctx.createRadialGradient(46, 60, 4, 46, 60, 60); g.addColorStop(0, c.color + '55'); g.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, 92, 110);
+  drawHero(ctx, 44, 98, c, 0, { scale: 1.25, swing: .3 });
+}
 function classCards() {
   const max = 60;
   $('classList').innerHTML = Object.values(CLASSES).map(c => `
@@ -1318,56 +1699,77 @@ function classCards() {
         <span class="skills" style="display:block">Skills: ${c.skills.map(x => x.name).join(', ')}</span>
       </span>
     </button>`).join('');
-  document.querySelectorAll('[data-portrait]').forEach(cv => {
-    const ctx = cv.getContext('2d'); ctx.setTransform(2, 0, 0, 2, 0, 0);
-    const c = CLASSES[cv.dataset.portrait];
-    const g = ctx.createRadialGradient(46, 60, 4, 46, 60, 60); g.addColorStop(0, c.color + '55'); g.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.fillStyle = g; ctx.fillRect(0, 0, 92, 110);
-    drawHero(ctx, 44, 98, c, 0, { scale: 1.25, swing: .3 });
-  });
+  document.querySelectorAll('[data-portrait]').forEach(cv => portrait(cv, CLASSES[cv.dataset.portrait]));
 }
-function openStart() { startOpen = true; $('start').hidden = false; classCards(); $('heroName').value = (G && G.p.name) || 'Hero'; }
+function showStartPage(create) {
+  $('startTitle').hidden = create; $('startCreate').hidden = !create;
+  if (create) { classCards(); $('overwriteWarn').hidden = !SAVE; $('btnBegin').textContent = SAVE ? 'Replace hero & enter Emberwatch' : 'Enter Emberwatch'; }
+  else {
+    const c = SAVE && (CLASSES[SAVE.p.classId] || CLASSES.gladiator);
+    $('continueBox').innerHTML = SAVE ? `<button class="ccard cont" id="btnContinue" style="--cc:${c.color}"><canvas width="184" height="220" id="contPortrait"></canvas>
+      <span><h3>Continue</h3><span class="role">${esc(SAVE.p.name)} · ${c.name} · Lv ${SAVE.p.level}</span>
+      <span class="passive"><span>${SAVE.loc === 'town' ? 'Resting in Emberwatch' : `Out in ${esc(ZONES[(SAVE.zone || 1) - 1].name)}`}</span><span class="num">${fmt(SAVE.p.gold)} gold</span></span></span></button>` : '';
+    if (SAVE) portrait($('contPortrait'), c);
+    $('btnNew').textContent = SAVE ? 'New hero' : 'Create your hero';
+  }
+  $('start').scrollTop = 0;
+}
+function openStart(create) {
+  if (G) SAVE = snapshot();
+  startOpen = true; $('start').hidden = false; $('notice').innerHTML = '';
+  $('heroName').value = 'Hero';
+  showStartPage(!!create || !SAVE);
+}
+function closeStart() {
+  startOpen = false; $('start').hidden = true; S.parts = []; S.floats = []; FX.length = 0;
+  tab = 'world'; sheet = null; lastView = ''; last = Date.now();
+  sceneSize(); render(); window.scrollTo(0, 0);
+}
+$('btnNew').onclick = () => showStartPage(true);
+$('btnBack').onclick = () => { if (SAVE) showStartPage(false); };
+$('continueBox').addEventListener('click', e => {
+  if (!e.target.closest('#btnContinue')) return;
+  const away = (Date.now() - SAVE.t) / 1000;
+  G = fromSnap(SAVE); SAVE = null;
+  const r = offline(away); FX.length = 0;
+  closeStart(); showReport(r); save();
+});
 $('classList').addEventListener('click', e => {
   const b = e.target.closest('[data-class]'); if (!b) return;
   pickClass = b.dataset.class;
-  document.querySelectorAll('.ccard').forEach(x => x.setAttribute('aria-pressed', x.dataset.class === pickClass));
+  document.querySelectorAll('.ccard[data-class]').forEach(x => x.setAttribute('aria-pressed', x.dataset.class === pickClass));
 });
 $('btnBegin').onclick = () => {
   const name = ($('heroName').value || 'Hero').trim().slice(0, 16) || 'Hero';
-  G = newGame(pickClass, name);
+  G = newGame(pickClass, name); SAVE = null;
   G.p.cons.minor_healing_draught = 2;
-  emit(`${name} the ${CLASSES[pickClass].name} arrives in Emberwatch. Captain Varr has work — check the Quests tab.`, 'quest');
-  startOpen = false; $('start').hidden = true; S.parts = []; S.floats = []; FX.length = 0;
-  tab = 'hero'; document.querySelectorAll('#tabs button').forEach(x => x.setAttribute('aria-selected', x.dataset.tab === tab));
-  lastPanel = ''; save(); sceneSize(); render(); window.scrollTo(0, 0);
+  emit(`${name} the ${CLASSES[pickClass].name} arrives in Emberwatch.`, 'quest');
+  closeStart(); save();
+  $('notice').innerHTML = `<div class="notice"><p><b>Welcome to Emberwatch.</b> Captain Hedda Varr in <b>Wardtower Keep</b> has your first job. When you are ready, leave through the <b>Town Gate</b> in Gatehold Square and pick what to do in the zone.</p><button class="sm" id="dismiss">Got it</button></div>`;
+  $('dismiss').onclick = () => { $('notice').innerHTML = ''; };
 };
 window.addEventListener('resize', () => { if (G) sceneSize(); });
 
 // ===== Loop: real-time accumulator; long gaps (tab asleep) become offline progress =====
-let acc = 0, last = Date.now(), sinceUp = 0, sinceSave = 0;
+let acc = 0, last = Date.now(), sinceSave = 0;
 function loop() {
   const now = Date.now(), dt = (now - last) / 1000; last = now;
   if (!G || startOpen) return;
   if (dt > 120) { showReport(offline(dt)); acc = 0; FX.length = 0; }
-  else acc += dt * G.speed;
+  else acc += dt * (inTown() && !ambush() ? 1 : G.speed);
   let n = Math.floor(acc); acc -= n;
-  while (n-- > 0) { tick(); if (G.autoUp && ++sinceUp >= 10) { sinceUp = 0; autoUpgrade(); } }
+  while (n-- > 0) tick();
   if ((sinceSave += dt) > 10) { sinceSave = 0; save(); }
   render();
 }
 function start(hotData) {
-  let report = null;
-  if (hotData && hotData.p) G = fromSnap(hotData);
-  else {
-    let d = null; try { d = JSON.parse(localStorage.getItem(KEY)); } catch (e) { d = null; }
-    if (d && d.p) { G = fromSnap(d); report = offline((Date.now() - d.t) / 1000); FX.length = 0; }
-  }
-  if (G) { sceneSize(); render(); showReport(report); } else openStart();
+  if (hotData && hotData.p) { G = fromSnap(hotData); closeStart(); }
+  else { SAVE = loadSave(); openStart(false); }
   requestAnimationFrame(frame);
   setInterval(loop, 250);
   document.addEventListener('visibilitychange', () => { if (document.hidden) save(); });
   window.addEventListener('pagehide', save);
 }
-window.claude?.hot?.snapshot?.(() => snapshot());
+window.claude?.hot?.snapshot?.(() => G ? snapshot() : {});
 window.claude?.hot?.ready ? window.claude.hot.ready(start) : start(window.claude?.hot?.data ?? {});
 </script>
