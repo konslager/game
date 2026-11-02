@@ -30,3 +30,14 @@
 *.exe
 *.out
 *.app
+
+# .NET
+bin/
+obj/
+*.user
+.vs/
+TestResults/
+
+# Local game saves
+save.json
+*.json.tmp
