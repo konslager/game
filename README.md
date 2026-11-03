@@ -9,6 +9,7 @@ Web versijos eiga:
 - **Miestas (Emberwatch):** nieko nevyksta automatiškai. Rajonai → pastatai (parduotuvės su Buy/Sell, Torvald's Forge: rūda → luitai, enhance/promote/kalimas; Moonvane Jewelers; Captain's Hall; Quest Board; Town Gate). Užduotys priimamos ir atiduodamos pas NPC.
 - **Zona:** atvykus renkiesi veiklą – kovoti su monstrais, medžioti gyvūnus ar rinkti (Cinder Vein, Ash Bloom). Offline progresas skaičiuojamas tik zonoje.
 - **Gyvūnų medžioklė:** po 3 gyvūnus kiekvienoje iš 6 zonų (`animals` JSON'e: sekimo laikas, statai, loot lentelė). Loot: Game Meat, zonos oda, retas trofėjus (8% iš didžiausio gyvūno). Hunter's Lodge (Gatehold Square, Orla Greyfeather): Hunter's Stew iš mėsos, odinė apranga iš odų ir trofėjų, supirkimas, užduotis „Pelts for the Lodge“.
+- **Rift Storm:** interaktyvus pasaulio boso įvykis per visą ekraną (Vorthrax, the Sky-Eater). Krūvis kaupiasi žudant (+2 už monstrą, +1 už gyvūną); pirmas audra paruošta iš karto. DODGE (arba tarpas) kai mažėjantis žiedas pasiekia auksinį žiedą = PERFECT (kontrataka, combo); bakstelėk švytinčias silpnas vietas. Laimėjus – skrynia su Epic/Legendary daiktu (pirmas kartas – klasės ginklas). Garsai sintezuojami WebAudio, telefone vibracija.
 - **Inventorius:** 6 slotų apranga aplink herojų, krepšys (Gear / Materials / Potions / Quest), daikto kortelė su palyginimu.
 
 ## Paleidimas

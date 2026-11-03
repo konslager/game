@@ -193,6 +193,50 @@ button.danger { color: var(--hp); }
 .loottab span { display: grid; grid-template-columns: 24px minmax(0, 1fr) auto auto; gap: 8px; align-items: center; font-size: .82rem; }
 .loottab .icon { width: 24px; height: 24px; } .loottab .icon svg { width: 16px; height: 16px; }
 .loottab b { font-weight: 500; } .loottab i { font-style: normal; color: var(--brass); } .loottab em { font-style: normal; color: var(--muted); font-size: .75rem; }
+#storm { position: fixed; inset: 0; z-index: 30; background: #05040d; touch-action: manipulation; user-select: none; -webkit-user-select: none; }
+#stormCv { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.st-top, .st-bottom, .st-corner, .st-hint { position: absolute; left: max(16px, env(safe-area-inset-left, 0px)); right: max(16px, env(safe-area-inset-right, 0px)); transition: opacity .6s; }
+.st-top { top: calc(14px + env(safe-area-inset-top, 0px)); right: 120px; }
+.st-name { font: 700 1rem var(--display); color: #d8c8ff; letter-spacing: .06em; text-shadow: 0 0 12px #7a5cff; }
+.st-bar { position: relative; height: 14px; margin-top: 4px; border-radius: 3px; background: rgba(0,0,0,.55); border: 1px solid rgba(180,160,255,.4); overflow: hidden; }
+.st-bar i { position: absolute; inset: 0 auto 0 0; background: linear-gradient(90deg, #6a3cff, #c070ff); transition: width .15s; }
+.st-bar span { position: relative; display: block; text-align: right; padding: 0 6px; font-size: .68rem; line-height: 12px; color: #fff; }
+.st-bar.hero { border-color: rgba(255,120,120,.5); } .st-bar.hero i { background: linear-gradient(90deg, #8a1c26, #e0505a); }
+.st-corner { top: calc(12px + env(safe-area-inset-top, 0px)); left: auto; display: flex; gap: 6px; }
+.st-corner button { font: 600 .75rem var(--body); padding: 6px 9px; border-radius: 99px; border: 1px solid rgba(255,255,255,.25); background: rgba(0,0,0,.45); color: #e7e3d6; }
+.st-hint { top: calc(64px + env(safe-area-inset-top, 0px)); text-align: center; font-size: .85rem; color: #f0e8d8; background: rgba(5,4,12,.6); border: 1px solid rgba(255,208,96,.35); border-radius: 8px; padding: 8px 10px; }
+.st-bottom { bottom: calc(14px + env(safe-area-inset-bottom, 0px)); display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: end; }
+.st-heroline { display: flex; justify-content: space-between; gap: 8px; font: 600 .82rem var(--body); color: #e7e3d6; }
+.st-combo { color: #ffd060; font-weight: 700; }
+.st-dodge { width: 104px; height: 104px; border-radius: 50%; font: 700 1.05rem var(--display); letter-spacing: .06em; color: #fff; background: radial-gradient(circle at 40% 35%, #5a4a9a, #1e1640); border: 2px solid rgba(200,180,255,.6); box-shadow: 0 0 18px rgba(120,90,255,.45); }
+.st-dodge.ready { border-color: #ffd060; box-shadow: 0 0 0 4px rgba(255,208,96,.35), 0 0 30px rgba(255,208,96,.7); animation: dpulse .35s ease-in-out infinite alternate; }
+.st-dodge:active { transform: scale(.94); }
+@keyframes dpulse { to { transform: scale(1.07); } }
+#storm.intro .st-top, #storm.intro .st-bottom, #storm.victory .st-top, #storm.victory .st-bottom { opacity: 0; pointer-events: none; }
+#storm.victory #stFlee { display: none; }
+.st-card { position: absolute; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); width: min(92vw, 420px); display: grid; gap: 8px; padding: 18px;
+  background: rgba(14,12,26,.92); border: 1px solid var(--tc, rgba(255,208,96,.5)); border-radius: 12px; box-shadow: 0 0 40px rgba(0,0,0,.6); animation: cardIn .5s ease-out; }
+.st-card[hidden] { display: none; }
+@keyframes cardIn { from { opacity: 0; transform: translate(-50%, 30px); } }
+.st-card h3 { margin: 0; font: 700 1.4rem var(--display); color: var(--tc, var(--fg)); }
+.st-card h3.bad { color: var(--hp); }
+.st-card p { margin: 0; }
+.st-tier { font: 700 .75rem var(--body); letter-spacing: .2em; text-transform: uppercase; color: var(--tc); }
+.st-stats { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: .9rem; }
+.storm-banner { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 12px; align-items: center; width: 100%; padding: 14px; text-align: left; font: inherit; color: var(--fg); cursor: pointer;
+  border-radius: 10px; border: 1px solid #a080ff; overflow: hidden;
+  background: radial-gradient(120% 140% at 85% 0%, rgba(200,120,255,.35), transparent 60%), linear-gradient(135deg, #1d1236, #0e0a1c);
+  box-shadow: 0 0 0 1px rgba(160,128,255,.3), 0 0 26px rgba(140,90,255,.35); animation: sglow 1.6s ease-in-out infinite alternate; }
+.storm-banner::after { content: ""; position: absolute; inset: 0; background: linear-gradient(105deg, transparent 35%, rgba(255,255,255,.14) 50%, transparent 65%); transform: translateX(-100%); animation: sheen 2.8s ease-in-out infinite; }
+@keyframes sglow { to { box-shadow: 0 0 0 1px rgba(200,170,255,.6), 0 0 40px rgba(170,110,255,.6); } }
+@keyframes sheen { 60%, 100% { transform: translateX(100%); } }
+.sb-bolt { font-size: 2rem; color: #f0e0ff; text-shadow: 0 0 14px #c070ff; }
+.sb-txt b { display: block; font: 700 1.15rem var(--display); color: #e8d8ff; letter-spacing: .04em; }
+.sb-txt small { color: #c8bce0; font-size: .8rem; }
+.sb-go { font: 700 .8rem var(--body); letter-spacing: .08em; text-transform: uppercase; padding: 8px 10px; border-radius: 6px; background: #c9a0ff; color: #140c26; }
+.storm-charge { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 10px; align-items: center; font-size: .78rem; color: var(--muted); }
+.storm-charge .cd { margin: 0; } .storm-charge .cd i { background: #a080ff; }
+@media (prefers-reduced-motion: reduce) { .storm-banner, .storm-banner::after, .st-dodge.ready, .st-card { animation: none; } }
 @media (prefers-reduced-motion: reduce) { .bar > i { transition: none; } .hit.crit { animation: none; } }
 </style>
 
@@ -229,6 +273,17 @@ button.danger { color: var(--hp); }
 </nav>
 <div id="sheet" hidden><div class="sheet-bg"></div><div class="sheet-in" id="sheetIn" role="dialog" aria-modal="true"></div></div>
 
+<section id="storm" hidden aria-label="Rift Storm">
+  <canvas id="stormCv"></canvas>
+  <div class="st-top"><div class="st-name">Vorthrax, the Sky-Eater</div><div class="st-bar"><i id="stBoss"></i><span class="num" id="stBossHp"></span></div></div>
+  <div class="st-hint" id="stHint" hidden>Tap <b>DODGE</b> when the shrinking ring meets the gold ring. Tap glowing <b>weak points</b> on the wyrm for huge damage.</div>
+  <div class="st-bottom">
+    <div class="st-hero"><div class="st-heroline"><span id="stHeroName"></span><span class="st-combo" id="stCombo"></span></div><div class="st-bar hero"><i id="stHero"></i><span class="num" id="stHeroHp"></span></div></div>
+    <button class="st-dodge" id="stDodge">DODGE</button>
+  </div>
+  <div class="st-corner"><button id="stMute">♪ on</button><button id="stFlee">Flee</button></div>
+  <div class="st-card" id="stCard" role="dialog" hidden></div>
+</section>
 <section id="start" hidden>
   <div class="start-in">
     <div id="startTitle">
@@ -640,13 +695,13 @@ function killed(m) {
   if (m.animal) {
     fx('kill', { mon: m });
     if (gainExp(p, m.exp)) { emit(`Level up! Level ${p.level}`, 'up'); fx('level'); }
-    p.gold += m.gold; p.killsBy[m.aid] = (p.killsBy[m.aid] || 0) + 1;
+    p.gold += m.gold; p.killsBy[m.aid] = (p.killsBy[m.aid] || 0) + 1; p.stormCharge = Math.min(100, (p.stormCharge ?? 100) + 1);
     if (G.loot) animalLoot(m);
     G.mon = null; return;
   }
   fx('kill', { mon: m });
   if (gainExp(p, m.exp)) { emit(`Level up! Level ${p.level}`, 'up'); fx('level'); }
-  p.gold += m.gold;
+  p.gold += m.gold; if (!wasAmbush && !m.boss) p.stormCharge = Math.min(100, (p.stormCharge ?? 100) + 2);
   if (m.mid) { p.killsBy[m.mid] = (p.killsBy[m.mid] || 0) + 1; questKill(m.mid); }
   dropMats(m);
   if (G.loot && !wasAmbush && (m.boss || Math.random() < z.loot)) {
@@ -1257,7 +1312,7 @@ const logHtml = () => `<div class="log">${G.log.slice().reverse().map(l => `<div
 
 function viewHtml() {
   const p = G.p;
-  if (tab === 'world') return inTown() ? townHtml(p) : zoneHtml(p);
+  if (tab === 'world') return stormBanner() + (inTown() ? townHtml(p) : zoneHtml(p));
   if (tab === 'bag') return bagHtml(p);
   if (tab === 'hero') return heroHtml(p);
   if (tab === 'quests') return journalHtml(p);
@@ -1354,6 +1409,7 @@ function onAct(e) {
   else if (a === 'accept') acceptQuest(ds.q);
   else if (a === 'qact') questAction(ds.q, +ds.i);
   else if (a === 'turnin') turnIn(ds.q);
+  else if (a === 'storm') { if (stormReady()) { openStorm(); return; } }
   else if (a === 'reset') resetPending = true;
   else if (a === 'reset-no') resetPending = false;
   else if (a === 'reset-yes') { resetPending = false; save(); openStart(true); return; }
@@ -1709,7 +1765,7 @@ function drawNode(ctx, kind, x, y, t, prog) {
 
 function frame(ts) {
   requestAnimationFrame(frame);
-  if (!G || startOpen) return;
+  if (!G || startOpen || SM) return;
   const c = $('scene'); if (!c || !S.w) { sceneSize(); return; }
   const dt = Math.min(0.05, (ts - (S.last || ts)) / 1000); S.last = ts; S.t += dt;
   const ctx = c.getContext('2d'); ctx.setTransform(S.dpr, 0, 0, S.dpr, 0, 0);
@@ -1729,6 +1785,7 @@ function frame(ts) {
     else if (e.type === 'aloot') { e.got.forEach((g, i) => { const t = TIER_IX[MAT[g.id].tier], col = getComputedStyle(document.documentElement).getPropertyValue('--t' + t).trim(); floatText(mx, gy - 70 - i * 16, `+${g.n} ${matName(g.id)}`, col, t >= 2); if (t >= 2) burst(mx, gy - 20, col, 14, 70); }); }
     else if (e.type === 'gather') { S.heroLunge = 1; floatText(mx, gy - 46, '+1 ' + e.name, '#ffd8a0'); burst(mx, gy - 16, '#ffb060', 6, 40); }
   }
+  const teaser = stormReady() && !ambush();
   if (town) drawTown(ctx, w, h, gy, S.t, G.district);
   else {
   // sky
@@ -1745,6 +1802,12 @@ function frame(ts) {
   ctx.lineTo(w, gy); ctx.closePath(); ctx.fill();
   ctx.fillStyle = art.ground; ctx.fillRect(0, gy - 2, w, h - gy + 2);
   ctx.fillStyle = 'rgba(255,255,255,.04)'; ctx.fillRect(0, gy - 2, w, 2);
+  }
+  if (teaser) { // storm is ready: a pulsing tear in the sky
+    const a = RM ? .8 : .55 + .45 * Math.sin(S.t * 3), cx = w * .66;
+    ctx.save(); ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.shadowColor = '#d070ff'; ctx.shadowBlur = RM ? 0 : 16;
+    ctx.strokeStyle = `rgba(245,225,255,${a})`; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(cx, 0);
+    for (let i = 1; i <= 6; i++) ctx.lineTo(cx + (hash(i, 9) - .5) * 26, i * h * .07); ctx.stroke(); ctx.restore();
   }
   // ambient particles
   if (!RM) {
@@ -1805,6 +1868,539 @@ function frame(ts) {
   S.monShake = Math.max(0, S.monShake - d); S.flash = Math.max(0, S.flash - dt * 2); S.dieT = Math.max(0, S.dieT - dt * 2.2);
   S.ring = Math.max(0, S.ring - dt * 1.2); S.shieldT = Math.max(0, S.shieldT - dt);
 }
+
+// ===== Rift Storm: interactive world-boss event (own overlay canvas + real-time loop; the idle loop pauses meanwhile) =====
+const SFX = {
+  ac: null,
+  on: (() => { try { return localStorage.getItem('riftbound.sfx') !== 'off'; } catch (e) { return true; } })(),
+  init() {
+    if (!this.ac) { try { this.ac = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { this.ac = null; } }
+    if (this.ac && this.ac.state === 'suspended') this.ac.resume();
+  },
+  noise(dur, f0, f1, vol, type = 'lowpass', delay = 0) {
+    const a = this.ac; if (!a || !this.on) return;
+    const t = a.currentTime + delay, n = Math.floor(a.sampleRate * dur), buf = a.createBuffer(1, n, a.sampleRate), d = buf.getChannelData(0);
+    for (let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1;
+    const src = a.createBufferSource(), f = a.createBiquadFilter(), g = a.createGain();
+    src.buffer = buf; f.type = type; f.frequency.setValueAtTime(f0, t); f.frequency.exponentialRampToValueAtTime(Math.max(20, f1), t + dur);
+    g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(.001, t + dur);
+    src.connect(f).connect(g).connect(a.destination); src.start(t);
+  },
+  tone(freq, dur, type, vol, slide, delay = 0) {
+    const a = this.ac; if (!a || !this.on) return;
+    const t = a.currentTime + delay, o = a.createOscillator(), g = a.createGain();
+    o.type = type; o.frequency.setValueAtTime(freq, t); if (slide) o.frequency.exponentialRampToValueAtTime(slide, t + dur);
+    g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + .012); g.gain.exponentialRampToValueAtTime(.0001, t + dur);
+    o.connect(g).connect(a.destination); o.start(t); o.stop(t + dur + .05);
+  },
+  play(k) {
+    if (k === 'thunder') { this.noise(2.2, 900, 60, .9); this.noise(.25, 3000, 400, .5, 'highpass'); }
+    else if (k === 'roar') { this.tone(68, 1.8, 'sawtooth', .35, 42); this.tone(103, 1.6, 'sawtooth', .18, 60); this.noise(1.6, 600, 120, .35, 'bandpass'); }
+    else if (k === 'hit') { this.tone(190, .09, 'square', .12, 80); this.noise(.07, 4000, 900, .2, 'highpass'); }
+    else if (k === 'crit') { this.tone(640, .16, 'sawtooth', .16, 160); this.noise(.12, 5000, 800, .3, 'highpass'); }
+    else if (k === 'hurt') { this.noise(.5, 500, 60, .9); this.tone(90, .4, 'sine', .5, 35); }
+    else if (k === 'dodge') this.noise(.28, 2400, 500, .35, 'bandpass');
+    else if (k === 'perfect') { this.tone(880, .35, 'sine', .25); this.tone(1320, .5, 'sine', .2, null, .07); this.noise(.3, 3000, 600, .3, 'bandpass'); }
+    else if (k === 'charge') this.tone(220, 1.1, 'triangle', .12, 880);
+    else if (k === 'weak') { this.tone(1400, .25, 'triangle', .25, 300); this.noise(.3, 6000, 1000, .35, 'highpass'); }
+    else if (k === 'boom') { this.noise(1.1, 700, 40, .9); this.tone(60, .9, 'sine', .6, 28); }
+    else if (k === 'click') this.tone(900, .05, 'square', .1, 600);
+    else if (k === 'chest') [523, 659, 784, 1046].forEach((f, i) => this.tone(f, 1.2, 'sine', .18, null, i * .09));
+    else if (k === 'legend') [523, 659, 784, 1046, 1318, 1568].forEach((f, i) => { this.tone(f, 1.8, 'sine', .16, null, i * .08); this.tone(f * 1.005, 1.8, 'triangle', .06, null, i * .08); });
+  },
+};
+const buzz = pat => { try { if (!RM && navigator.vibrate) navigator.vibrate(pat); } catch (e) { /* no haptics */ } };
+const STORM_WEAPON = { gladiator: 'Stormcaller Greatsword', duelist: 'Twin Fangs of the Tempest', ashmage: 'Staff of the Torn Sky', warden: 'Thunderwall Mace', reaver: "Sky-Eater's Scythe" };
+const stormCharge = () => G.p.stormCharge ?? 100;
+const stormReady = () => stormCharge() >= 100;
+function stormBanner() {
+  if (ambush() || G.mode === 'boss') return '';
+  if (stormReady()) return `<button class="storm-banner" data-act="storm"><span class="sb-bolt" aria-hidden="true">ϟ</span><span class="sb-txt"><b>Rift Storm</b><small>The sky above Emberwatch is tearing open. Something enormous is coming through.</small></span><span class="sb-go">Face it</span></button>`;
+  const c = stormCharge();
+  return `<div class="storm-charge"><span>Rift Storm gathering</span><div class="cd q"><i style="width:${c}%"></i></div><span class="num">${c}%</span></div>`;
+}
+
+let SM = null;
+const N_SEG = 30, LAG = .075;
+function openStorm() {
+  const p = G.p, st = stats(p), P = cls(p).passive;
+  const dps = st.dmg * 1.4 * st.as * (1 + st.crit * (st.critDmg - 1));
+  SFX.init();
+  SM = {
+    phase: 'intro', t: 0, bt: -99, st, P, hp: st.maxHp, max: st.maxHp, bmax: Math.round(dps * 40), bhp: 0,
+    atk: null, atkCd: 3, fire: null, wp: null, wpCd: 4, heroCd: .6, combo: 0, perfects: 0, weakHits: 0, dodgeLock: 0, slow: 1, slowT: 0,
+    shake: 0, flash: 0, flashC: '#fff', hurtV: 0, bossFlash: 0, parts: [], floats: [], bolts: [], boltCd: .3, slashes: [], meteors: [],
+    heroDash: 0, deadN: 0, headDead: false, banner: null, chest: null, reward: null, enraged: false, last: performance.now(), raf: 0, hintT: 0, cardShown: false,
+  };
+  SM.bhp = SM.bmax;
+  SM.clouds = Array.from({ length: 9 }, () => ({ x: Math.random(), y: Math.random() * .5, r: .25 + Math.random() * .3, s: .004 + Math.random() * .01, a: .25 + Math.random() * .3 }));
+  SM.rain = Array.from({ length: 150 }, () => ({ x: Math.random(), y: Math.random(), l: .02 + Math.random() * .03, s: .9 + Math.random() * .8 }));
+  const el = $('storm'); el.hidden = false; el.className = 'intro';
+  $('stCard').hidden = true; $('stHint').hidden = true; $('stHeroName').textContent = `${p.name} · ${cls(p).name}`;
+  $('stMute').textContent = SFX.on ? '♪ on' : '♪ off';
+  stormSize();
+  SFX.play('thunder'); buzz([60, 40, 120]);
+  SM.raf = requestAnimationFrame(stormFrame);
+}
+function stormSize() {
+  if (!SM) return;
+  const c = $('stormCv'), dpr = Math.min(2, window.devicePixelRatio || 1);
+  SM.w = window.innerWidth; SM.h = window.innerHeight; SM.dpr = dpr;
+  c.width = Math.round(SM.w * dpr); c.height = Math.round(SM.h * dpr);
+  SM.K = Math.max(.75, Math.min(1.6, Math.min(SM.w / 400, SM.h / 760)));
+  SM.gy = SM.h * .84; SM.hx = SM.w * .24;
+  // crack: jagged line from the top, a few branches; the wyrm comes out of its lower end
+  const pts = [[SM.w * .7, 0]];
+  for (let i = 0; i < 8; i++) { const [x, y] = pts[pts.length - 1]; pts.push([x + (Math.random() - .5) * 50 * SM.K, y + SM.h * .028]); }
+  const br = [];
+  for (let b = 0; b < 5; b++) {
+    const s = pts[1 + rand(pts.length - 2)], line = [s.slice()];
+    for (let i = 0; i < 4; i++) { const [x, y] = line[line.length - 1]; line.push([x + (Math.random() - .5) * 70 * SM.K, y + (Math.random() * .5 + .1) * 22 * SM.K]); }
+    br.push(line);
+  }
+  SM.crack = { pts, br, o: pts[pts.length - 1] };
+}
+window.addEventListener('resize', stormSize);
+function wpos(tt) {
+  const W = SM.w, H = SM.h, o = SM.crack.o;
+  const px = W * .6 + W * .2 * Math.sin(tt * .55) + W * .05 * Math.sin(tt * 1.7), py = H * .3 + H * .085 * Math.sin(tt * 1.05 + 1) + H * .02 * Math.sin(tt * 2.3);
+  const e = Math.max(0, Math.min(1, tt / 2.2)), k = e * e * (3 - 2 * e);
+  return [o[0] + (px - o[0]) * k, o[1] + (py - o[1]) * k];
+}
+const segR = i => (5 + 25 * Math.pow(1 - i / N_SEG, .8)) * SM.K;
+function sPart(x, y, c, n, sp = 120, life = .9, g = 160, r = 2.2) {
+  if (RM) n = Math.ceil(n / 3);
+  for (let i = 0; i < n; i++) { const a = Math.random() * 6.283, v = sp * (.3 + Math.random()); SM.parts.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v - sp * .3, c, life: life * (.6 + Math.random() * .6), max: life, g, r: r * (.5 + Math.random()) }); }
+  if (SM.parts.length > 700) SM.parts.splice(0, SM.parts.length - 700);
+}
+function sFloat(x, y, text, color, size = 18) { SM.floats.push({ x: x + (Math.random() - .5) * 30, y, text, color, size, t: 0 }); if (SM.floats.length > 18) SM.floats.shift(); }
+function sBanner(text, sub, color = '#f2e6c8', dur = 2) { SM.banner = { text, sub, color, t: 0, dur }; }
+function bolt(x0, y0, x1, y1) {
+  const pts = [[x0, y0]], n = 12;
+  for (let i = 1; i < n; i++) pts.push([x0 + (x1 - x0) * i / n + (Math.random() - .5) * 46 * SM.K, y0 + (y1 - y0) * i / n]);
+  pts.push([x1, y1]);
+  SM.bolts.push({ pts, life: .35 });
+  SM.flash = Math.max(SM.flash, RM ? .15 : .55); SM.flashC = '#e8e4ff';
+  SFX.play('thunder');
+}
+function heroPos() { const d = SM.heroDash; return [SM.hx - Math.sin(Math.min(1, d) * Math.PI) * 70 * SM.K, SM.gy]; }
+
+function bossDamage(d, x, y, big, color) {
+  SM.bhp = Math.max(0, SM.bhp - d); SM.bossFlash = .12;
+  sFloat(x, y - 20 * SM.K, fmt(d), color || (big ? '#ffd060' : '#ffffff'), big ? 30 : 18);
+  sPart(x, y, big ? '#ffd060' : '#bfe8ff', big ? 26 : 8, big ? 220 : 120);
+  if (!SM.enraged && SM.bhp <= SM.bmax * .5 && SM.bhp > 0) {
+    SM.enraged = true; sBanner('VORTHRAX IS ENRAGED', 'The storm turns red. Attacks come faster.', '#ff6b6b', 2.4);
+    SFX.play('roar'); buzz([80, 50, 160]); SM.shake = 1.2; bolt(SM.w * .3, 0, SM.w * .45, SM.gy);
+  }
+  if (SM.bhp <= 0 && SM.phase === 'fight') stormVictory();
+}
+function dodge() {
+  if (!SM || SM.phase !== 'fight' || SM.dodgeLock > 0) return;
+  SFX.init();
+  const a = SM.atk;
+  SM.heroDash = 0.0001;
+  if (!a || a.dodged) { SM.dodgeLock = .45; return; }
+  const left = a.dur - a.t;
+  if (left > .75) { SM.dodgeLock = .6; sFloat(SM.hx, SM.gy - 140 * SM.K, 'too early', '#9a98a8', 16); return; }
+  SM.dodgeLock = .3;
+  if (left <= .3) {
+    a.dodged = 'perfect'; SM.combo = Math.min(5, SM.combo + 1); SM.perfects++;
+    SM.slow = .2; SM.slowT = .7; SFX.play('perfect'); buzz(25);
+    sBanner('PERFECT', SM.combo > 1 ? `Combo ×${SM.combo} · +${SM.combo * 20}% damage` : 'Counter-attack!', '#ffd060', 1.1);
+    const [x, y] = wpos(SM.bt); SM.slashes.push({ x0: SM.hx, y0: SM.gy - 60 * SM.K, x1: x, y1: y, t: 0, dur: .3, mult: 5, perfect: true });
+  } else { a.dodged = 'dodge'; SFX.play('dodge'); sFloat(SM.hx, SM.gy - 140 * SM.K, 'Dodged', '#cfe8ff', 18); }
+}
+function stormTap(e) {
+  if (!SM) return;
+  SFX.init();
+  const r = $('stormCv').getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;
+  if (SM.phase === 'intro') { if (SM.t > .6) { SM.i1 = SM.i2 = SM.i3 = 1; SM.t = Math.max(SM.t, 4.7); SM.bt = Math.max(SM.bt, 3.3); } return; }
+  if (SM.phase === 'fight' && SM.wp) {
+    const [wx, wy] = wpPos();
+    if (Math.hypot(x - wx, y - wy) < 44 * SM.K) {
+      SM.weakHits++; SM.wp = null; SM.wpCd = 5 + Math.random() * 3;
+      SFX.play('weak'); buzz(35); SM.shake = .6;
+      const mult = 8 * (1 + SM.combo * .2), d = Math.round(SM.st.dmg * mult * (SM.P.dmgMult || 1));
+      sPart(wx, wy, '#fff3b0', 40, 260); bossDamage(d, wx, wy, true, '#fff3b0'); sBanner('WEAK POINT', `${fmt(d)} damage`, '#fff3b0', .9);
+      return;
+    }
+  }
+  if (SM.phase === 'chest' && !SM.chest.opening && SM.chest.landed) openChest();
+}
+const wpPos = () => { const [x, y] = wpos(SM.bt - SM.wp.seg * LAG); return [x, y]; };
+
+function stormVictory() {
+  SM.phase = 'victory'; SM.t = 0; SM.atk = null; SM.fire = null; SM.wp = null; SM.slow = .45; SM.slowT = 2.5;
+  $('storm').className = 'victory'; SFX.play('roar'); buzz([100, 60, 100, 60, 300]);
+}
+function stormDefeat() {
+  SM.phase = 'defeat'; SM.t = 0; SM.atk = null; SM.fire = null; SM.wp = null;
+  $('storm').className = 'victory';
+  sBanner('THE STORM SWALLOWS YOU', 'The rift closes… for now.', '#ff6b6b', 3);
+  SFX.play('boom'); buzz([200, 100, 400]);
+  const g = Z().gold * 8; G.p.gold += g; G.p.stormCharge = 50;
+  emit(`The Rift Storm overwhelmed you. You salvaged ${g} gold from the wreckage.`, 'bad');
+  setTimeout(() => SM && showStormCard(`<h3 class="bad">Defeated</h3><p>Vorthrax had <b>${Math.round(SM.bhp / SM.bmax * 100)}%</b> health left. The storm will gather again faster (charge 50%).</p><p class="meta">Salvaged ${fmt(g)} gold · ${SM.perfects} perfect dodges · ${SM.weakHits} weak points</p>`), 1800);
+}
+function stormReward() {
+  const p = G.p, z = Z(), c = cls(p), legendary = Math.random() < Math.min(.85, .25 + .1 * SM.perfects + .05 * SM.weakHits);
+  const first = !(p.stormWins > 0), slot = first ? 'Weapon' : SLOTS[rand(6)];
+  const ilvl = Math.max(z.req, p.level) + 4, b = Math.round((4 + ilvl * 2) * 1.3), q = d => Math.trunc(b / d);
+  const base = {
+    Weapon: c.dmgStat === 'm' ? A(0, q(4), b, 0, q(5)) : A(b, q(4), 0, 0, q(5)), Armor: A(q(4), 0, 0, b, q(6)), Helmet: A(0, 0, q(3), q(2), q(5)),
+    Boots: A(0, q(2), 0, q(3), q(6)), Belt: A(q(3), 0, 0, q(2), q(6)), Ring: A(q(4), q(4), q(4), 0, q(2)),
+  }[slot];
+  const it = { id: Math.random().toString(36).slice(2), name: slot === 'Weapon' ? STORM_WEAPON[c.id] : `Riftborn ${BASE_NAMES[slot][rand(3)]}`, slot, tier: legendary ? 4 : 3, ilvl, enh: 0, base, def: ['Armor', 'Helmet', 'Boots'].includes(slot) ? ilvl * 3 : 0, storm: true };
+  const gold = z.gold * 40, exp = Math.round(expToNext(p.level) * .35);
+  p.gold += gold; const lv = gainExp(p, exp); p.stormWins = (p.stormWins || 0) + 1; p.stormCharge = 0;
+  const out = receive(p, it);
+  emit(`RIFT STORM VANQUISHED — ${TIERS[it.tier]} ${it.name} (${out}), +${fmt(gold)} gold, +${fmt(exp)} exp`, 'boss');
+  save();
+  return { it, gold, exp, out, lv };
+}
+function openChest() {
+  SM.chest.opening = true; SM.chest.ot = 0; SM.reward = stormReward();
+  SFX.play('click'); buzz(20);
+}
+function showStormCard(html) {
+  const el = $('stCard'); el.innerHTML = html + `<button class="big go" id="stClose">Return to ${inTown() ? 'Emberwatch' : esc(Z().name)}</button>`; el.hidden = false;
+  $('stClose').onclick = closeStorm;
+}
+function rewardCard() {
+  const r = SM.reward, it = r.it, b = effB(it);
+  const stats_ = ATTR_LBL.filter(([k]) => b[k]).map(([k, l]) => `<span>${l} <b class="num">${b[k]}</b></span>`).join('') + (effD(it) ? `<span>DEF <b class="num">${effD(it)}</b></span>` : '');
+  showStormCard(`<div class="st-tier t${it.tier}">${TIERS[it.tier]}</div><h3 class="t${it.tier}">${esc(it.name)}</h3>
+    <div class="meta">${it.slot} · iLvl ${it.ilvl} · power <span class="num">${power(it)}</span> · ${r.out === 'equipped' ? '<b class="buff">equipped</b>' : 'in your bag'}</div>
+    <div class="st-stats">${stats_}</div>
+    <p class="meta">+${fmt(r.gold)} gold · +${fmt(r.exp)} exp${r.lv ? ` · +${r.lv} level` : ''}<br>${SM.perfects} perfect dodges · ${SM.weakHits} weak points${SM.perfects + SM.weakHits ? ' raised your Legendary chance' : ''}</p>`);
+}
+function closeStorm() {
+  if (!SM) return;
+  cancelAnimationFrame(SM.raf); SM = null; $('storm').hidden = true;
+  restore(G.p); last = Date.now(); acc = 0; lastView = ''; render(); save();
+}
+
+function stormUpdate(dt) {
+  const s = SM, K = s.K;
+  s.t += dt;
+  if (s.bt > -99 || s.t > 1.4) s.bt = s.bt <= -99 ? 0 : s.bt + dt;
+  // ambience
+  for (const c of s.clouds) { c.x -= c.s * dt * (s.enraged ? 2 : 1); if (c.x < -.4) c.x = 1.3; }
+  s.boltCd -= dt;
+  if (s.boltCd <= 0 && s.phase !== 'chest') { s.boltCd = (s.enraged ? .9 : 1.8) + Math.random() * 2.5; const x = Math.random() * s.w; bolt(x, 0, x + (Math.random() - .5) * 120, s.h * (.3 + Math.random() * .5)); }
+  for (const b of s.bolts) b.life -= dt; s.bolts = s.bolts.filter(b => b.life > 0);
+  for (const p of s.parts) { p.x += p.vx * dt; p.y += p.vy * dt; p.vy += p.g * dt; p.life -= dt; } s.parts = s.parts.filter(p => p.life > 0);
+  for (const f of s.floats) f.t += dt; s.floats = s.floats.filter(f => f.t < 1.2);
+  if (s.banner) { s.banner.t += dt; if (s.banner.t > s.banner.dur) s.banner = null; }
+  s.shake = Math.max(0, s.shake - dt * 2.2); s.flash = Math.max(0, s.flash - dt * 2.5); s.hurtV = Math.max(0, s.hurtV - dt * 1.2); s.bossFlash = Math.max(0, s.bossFlash - dt);
+  if (s.heroDash > 0) { s.heroDash += dt * 3.2; if (s.heroDash >= 1) s.heroDash = 0; }
+  s.dodgeLock = Math.max(0, s.dodgeLock - dt);
+  // intro script
+  if (s.phase === 'intro') {
+    if (s.t > .25 && !s.i1) { s.i1 = 1; bolt(s.w * .7, 0, s.crack.o[0], s.crack.o[1]); }
+    if (s.t > 1.4 && !s.i2) { s.i2 = 1; s.flash = RM ? .2 : .9; s.flashC = '#f0d8ff'; SFX.play('boom'); s.shake = 1; buzz(120); }
+    if (s.t > 1.7 && !s.i3) { s.i3 = 1; SFX.play('roar'); buzz([200, 80, 200]); }
+    if (s.t > 3 && !s.i4) { s.i4 = 1; sBanner('VORTHRAX', 'THE SKY-EATER', '#d8c8ff', 2.4); }
+    if (s.t > 4.7) { s.phase = 'fight'; s.hintT = 9; $('storm').className = 'fight'; $('stHint').hidden = false; }
+    return;
+  }
+  if (s.hintT > 0) { s.hintT -= dt; if (s.hintT <= 0) $('stHint').hidden = true; }
+  // slashes in flight
+  for (const sl of s.slashes) {
+    sl.t += dt;
+    if (sl.t >= sl.dur && !sl.done) {
+      sl.done = true;
+      if (s.phase !== 'fight') continue;
+      const crit = sl.perfect || Math.random() < s.st.crit;
+      let d = s.st.dmg * (1.1 + Math.random() * .6) * (sl.mult || 1) * (1 + s.combo * .2);
+      if (crit) d *= s.st.critDmg;
+      bossDamage(Math.round(d), sl.x1, sl.y1, crit);
+      SFX.play(crit ? 'crit' : 'hit');
+      if (s.P.lifesteal) s.hp = Math.min(s.max, s.hp + s.max * .02);
+    }
+  }
+  s.slashes = s.slashes.filter(sl => sl.t < sl.dur + .15);
+  if (s.fire) { s.fire.t += dt; if (s.fire.t > .6) s.fire = null; }
+  for (const m of s.meteors) { m.t += dt; if (m.t >= m.dur && !m.boom) { m.boom = 1; sPart(m.x1, m.y1, '#ff9a40', 18, 180); sPart(m.x1, m.y1, '#ffe0a0', 8, 90); } } s.meteors = s.meteors.filter(m => m.t < m.dur + .1);
+  if (s.phase === 'victory') {
+    const n = Math.min(N_SEG, Math.floor(s.t / .07));
+    while (s.deadN < n) {
+      const i = N_SEG - 1 - s.deadN, [x, y] = wpos(s.bt - i * LAG); s.deadN++;
+      sPart(x, y, s.deadN % 2 ? '#bfe8ff' : '#a88cff', 14, 200); if (s.deadN % 4 === 0) { SFX.play('boom'); s.shake = .5; }
+    }
+    if (s.deadN >= N_SEG && !s.headDead) {
+      s.headDead = true; const [x, y] = wpos(s.bt); sPart(x, y, '#ffffff', 80, 380, 1.4); sPart(x, y, '#ffd060', 60, 300, 1.6);
+      s.flash = RM ? .3 : 1; s.flashC = '#ffffff'; s.shake = 1.4; SFX.play('boom'); buzz([300, 80, 300]);
+      sBanner('RIFT STORM VANQUISHED', 'The sky seals itself shut.', '#ffd060', 2.6); s.vt = s.t;
+    }
+    if (s.headDead && s.t > s.vt + 1.6 && !s.chest) { s.chest = { x: s.w * .5, y: -60, vy: 0, landed: false, opening: false, ot: 0 }; s.phase = 'chest'; }
+    return;
+  }
+  if (s.phase === 'chest') {
+    const c = s.chest, floor = s.gy - 6 * K;
+    if (!c.landed) { c.vy += 1400 * dt; c.y += c.vy * dt; if (c.y >= floor) { c.y = floor; if (c.vy > 260) { c.vy *= -.35; SFX.play('click'); s.shake = .4; buzz(30); } else { c.vy = 0; c.landed = true; } } }
+    if (c.opening) {
+      const prev = c.ot; c.ot += dt;
+      for (const mark of [.35, .7, 1.0]) if (prev < mark && c.ot >= mark) { SFX.play('click'); buzz(15); }
+      if (prev < 1.3 && c.ot >= 1.3) {
+        const t = s.reward.it.tier, col = t === 4 ? '#f0b84a' : '#b67cf0';
+        sPart(c.x, c.y - 30 * K, col, 70, 340, 1.6); sPart(c.x, c.y - 30 * K, '#ffffff', 30, 200);
+        s.flash = RM ? .3 : 1; s.flashC = col; s.shake = 1; SFX.play(t === 4 ? 'legend' : 'chest'); buzz(t === 4 ? [80, 40, 80, 40, 400] : [60, 40, 160]);
+        sBanner(t === 4 ? 'LEGENDARY!' : 'EPIC!', s.reward.it.name, col, 3);
+      }
+      if (c.ot > 2.1 && !s.cardShown) { s.cardShown = true; rewardCard(); }
+    }
+    return;
+  }
+  if (s.phase !== 'fight') return;
+  // fight
+  s.hp = Math.min(s.max, s.hp + s.max * .015 * dt);
+  s.heroCd -= dt;
+  if (s.heroCd <= 0) {
+    s.heroCd = 1 / s.st.as;
+    const i = rand(4), [x, y] = wpos(s.bt - i * LAG), [hx] = heroPos();
+    s.slashes.push({ x0: hx + 20 * K, y0: s.gy - 70 * K, x1: x, y1: y, t: 0, dur: .24, mult: 1 });
+  }
+  if (!s.wp) { s.wpCd -= dt; if (s.wpCd <= 0) s.wp = { seg: 3 + rand(10), t: 0, dur: 2.4 }; }
+  else { s.wp.t += dt; if (s.wp.t >= s.wp.dur) { s.wp = null; s.wpCd = 4 + Math.random() * 3; } }
+  if (!s.atk) {
+    s.atkCd -= dt;
+    if (s.atkCd <= 0) {
+      const kind = ['lance', 'breath', 'meteor'][rand(3)];
+      s.atk = { kind, t: 0, dur: s.enraged ? 1.15 : 1.45, dodged: null };
+      SFX.play(kind === 'breath' ? 'roar' : 'charge');
+    }
+  } else {
+    const a = s.atk; a.t += dt;
+    if (a.t >= a.dur) {
+      const [hx] = heroPos();
+      s.fire = { kind: a.kind, t: 0, miss: !!a.dodged };
+      if (a.kind === 'meteor') for (let k = 0; k < 3; k++) s.meteors.push({ x0: s.w * (.7 + Math.random() * .4), y0: -40, x1: hx + (k - 1) * 46 * K + (a.dodged ? 90 * K : 0), y1: s.gy, t: 0, dur: .32 + k * .06 });
+      if (a.kind === 'lance') bolt(hx + (a.dodged ? 80 * K : 0), 0, hx + (a.dodged ? 80 * K : 0), s.gy);
+      if (!a.dodged) {
+        const d = Math.round(s.max * (s.enraged ? .4 : .32) * (s.P.dmgTakenMult || 1) / Math.sqrt(s.P.defMult || 1));
+        s.hp = Math.max(0, s.hp - d); s.combo = 0; s.shake = 1.2; s.hurtV = 1; s.flash = RM ? .15 : .5; s.flashC = '#ff2a2a';
+        sFloat(hx, s.gy - 130 * K, '-' + fmt(d), '#ff6b6b', 26); sPart(hx, s.gy - 40 * K, '#ff7a50', 30, 220);
+        SFX.play('hurt'); buzz([120, 40, 120]);
+        if (s.P.reflect) bossDamage(Math.round(d * s.P.reflect * 3), ...wpos(s.bt), false, '#a8c8ff');
+        if (s.hp <= 0) { stormDefeat(); return; }
+      }
+      s.atk = null; s.atkCd = s.enraged ? 1.3 + Math.random() * 1 : 2.1 + Math.random() * 1.4;
+    }
+  }
+}
+
+function drawWyrm(ctx) {
+  const s = SM, K = s.K, t = s.t, enr = s.enraged, rim = enr ? 'rgba(255,110,110,.6)' : 'rgba(150,220,255,.55)', spike = enr ? '#ff6060' : '#7cf0ff';
+  const fl = s.bossFlash > 0;
+  for (let i = N_SEG - 1; i >= 1; i--) {
+    const tt = s.bt - i * LAG; if (tt < 0) continue;
+    if (N_SEG - 1 - i < s.deadN) continue;
+    const [x, y] = wpos(tt), [x2, y2] = wpos(tt - .03), ang = Math.atan2(y - y2, x - x2), r = segR(i);
+    if (i === 6 || i === 13) { // wing fins
+      const flap = RM ? 0 : Math.sin(t * 3 + i) * .6;
+      for (const side of [-1, 1]) {
+        ctx.save(); ctx.translate(x, y); ctx.rotate(ang);
+        ctx.beginPath(); ctx.moveTo(0, 0); ctx.bezierCurveTo(-r, side * r * (3 + flap), -r * 4, side * r * (4.6 + flap * 2), -r * 5.4, side * r * 1.6); ctx.quadraticCurveTo(-r * 2.6, side * r * 1.3, 0, 0);
+        ctx.fillStyle = enr ? 'rgba(150,40,70,.35)' : 'rgba(90,60,190,.32)'; ctx.fill(); ctx.strokeStyle = rim; ctx.lineWidth = 1.2; ctx.stroke();
+        ctx.restore();
+      }
+    }
+    const g = ctx.createRadialGradient(x - r * .3, y - r * .4, r * .1, x, y, r);
+    g.addColorStop(0, fl ? '#ffffff' : enr ? '#6a2a4a' : '#4b3a86'); g.addColorStop(.7, enr ? '#2a0e20' : '#1e1640'); g.addColorStop(1, '#0b0818');
+    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, r, 0, 7); ctx.fill();
+    ctx.strokeStyle = rim; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(x, y, r, -Math.PI * .95, -Math.PI * .05); ctx.stroke();
+    if (i % 2 === 0) {
+      let nx = Math.cos(ang - Math.PI / 2), ny = Math.sin(ang - Math.PI / 2); if (ny > 0) { nx = -nx; ny = -ny; }
+      ctx.fillStyle = spike; ctx.shadowColor = spike; ctx.shadowBlur = RM ? 0 : 10;
+      ctx.beginPath(); ctx.moveTo(x + nx * r * .7 - ny * r * .3, y + ny * r * .7 + nx * r * .3); ctx.lineTo(x + nx * r * 1.7, y + ny * r * 1.7); ctx.lineTo(x + nx * r * .7 + ny * r * .3, y + ny * r * .7 - nx * r * .3); ctx.fill();
+      ctx.shadowBlur = 0;
+    }
+  }
+  if (s.headDead || s.bt < 0) return;
+  // head
+  const [hx, hy] = wpos(s.bt), [px, py] = wpos(s.bt - .03), ang = Math.atan2(hy - py, hx - px);
+  const breath = s.atk && s.atk.kind === 'breath' ? s.atk.t / s.atk.dur : 0, jaw = .12 + breath * .5 + (s.fire && s.fire.kind === 'breath' ? .5 : 0) + (s.phase === 'intro' && s.t > 1.7 && s.t < 3.2 ? .55 : 0);
+  ctx.save(); ctx.translate(hx, hy); ctx.rotate(ang); ctx.scale(K * 1.1, K * 1.1);
+  ctx.strokeStyle = '#d8ccb0'; ctx.lineWidth = 5; ctx.lineCap = 'round';
+  for (const sd of [-1, 1]) { ctx.beginPath(); ctx.moveTo(-6, sd * 13); ctx.bezierCurveTo(-30, sd * 34, -52, sd * 32, -64, sd * 16); ctx.stroke(); ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(-20, sd * 18); ctx.lineTo(-34, sd * 40); ctx.stroke(); ctx.lineWidth = 5; }
+  ctx.save(); ctx.translate(2, 6); ctx.rotate(jaw);
+  ctx.fillStyle = fl ? '#ddd' : '#24183e'; ctx.beginPath(); ctx.moveTo(-8, 0); ctx.lineTo(46, 4); ctx.lineTo(40, 12); ctx.lineTo(-6, 12); ctx.fill();
+  ctx.fillStyle = '#e8e0d0'; for (let k = 0; k < 5; k++) { ctx.beginPath(); ctx.moveTo(8 + k * 8, 3); ctx.lineTo(11 + k * 8, -4); ctx.lineTo(14 + k * 8, 3); ctx.fill(); }
+  ctx.restore();
+  const hg = ctx.createRadialGradient(-4, -8, 2, 6, 0, 46); hg.addColorStop(0, fl ? '#fff' : enr ? '#7a3050' : '#5a48a0'); hg.addColorStop(1, '#120c24');
+  ctx.fillStyle = hg; ctx.beginPath(); ctx.moveTo(-26, -16); ctx.quadraticCurveTo(10, -26, 52, -2); ctx.lineTo(50, 6); ctx.quadraticCurveTo(10, 14, -26, 14); ctx.quadraticCurveTo(-36, 0, -26, -16); ctx.fill();
+  ctx.strokeStyle = rim; ctx.lineWidth = 1.5; ctx.stroke();
+  const eye = enr ? '#ff3030' : '#7cf0ff'; ctx.fillStyle = eye; ctx.shadowColor = eye; ctx.shadowBlur = 16;
+  ctx.beginPath(); ctx.ellipse(16, -8, 6, 2.6, -.2, 0, 7); ctx.fill(); ctx.shadowBlur = 0;
+  if (breath > 0 || (s.fire && s.fire.kind === 'breath')) {
+    const mg = ctx.createRadialGradient(48, 6, 1, 48, 6, 10 + breath * 30); mg.addColorStop(0, '#fff6d0'); mg.addColorStop(.4, enr ? '#ff5040' : '#c070ff'); mg.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = mg; ctx.beginPath(); ctx.arc(48, 6, 10 + breath * 30, 0, 7); ctx.fill();
+  }
+  ctx.restore();
+}
+function drawChest(ctx, c) {
+  const s = SM, K = s.K, shake = c.opening && c.ot < 1.3 ? Math.sin(c.ot * (30 + c.ot * 40)) * (2 + c.ot * 5) : 0, open = c.opening && c.ot >= 1.3;
+  const tier = s.reward ? s.reward.it.tier : 3, col = c.opening && c.ot > 1.1 && tier === 4 ? '#f0b84a' : '#b67cf0';
+  ctx.save(); ctx.translate(c.x + shake, c.y); ctx.scale(K * 1.3, K * 1.3);
+  const glow = ctx.createRadialGradient(0, -20, 4, 0, -20, open ? 120 : 60 + Math.sin(s.t * 4) * 6); glow.addColorStop(0, col + 'aa'); glow.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = glow; ctx.fillRect(-140, -150, 280, 200);
+  if (open) { // light pillar + rays
+    ctx.save(); ctx.globalAlpha = .55 + .2 * Math.sin(s.t * 6);
+    const pg = ctx.createLinearGradient(0, -400, 0, 0); pg.addColorStop(0, 'rgba(255,255,255,0)'); pg.addColorStop(1, col);
+    ctx.fillStyle = pg; ctx.fillRect(-26, -400, 52, 380);
+    ctx.rotate(RM ? 0 : s.t * .6); ctx.fillStyle = col + '55';
+    for (let k = 0; k < 10; k++) { ctx.rotate(Math.PI / 5); ctx.beginPath(); ctx.moveTo(0, -22); ctx.lineTo(-10, -160); ctx.lineTo(10, -160); ctx.fill(); }
+    ctx.restore();
+  }
+  ctx.fillStyle = '#4a2c1a'; ctx.fillRect(-30, -28, 60, 28);
+  ctx.fillStyle = '#d6a94a'; ctx.fillRect(-30, -28, 60, 4); ctx.fillRect(-30, -4, 60, 4); ctx.fillRect(-4, -28, 8, 28);
+  ctx.save(); ctx.translate(-30, -28); if (open) ctx.rotate(-1.9);
+  ctx.fillStyle = '#5a341e'; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(0, -10); ctx.quadraticCurveTo(30, -26, 60, -10); ctx.lineTo(60, 0); ctx.fill();
+  ctx.fillStyle = '#d6a94a'; ctx.fillRect(26, -16, 8, 16);
+  ctx.restore();
+  ctx.restore();
+}
+function stormFrame(ts) {
+  if (!SM) return;
+  SM.raf = requestAnimationFrame(stormFrame);
+  const s = SM, rdt = Math.min(.05, (ts - s.last) / 1000); s.last = ts;
+  if (s.slowT > 0) { s.slowT -= rdt; if (s.slowT <= 0) s.slow = 1; }
+  stormUpdate(rdt * s.slow);
+  if (!SM) return;
+  const c = $('stormCv'), ctx = c.getContext('2d'), w = s.w, h = s.h, K = s.K, gy = s.gy;
+  ctx.setTransform(s.dpr, 0, 0, s.dpr, 0, 0);
+  ctx.save();
+  if (s.shake > 0 && !RM) ctx.translate((Math.random() - .5) * s.shake * 14, (Math.random() - .5) * s.shake * 14);
+  // sky
+  const g = ctx.createLinearGradient(0, 0, 0, gy); g.addColorStop(0, '#05040d'); g.addColorStop(.6, s.enraged ? '#2c0812' : '#140b2e'); g.addColorStop(1, s.enraged ? '#4a1018' : '#2a1238');
+  ctx.fillStyle = g; ctx.fillRect(-20, -20, w + 40, h + 40);
+  const intro = Math.min(1, s.t / 1.4), o = s.crack.o, open = s.phase === 'intro' ? Math.max(0, Math.min(1, (s.t - 1.4) / .6)) : (s.headDead ? Math.max(0, 1 - (s.t - s.vt) / 1.5) : 1);
+  if (open > 0) { const rg = ctx.createRadialGradient(o[0], o[1] * .6, 4, o[0], o[1] * .6, 260 * K); rg.addColorStop(0, `rgba(230,190,255,${.55 * open})`); rg.addColorStop(1, 'rgba(80,30,140,0)'); ctx.fillStyle = rg; ctx.fillRect(0, 0, w, h); }
+  for (const cl of s.clouds) { const cx = cl.x * w, cy = cl.y * h, r = cl.r * w; const cg = ctx.createRadialGradient(cx, cy, 2, cx, cy, r); cg.addColorStop(0, s.enraged ? `rgba(90,20,40,${cl.a})` : `rgba(50,34,90,${cl.a})`); cg.addColorStop(1, 'rgba(0,0,0,0)'); ctx.fillStyle = cg; ctx.fillRect(cx - r, cy - r, r * 2, r * 2); }
+  // crack
+  const showCrack = s.phase === 'intro' ? intro : open;
+  if (showCrack > 0) {
+    const pts = s.crack.pts, n = Math.max(2, Math.ceil(pts.length * (s.phase === 'intro' ? intro : 1)));
+    const line = (arr, k) => { ctx.beginPath(); ctx.moveTo(arr[0][0], arr[0][1]); for (let i = 1; i < k; i++) ctx.lineTo(arr[i][0], arr[i][1]); ctx.stroke(); };
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    ctx.strokeStyle = `rgba(200,120,255,${.35 * showCrack})`; ctx.lineWidth = (8 + open * 14) * K; line(pts, n);
+    ctx.shadowColor = '#e070ff'; ctx.shadowBlur = RM ? 0 : 22; ctx.strokeStyle = `rgba(250,236,255,${showCrack})`; ctx.lineWidth = (2 + open * 4) * K; line(pts, n);
+    if (s.phase !== 'intro' || s.t > .8) for (const b of s.crack.br) { ctx.lineWidth = 1.5 * K; line(b, b.length); }
+    ctx.shadowBlur = 0;
+  }
+  // distant Emberwatch silhouette
+  ctx.fillStyle = '#07060c';
+  ctx.beginPath(); ctx.moveTo(0, gy);
+  for (let x = 0; x <= w; x += 18) ctx.lineTo(x, gy - 18 * K - hash(x, 4) * 26 * K);
+  ctx.lineTo(w, gy); ctx.fill();
+  ctx.fillRect(w * .1, gy - 90 * K, 22 * K, 90 * K); for (let k = 0; k < 3; k++) ctx.fillRect(w * .1 - 3 * K + k * 10 * K, gy - 98 * K, 6 * K, 8 * K);
+  // bolts
+  for (const b of s.bolts) {
+    ctx.strokeStyle = `rgba(235,230,255,${b.life / .35})`; ctx.lineWidth = 2.5 * K; ctx.shadowColor = '#b8a8ff'; ctx.shadowBlur = RM ? 0 : 20;
+    ctx.beginPath(); ctx.moveTo(b.pts[0][0], b.pts[0][1]); for (const p of b.pts) ctx.lineTo(p[0], p[1]); ctx.stroke(); ctx.shadowBlur = 0;
+  }
+  drawWyrm(ctx);
+  // weak point
+  if (s.wp && s.phase === 'fight') {
+    const [x, y] = wpPos(), k = s.wp.t / s.wp.dur, pulse = 1 + Math.sin(s.t * 12) * .15;
+    const wg = ctx.createRadialGradient(x, y, 1, x, y, 26 * K * pulse); wg.addColorStop(0, '#ffffff'); wg.addColorStop(.35, '#fff0a0'); wg.addColorStop(1, 'rgba(255,200,60,0)');
+    ctx.fillStyle = wg; ctx.beginPath(); ctx.arc(x, y, 26 * K * pulse, 0, 7); ctx.fill();
+    ctx.strokeStyle = '#fff3b0'; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(x, y, 34 * K, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * (1 - k)); ctx.stroke();
+    ctx.font = `700 ${12 * K}px "Alegreya Sans", system-ui, sans-serif`; ctx.textAlign = 'center'; ctx.fillStyle = '#fff3b0'; ctx.fillText('TAP!', x, y - 42 * K);
+  }
+  // ground
+  const gg = ctx.createLinearGradient(0, gy, 0, h); gg.addColorStop(0, '#120d16'); gg.addColorStop(1, '#050408'); ctx.fillStyle = gg; ctx.fillRect(-20, gy, w + 40, h - gy + 20);
+  ctx.fillStyle = s.enraged ? 'rgba(255,90,90,.25)' : 'rgba(170,140,255,.25)'; ctx.fillRect(0, gy, w, 2);
+  // hero (+ afterimages while dashing)
+  const [hx] = heroPos(), c0 = cls(G.p), hk = 2.3 * K;
+  if (s.phase !== 'defeat' || s.t < .8) {
+    if (s.heroDash > 0) for (let k = 1; k <= 3; k++) { ctx.globalAlpha = .18 * (4 - k) / 3; drawHero(ctx, hx + k * 16 * K, gy, c0, s.t, { scale: hk }); }
+    ctx.globalAlpha = s.phase === 'defeat' ? Math.max(0, 1 - s.t / .8) : 1;
+    drawHero(ctx, hx, gy, c0, s.t, { scale: hk, swing: s.heroCd < .12 ? 1 : 0 });
+    ctx.globalAlpha = 1;
+  }
+  // slashes
+  for (const sl of s.slashes) {
+    const k = Math.min(1, sl.t / sl.dur), x = sl.x0 + (sl.x1 - sl.x0) * k, y = sl.y0 + (sl.y1 - sl.y0) * k - Math.sin(k * Math.PI) * 60 * K;
+    if (k >= 1) continue;
+    const col = sl.perfect ? '#ffd060' : c0.color;
+    ctx.save(); ctx.translate(x, y); ctx.rotate(Math.atan2(sl.y1 - sl.y0, sl.x1 - sl.x0) + k * 4);
+    ctx.strokeStyle = col; ctx.shadowColor = col; ctx.shadowBlur = RM ? 0 : 14; ctx.lineWidth = (sl.perfect ? 6 : 3.5) * K;
+    ctx.beginPath(); ctx.arc(0, 0, (sl.perfect ? 22 : 13) * K, -1.1, 1.1); ctx.stroke(); ctx.restore();
+  }
+  // attack telegraphs and impacts
+  if (s.atk && s.phase === 'fight') {
+    const a = s.atk, left = a.dur - a.t, k = left / a.dur, cy = gy - 45 * K;
+    if (a.kind === 'lance') { ctx.setLineDash([8, 8]); ctx.strokeStyle = `rgba(255,80,80,${.3 + (1 - k) * .6})`; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(hx, 0); ctx.lineTo(hx, gy); ctx.stroke(); ctx.setLineDash([]); }
+    if (a.kind === 'meteor') for (let m = -1; m <= 1; m++) { ctx.strokeStyle = `rgba(255,120,60,${.4 + (1 - k) * .5})`; ctx.lineWidth = 2; ctx.beginPath(); ctx.ellipse(hx + m * 46 * K, gy, 26 * K * (1 - k * .5), 7 * K, 0, 0, 7); ctx.stroke(); }
+    if (a.kind === 'breath') { const [bx, by] = wpos(s.bt); ctx.strokeStyle = `rgba(200,110,255,${.25 + (1 - k) * .5})`; ctx.lineWidth = 2; ctx.setLineDash([4, 10]); ctx.beginPath(); ctx.moveTo(bx, by); ctx.lineTo(hx, cy); ctx.stroke(); ctx.setLineDash([]); }
+    const target = 40 * K + 110 * K * (.3 / a.dur), r = 40 * K + 110 * K * k, inWin = left <= .75;
+    ctx.strokeStyle = '#ffd060'; ctx.lineWidth = 3; ctx.globalAlpha = .9; ctx.beginPath(); ctx.arc(hx, cy, target, 0, 7); ctx.stroke(); ctx.globalAlpha = 1;
+    ctx.strokeStyle = left <= .3 ? '#ffd060' : inWin ? '#ffffff' : '#ff5050'; ctx.lineWidth = left <= .3 ? 5 : 3;
+    ctx.beginPath(); ctx.arc(hx, cy, r, 0, 7); ctx.stroke();
+    if (inWin && !a.dodged) { ctx.font = `700 ${16 * K}px "Alegreya SC", Georgia, serif`; ctx.textAlign = 'center'; ctx.fillStyle = left <= .3 ? '#ffd060' : '#ffffff'; ctx.fillText('DODGE!', hx, cy - r - 10); }
+  }
+  if (s.fire) {
+    const f = s.fire, k = 1 - f.t / .6, fx_ = hx + (f.miss ? 80 * K : 0);
+    if (f.kind === 'lance') { const bg = ctx.createLinearGradient(fx_ - 30 * K, 0, fx_ + 30 * K, 0); bg.addColorStop(0, 'rgba(120,220,255,0)'); bg.addColorStop(.5, `rgba(240,250,255,${k})`); bg.addColorStop(1, 'rgba(120,220,255,0)'); ctx.fillStyle = bg; ctx.fillRect(fx_ - 30 * K * k - 6, 0, 60 * K * k + 12, gy); }
+    if (f.kind === 'breath' && !RM) { const [bx, by] = wpos(s.bt); for (let n = 0; n < 6; n++) { const q = Math.random(); SM.parts.push({ x: bx + (fx_ - bx) * q, y: by + (gy - 45 * K - by) * q, vx: (Math.random() - .5) * 80, vy: (Math.random() - .5) * 80, c: s.enraged ? '#ff6040' : '#c080ff', life: .5, max: .5, g: 0, r: 3 + Math.random() * 5 }); } }
+  }
+  for (const m of s.meteors) {
+    if (m.t >= m.dur) continue;
+    const k = m.t / m.dur, x = m.x0 + (m.x1 - m.x0) * k, y = m.y0 + (m.y1 - m.y0) * k;
+    ctx.strokeStyle = 'rgba(255,150,60,.6)'; ctx.lineWidth = 6 * K; ctx.beginPath(); ctx.moveTo(x - (m.x1 - m.x0) * .15, y - (m.y1 - m.y0) * .15); ctx.lineTo(x, y); ctx.stroke();
+    ctx.fillStyle = '#ffe0a0'; ctx.beginPath(); ctx.arc(x, y, 6 * K, 0, 7); ctx.fill();
+  }
+  if (s.chest) drawChest(ctx, s.chest);
+  // particles
+  for (const p of s.parts) { ctx.globalAlpha = Math.max(0, p.life / p.max); ctx.fillStyle = p.c; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 7); ctx.fill(); }
+  ctx.globalAlpha = 1;
+  // rain
+  if (!RM) {
+    ctx.strokeStyle = 'rgba(190,200,255,.22)'; ctx.lineWidth = 1; ctx.beginPath();
+    for (const r of s.rain) { r.y += r.s * (1 / 60) * 1.6; r.x -= .004; if (r.y > 1) { r.y = -.05; r.x = Math.random() * 1.1; } const x = r.x * w, y = r.y * h; ctx.moveTo(x, y); ctx.lineTo(x - r.l * w * .3, y + r.l * h); }
+    ctx.stroke();
+  }
+  // floats
+  for (const f of s.floats) {
+    const a = Math.max(0, 1 - f.t / 1.2), sc = f.t < .12 ? 1 + (1 - f.t / .12) * .6 : 1;
+    ctx.globalAlpha = a; ctx.font = `700 ${f.size * K * sc}px "JetBrains Mono", ui-monospace, monospace`; ctx.textAlign = 'center';
+    ctx.lineWidth = 4; ctx.strokeStyle = 'rgba(5,5,15,.85)'; ctx.strokeText(f.text, f.x, f.y - f.t * 40); ctx.fillStyle = f.color; ctx.fillText(f.text, f.x, f.y - f.t * 40);
+  }
+  ctx.globalAlpha = 1;
+  ctx.restore();
+  // banner
+  if (s.banner) {
+    const b = s.banner, inK = Math.min(1, b.t / .25), outK = Math.min(1, (b.dur - b.t) / .4), a = Math.min(inK, outK), sc = 1 + (1 - inK) * .5;
+    ctx.save(); ctx.globalAlpha = a; ctx.translate(w / 2, h * .5); ctx.scale(sc, sc); ctx.textAlign = 'center';
+    const bw = Math.min(w * .92, 420 * K); const bg = ctx.createLinearGradient(-bw / 2, 0, bw / 2, 0); bg.addColorStop(0, 'rgba(0,0,0,0)'); bg.addColorStop(.5, 'rgba(5,4,12,.75)'); bg.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = bg; ctx.fillRect(-bw / 2, -46 * K, bw, (b.sub ? 80 : 60) * K);
+    const fs = Math.min(40 * K, w * .9 / Math.max(6, b.text.length * .74));
+    ctx.font = `700 ${fs}px "Alegreya SC", Georgia, serif`; ctx.fillStyle = b.color; ctx.shadowColor = b.color; ctx.shadowBlur = RM ? 0 : 18; ctx.fillText(b.text, 0, 0); ctx.shadowBlur = 0;
+    if (b.sub) { ctx.font = `500 ${14 * K}px "Alegreya Sans", system-ui, sans-serif`; ctx.fillStyle = '#e7e3d6'; ctx.fillText(b.sub, 0, 24 * K); }
+    ctx.restore();
+  }
+  if (s.phase === 'chest' && s.chest.landed && !s.chest.opening) { ctx.font = `700 ${18 * K}px "Alegreya SC", Georgia, serif`; ctx.textAlign = 'center'; ctx.fillStyle = `rgba(255,224,150,${.6 + .4 * Math.sin(s.t * 5)})`; ctx.fillText('Tap the chest', w / 2, s.chest.y - 110 * K); }
+  // screen flash + vignette
+  if (s.flash > 0) { ctx.globalAlpha = Math.min(1, s.flash) * .6; ctx.fillStyle = s.flashC; ctx.fillRect(0, 0, w, h); ctx.globalAlpha = 1; }
+  const low = 1 - s.hp / s.max, vg = ctx.createRadialGradient(w / 2, h / 2, Math.min(w, h) * .35, w / 2, h / 2, Math.max(w, h) * .75);
+  vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, s.hurtV > 0 || low > .6 ? `rgba(140,0,0,${Math.max(s.hurtV * .7, (low - .6) * 1.2)})` : 'rgba(0,0,0,.6)');
+  ctx.fillStyle = vg; ctx.fillRect(0, 0, w, h);
+  // HUD bars (DOM)
+  $('stBoss').style.width = (s.bhp / s.bmax * 100) + '%';
+  $('stHero').style.width = (s.hp / s.max * 100) + '%';
+  $('stHeroHp').textContent = `${Math.ceil(s.hp)}/${s.max}`;
+  $('stBossHp').textContent = `${fmt(s.bhp)} / ${fmt(s.bmax)}`;
+  const cb = s.combo ? `Combo ×${s.combo}` : ''; if ($('stCombo').textContent !== cb) $('stCombo').textContent = cb;
+  const dz = $('stDodge'); dz.classList.toggle('ready', !!(s.atk && s.atk.t > s.atk.dur - .75 && !s.atk.dodged)); dz.disabled = s.phase !== 'fight';
+}
+$('stormCv').addEventListener('pointerdown', stormTap);
+$('stDodge').addEventListener('pointerdown', e => { e.preventDefault(); dodge(); });
+$('stMute').onclick = () => { SFX.on = !SFX.on; try { localStorage.setItem('riftbound.sfx', SFX.on ? 'on' : 'off'); } catch (e) { /* ignore */ } $('stMute').textContent = SFX.on ? '♪ on' : '♪ off'; SFX.init(); };
+$('stFlee').onclick = () => { if (SM && (SM.phase === 'fight' || SM.phase === 'intro')) { emit('You retreat from the Rift Storm. It still rages above.'); closeStorm(); } };
+document.addEventListener('keydown', e => { if (SM && (e.code === 'Space' || e.key === 'ArrowLeft')) { e.preventDefault(); dodge(); } });
 
 // ===== Title screen: Continue / New hero → class selection =====
 let startOpen = false, pickClass = 'gladiator', SAVE = null;
@@ -1881,7 +2477,7 @@ window.addEventListener('resize', () => { if (G) sceneSize(); });
 let acc = 0, last = Date.now(), sinceSave = 0;
 function loop() {
   const now = Date.now(), dt = (now - last) / 1000; last = now;
-  if (!G || startOpen) return;
+  if (!G || startOpen || SM) return;
   if (dt > 120) { showReport(offline(dt)); acc = 0; FX.length = 0; }
   else acc += dt * (inTown() && !ambush() ? 1 : G.speed);
   let n = Math.floor(acc); acc -= n;
