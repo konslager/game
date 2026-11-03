@@ -237,6 +237,27 @@ button.danger { color: var(--hp); }
 .storm-charge { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 10px; align-items: center; font-size: .78rem; color: var(--muted); }
 .storm-charge .cd { margin: 0; } .storm-charge .cd i { background: #a080ff; }
 @media (prefers-reduced-motion: reduce) { .storm-banner, .storm-banner::after, .st-dodge.ready, .st-card { animation: none; } }
+.townlay { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 10px; align-items: start; }
+.tmain { display: grid; gap: 8px; min-width: 0; }
+.tmain h2 { margin-top: 0; }
+.kicker { font: 700 .68rem var(--body); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.trail { position: sticky; top: 8px; display: grid; gap: 3px; max-height: calc(100vh - 100px); overflow-y: auto; scrollbar-width: none; padding: 6px; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; }
+.ri { position: relative; display: grid; justify-items: center; gap: 3px; padding: 8px 4px; border: 0; border-radius: 6px; background: none; color: var(--muted); font: 600 .68rem/1.15 var(--body); text-align: center; }
+.ri svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.ri[aria-current="page"] { color: var(--brass); background: color-mix(in srgb, var(--brass) 14%, transparent); box-shadow: inset 3px 0 0 var(--brass); }
+.ri.exit { color: var(--fg); }
+.ri.exit svg { stroke: var(--brass); }
+.ri .rdot { position: absolute; top: 5px; right: 8px; width: 8px; height: 8px; border-radius: 50%; background: var(--brass); }
+.ri .rwarn { font-style: normal; font-size: .6rem; color: var(--hp); letter-spacing: .04em; }
+.rsep { height: 1px; background: var(--line); margin: 3px 2px; }
+.rsub { display: grid; gap: 2px; margin: 0 0 4px; padding-left: 6px; border-left: 2px solid color-mix(in srgb, var(--brass) 45%, var(--line)); }
+.ri.sub { padding: 6px 2px; font-weight: 500; font-size: .64rem; }
+.ri.sub svg { width: 18px; height: 18px; }
+.tmain .row { padding: 8px; }
+.tmain .row .icon { width: 24px; height: 24px; } .tmain .row .icon svg { width: 16px; height: 16px; } .tmain .itemhead { gap: 7px; }
+.tmain .row .acts { flex-direction: column; align-items: stretch; }
+.tmain button.sm { min-width: 58px; }
+@media (min-width: 520px) { .townlay { grid-template-columns: 120px minmax(0, 1fr); } }
 @media (prefers-reduced-motion: reduce) { .bar > i { transition: none; } .hit.crit { animation: none; } }
 </style>
 
@@ -1044,20 +1065,33 @@ function townHtml(p) {
     const n = G.queue.length + (G.mon && G.mon.hp > 0 ? 1 : 0);
     return `<div class="notice"><p><b>Ambush in The Cinders!</b> ${n} cutthroat${n === 1 ? '' : 's'} left. Your hero fights back automatically.</p>${btn('Flee to Gatehold Square', 'data-act="flee"', true, 'big')}</div>`;
   }
-  if (G.building) return buildingHtml(p, BLD[G.building]);
-  if (G.district) return districtHtml(p, DIST[G.district]);
+  const main = G.building ? buildingHtml(p, BLD[G.building]) : G.district ? districtHtml(p, DIST[G.district]) : townOverview();
+  return `<div class="townlay">${townRail()}<div class="tmain">${main}</div></div>`;
+}
+function townOverview() {
   const set = R.settlement;
-  let h = `<div class="intro"><h2>${esc(set.name)}</h2><p class="lead">${esc(set.atmosphere)}</p><p class="meta">In town nothing happens on its own: shop, forge, take quests. Fighting and gathering happen out in the zones.</p></div>`;
+  let h = `<div class="intro"><h2>${esc(set.name)}</h2><p class="lead">${esc(set.atmosphere)}</p><p class="meta">In town nothing happens on its own: shop, forge, take quests. Fighting and gathering happen out in the zones. Pick a district on the left.</p></div>`;
   h += `<button class="card wide gocard" data-act="bld" data-id="town_gate">${icon('Gate')}<div><h3>Leave town</h3><div class="meta">Town Gate · choose a zone, then hunt or gather</div></div></button>`;
-  h += `<div class="section">Districts</div><div class="cards">` + R.districts.map(d => `<button class="card" data-act="district" data-id="${d.id}">
-      <h3>${esc(d.name)}${d.buildings.some(bldAlert) ? ' <b class="qdot">!</b>' : ''}</h3><div class="meta">${esc(DTYPE[d.type] || d.type)}${d.safeZone ? '' : ' · <span class="miss">unsafe</span>'}</div>
-      <div class="blist">${d.buildings.map(b => `<span>${esc(b.name)}</span>`).join('')}</div></button>`).join('') + `</div>`;
   return h;
+}
+// Left-hand town navigator: overview, quick exit, districts; the open district unfolds its buildings.
+const DICON = { gatehold_square: 'Market', anvil_row: 'Forge', the_cinders: 'Flame', wardtower_keep: 'Banner', riftside_gate: 'Portal' };
+const shortName = n => n.replace(/^The /, '');
+function townRail() {
+  const item = (act, id, ic, label, on, extra = '', cls = '') => `<button class="ri ${cls}" data-act="${act}"${id ? ` data-id="${id}"` : ''} aria-current="${on ? 'page' : 'false'}">${svgIcon(ic)}<span>${esc(label)}</span>${extra}</button>`;
+  let h = item('totown', '', 'Map', 'Emberwatch', !G.district && !G.building);
+  h += item('bld', 'town_gate', 'Gate', 'Leave town', G.building === 'town_gate', '', 'exit');
+  h += `<div class="rsep"></div>`;
+  for (const d of R.districts) {
+    const open = G.district === d.id, alert = d.buildings.some(bldAlert);
+    h += item('district', d.id, DICON[d.id] || 'Map', d.name, open && !G.building, (alert ? '<b class="rdot"></b>' : '') + (d.safeZone ? '' : '<i class="rwarn">unsafe</i>'));
+    if (open) h += `<div class="rsub">` + d.buildings.map(b => item('bld', b.id, BICON[b.type], shortName(b.name), G.building === b.id, bldAlert(b) ? '<b class="rdot"></b>' : '', 'sub')).join('') + `</div>`;
+  }
+  return `<nav class="trail" aria-label="Town">${h}</nav>`;
 }
 const bldDesc = b => b.description || (b.shopId ? SHOPS.find(s => s.id === b.shopId).specialization : '');
 function districtHtml(p, d) {
-  let h = crumb('totown', 'Emberwatch');
-  h += `<h2>${esc(d.name)}</h2><p class="lead">${esc(d.description)}${d.safeZone ? '' : ' <span class="miss">Unsafe: cutthroats may ambush you here.</span>'}</p>`;
+  let h = `<div class="kicker">Emberwatch · ${esc(DTYPE[d.type] || d.type)}</div><h2>${esc(d.name)}</h2><p class="lead">${esc(d.description)}${d.safeZone ? '' : ' <span class="miss">Unsafe: cutthroats may ambush you here.</span>'}</p>`;
   h += `<div class="cards">` + d.buildings.map(b => {
     const n = b.npcId && NPC[b.npcId];
     return `<button class="card wide bcard" data-act="bld" data-id="${b.id}">${icon(BICON[b.type])}<div><h3>${esc(b.name)}${bldAlert(b) ? ' <b class="qdot">!</b>' : ''}</h3><div class="meta">${n ? esc(n.name) + ' · ' : ''}${esc(bldDesc(b))}</div></div></button>`;
@@ -1065,7 +1099,7 @@ function districtHtml(p, d) {
   return h;
 }
 function buildingHtml(p, b) {
-  let h = crumb('todistrict', DIST[b.districtId].name) + `<h2>${esc(b.name)}</h2>`;
+  let h = `<div class="kicker">${esc(DIST[b.districtId].name)}</div><h2>${esc(b.name)}</h2>`;
   if (b.npcId) { const n = NPC[b.npcId]; h += `<div class="npc"><b>${esc(n.name)}</b> <span class="meta">${esc(n.race)} · ${esc(n.profession || n.role.replace('_', ' '))}</span><p>${esc(n.trait)}</p></div>` + npcQuestsHtml(p, b.npcId); }
   else if (b.description) h += `<p class="lead">${esc(b.description)}</p>`;
   if (b.type === 'lodge') h += crafterHtml(p, b.npcId);
@@ -1465,6 +1499,9 @@ const ICON_PATHS = {
   Ingot: 'M3 17l3-7h12l3 7zM6 10l2-4h8l2 4M3 17h18',
   Flower: 'M12 21v-8M12 13a3 3 0 1 1 0-6 3 3 0 0 1 0 6zM9 10H6M18 10h-3M12 7V4M8 18c1 0 3-1 4-3M16 18c-1 0-3-1-4-3',
   Fang: 'M6 4c6 2 10 7 11 16-3-3-6-5-8-9z',
+  Market: 'M3 10h18M5 10l2-5h10l2 5M5 10v10h14V10M9 20v-5h6v5',
+  Flame: 'M12 3c1 4 5 5 5 10a5 5 0 0 1-10 0c0-3 2-4 2-7 1 1 2 2 3 4 1-2 0-5 0-7z',
+  Portal: 'M6 21V10a6 6 0 0 1 12 0v11M3 21h18M12 9a3 3 0 0 1 3 3v9M12 9a3 3 0 0 0-3 3v9',
   Paw: 'M12 20c-3 0-5-1.5-5-3.5S9.5 12 12 12s5 2.5 5 4.5-2 3.5-5 3.5zM6 11a1.8 2.2 0 1 0 0-.01zM18 11a1.8 2.2 0 1 0 0-.01zM9.5 7a1.8 2.2 0 1 0 0-.01zM14.5 7a1.8 2.2 0 1 0 0-.01z',
   Hide: 'M7 3c2 1 8 1 10 0l1 4 3 2-2 4 1 6c-3-1-5 0-6 2-1-2-3-3-6-2l1-6-2-4 3-2z',
   Meat: 'M15 4a6 6 0 0 1 2 9l-5 5a3 3 0 0 1-4-4l5-5M8 18l-3 3M4 18l2 2M14 8a2 2 0 1 0 0 .01',
