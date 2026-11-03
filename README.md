@@ -4,13 +4,13 @@
 `web/index.html` – ta pati logika JavaScript'u, vienas failas, mobiliam ekranui. Progresas saugomas naršyklėje (localStorage), offline progresas skaičiuojamas atidarius iš naujo.
 Regiono duomenys (`data/regions/emberwatch.json`) įterpiami į puslapį: pakeitus JSON paleiskite `python3 tools/embed_region.py`.
 
-Web versijos eiga:
-- **Titulinis ekranas:** Continue / New hero → 5 klasių pasirinkimas (Gladiator, Duelist, Ashmage, Warden, Reaver).
-- **Miestas (Emberwatch):** nieko nevyksta automatiškai. Rajonai → pastatai (parduotuvės su Buy/Sell, Torvald's Forge: rūda → luitai, enhance/promote/kalimas; Moonvane Jewelers; Captain's Hall; Quest Board; Town Gate). Užduotys priimamos ir atiduodamos pas NPC.
-- **Zona:** atvykus renkiesi veiklą – kovoti su monstrais, medžioti gyvūnus ar rinkti (Cinder Vein, Ash Bloom). Offline progresas skaičiuojamas tik zonoje.
-- **Gyvūnų medžioklė:** po 3 gyvūnus kiekvienoje iš 6 zonų (`animals` JSON'e: sekimo laikas, statai, loot lentelė). Loot: Game Meat, zonos oda, retas trofėjus (8% iš didžiausio gyvūno). Hunter's Lodge (Gatehold Square, Orla Greyfeather): Hunter's Stew iš mėsos, odinė apranga iš odų ir trofėjų, supirkimas, užduotis „Pelts for the Lodge“.
-- **Rift Storm:** interaktyvus pasaulio boso įvykis per visą ekraną (Vorthrax, the Sky-Eater). Krūvis kaupiasi žudant (+2 už monstrą, +1 už gyvūną); pirmas audra paruošta iš karto. DODGE (arba tarpas) kai mažėjantis žiedas pasiekia auksinį žiedą = PERFECT (kontrataka, combo); bakstelėk švytinčias silpnas vietas. Laimėjus – skrynia su Epic/Legendary daiktu (pirmas kartas – klasės ginklas). Garsai sintezuojami WebAudio, telefone vibracija.
-- **Inventorius:** 6 slotų apranga aplink herojų, krepšys (Gear / Materials / Potions / Quest), daikto kortelė su palyginimu.
+Web versija – **„Plyšio sargas“** (visas tekstas lietuviškai):
+- **Tikslas:** užverti Plyšį. 7 skyriai (po vieną kiekvienai vietovei + finalas). Viršuje visada rodomas kitas žingsnis su mygtuku, kuris nuveda ten, kur reikia (`STORY` kode). Pirmas skyrius moko: užduotis → kova → rūda → kalvė → bosas.
+- **Pradžia:** titulinis ekranas (Tęsti / Naujas herojus) → 5 klasės.
+- **Miestas Žaržiūra:** nieko nevyksta savaime. Kairėje – rajonų ir pastatų navigacija (kalvė su lydymu ir stiprinimu, juvelyrė, ginklinė, vaistinė, medžiotojų namelis, kapitonės salė, skelbimų lenta, vartai).
+- **Vietovė:** stovykloje renkiesi – kovoti, medžioti gyvūnus ar rinkti. Bosą iššauki pats, kai surenki 25 pergales. Offline progresas skaičiuojamas tik vietovėje.
+- **Plyšio audra:** interaktyvus slibino Vortrakso įvykis (vengimas, silpnos vietos, skrynia); finale – paskutinė audra užveria Plyšį.
+- **Kuprinė:** 6 aprangos vietos aplink herojų, daiktai / medžiagos / gėrimai, daikto kortelė su palyginimu.
 
 ## Paleidimas
 ```bash

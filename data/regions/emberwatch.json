@@ -2,14 +2,14 @@
   "schemaVersion": 1,
   "region": {
     "id": "emberwatch_march",
-    "name": "Emberwatch March",
+    "name": "Žaržiūros pasienis",
     "levelRange": [1, 11],
     "zoneIds": [1, 2],
-    "description": "Pasienio regionas prie Plyšio (the Rift). Prieš 40 metų dangus čia suskilo, ir nuo tada be paliovos krenta pelenai. Gyvenvietė Emberwatch – paskutinė tvirtovė prieš Ashen Outskirts dykynes ir Shattered Rift plyšį."
+    "description": "Pasienio kraštas prie Plyšio. Prieš 40 metų dangus čia suskilo, ir nuo tada be paliovos krenta pelenai. Gyvenvietė Žaržiūra – paskutinė tvirtovė prieš Pelenų pakraščių dykynes ir Suskilusį Plyšį."
   },
   "settlement": {
     "id": "emberwatch",
-    "name": "Emberwatch",
+    "name": "Žaržiūra",
     "type": "frontier_fortress_town",
     "population": 3200,
     "faction": "emberwatch_garrison",
@@ -20,7 +20,7 @@
   "districts": [
     {
       "id": "gatehold_square",
-      "name": "Gatehold Square",
+      "name": "Vartų aikštė",
       "type": "market",
       "safeZone": true,
       "description": "Pagrindinė turgaus aikštė prie vartų. Čia stovi užduočių lenta, vaistinė ir karavanų stovykla.",
@@ -29,27 +29,27 @@
       "buildings": [
         {
           "id": "town_gate",
-          "name": "Town Gate",
+          "name": "Miesto vartai",
           "type": "gate",
           "description": "Išvykimas į zonas. Čia renkiesi, kur keliauti."
         },
         {
           "id": "quest_board",
-          "name": "Quest Board",
+          "name": "Skelbimų lenta",
           "type": "board",
           "description": "Visi miesto darbai ir kur rasti jų davėjus."
         },
         {
           "id": "hunters_lodge",
-          "name": "Hunter's Lodge",
+          "name": "Medžiotojų namelis",
           "type": "lodge",
           "shopId": "hunters_lodge",
           "npcId": "orla_greyfeather",
-          "description": "Gyvūnų loot: virimas, odinė apranga, trofėjų supirkimas."
+          "description": "Gyvūnų grobis: virimas, odinė apranga, trofėjų supirkimas."
         },
         {
           "id": "embervial_apothecary",
-          "name": "Embervial Apothecary",
+          "name": "Selos vaistinė",
           "type": "shop",
           "shopId": "embervial_apothecary",
           "npcId": "sela_quickmarrow"
@@ -58,7 +58,7 @@
     },
     {
       "id": "anvil_row",
-      "name": "Anvil Row",
+      "name": "Priekalų gatvė",
       "type": "craft_quarter",
       "safeZone": true,
       "description": "Amatininkų kvartalas. Kalvių kūjų dūžiai girdimi per visą miestą, o oras dvokia anglimi ir ištirpusiu metalu.",
@@ -67,21 +67,21 @@
       "buildings": [
         {
           "id": "torvald_forge",
-          "name": "Torvald's Forge",
+          "name": "Torvaldo kalvė",
           "type": "forge",
           "npcId": "torvald_ashmane",
-          "description": "Rūdos lydymas į luitus, enhance, promote (Common→Rare) ir kalimas."
+          "description": "Rūdos lydymas į luitus, sustiprinimas, rango kėlimas (Paprastas→Retas) ir kalimas."
         },
         {
           "id": "moonvane_jewelers",
-          "name": "Moonvane Jewelers",
+          "name": "Ilsos juvelyrinė",
           "type": "jeweler",
           "npcId": "ilsa_moonvane",
-          "description": "Promote Rare→Legendary ir žiedų kūrimas."
+          "description": "Rango kėlimas Retas→Legendinis ir žiedų kūrimas."
         },
         {
           "id": "split_anvil_armory",
-          "name": "The Split Anvil Armory",
+          "name": "Brakos ginklinė",
           "type": "shop",
           "shopId": "split_anvil_armory",
           "npcId": "brakka_ironjaw"
@@ -90,11 +90,11 @@
     },
     {
       "id": "the_cinders",
-      "name": "The Cinders",
+      "name": "Pelenynai",
       "type": "slums",
       "safeZone": false,
       "levelRange": [4, 6],
-      "description": "Pavojingieji lūšnynai sudegusiame rytiniame kvartale. Čia valdo kontrabandininkai, o neatsargų keliautoją užpuola Cinder Cutthroats.",
+      "description": "Pavojingieji lūšnynai sudegusiame rytiniame kvartale. Čia valdo kontrabandininkai, o neatsargų keliautoją užpuola galvažudžiai.",
       "npcIds": ["vex_ninefingers"],
       "features": ["black_market"],
       "monsterIds": ["cinder_cutthroat"],
@@ -108,7 +108,7 @@
       "buildings": [
         {
           "id": "rift_curio",
-          "name": "The Rift Curio",
+          "name": "Vekso kontrabanda",
           "type": "shop",
           "shopId": "rift_curio",
           "npcId": "vex_ninefingers"
@@ -117,16 +117,16 @@
     },
     {
       "id": "wardtower_keep",
-      "name": "Wardtower Keep",
+      "name": "Sargybos bokštas",
       "type": "garrison",
       "safeZone": true,
-      "description": "Garnizono štabas. Čia saugomi bosų vartai į Ashen Outskirts gilumą ir reputacijos kvartirmeisteris.",
+      "description": "Garnizono štabas. Čia saugomi bosų vartai į Pelenų pakraščių gilumą ir reputacijos kvartirmeisteris.",
       "npcIds": ["captain_hedda_varr"],
       "features": ["boss_gate", "reputation_vendor"],
       "buildings": [
         {
           "id": "captains_hall",
-          "name": "Captain's Hall",
+          "name": "Kapitonės salė",
           "type": "garrison",
           "npcId": "captain_hedda_varr",
           "description": "Kapitonės užduotys, garnizono reputacija ir bosų vartų žinios."
@@ -135,19 +135,19 @@
     },
     {
       "id": "riftside_gate",
-      "name": "Riftside Gate",
+      "name": "Plyšio vartai",
       "type": "zone_exit",
       "safeZone": true,
-      "description": "Užantspauduoti vartai į Shattered Rift. Atsidaro nugalėjus Kharn, the Cinder Warden.",
+      "description": "Užantspauduoti vartai į Suskilusį Plyšį. Atsidaro nugalėjus Kharną, Žarijų sargą.",
       "unlock": {"type": "boss_defeated", "monsterId": "ashen_outskirts_warden"},
       "leadsToZoneId": 2,
       "buildings": [
         {
           "id": "riftside_portal",
-          "name": "Riftside Gate",
+          "name": "Plyšio vartai",
           "type": "gate",
           "zoneIds": [2],
-          "description": "Tiesus kelias į Shattered Rift."
+          "description": "Tiesus kelias į Suskilusį Plyšį."
         }
       ]
     }
@@ -155,40 +155,40 @@
   "factions": [
     {
       "id": "emberwatch_garrison",
-      "name": "Emberwatch Garrison",
+      "name": "Žaržiūros garnizonas",
       "ranks": [
-        {"rank": "Neutral", "minRep": 0, "shopDiscount": 0.0},
-        {"rank": "Friendly", "minRep": 500, "shopDiscount": 0.05},
-        {"rank": "Honored", "minRep": 1500, "shopDiscount": 0.1},
-        {"rank": "Revered", "minRep": 4000, "shopDiscount": 0.15}
+        {"rank": "Neutralus", "minRep": 0, "shopDiscount": 0.0},
+        {"rank": "Draugiškas", "minRep": 500, "shopDiscount": 0.05},
+        {"rank": "Gerbiamas", "minRep": 1500, "shopDiscount": 0.1},
+        {"rank": "Šlovinamas", "minRep": 4000, "shopDiscount": 0.15}
       ]
     }
   ],
   "materials": [
     {
       "id": "ash_wolf_fang",
-      "name": "Ash Wolf Fang",
+      "name": "Vilko iltis",
       "tier": "Common",
       "sellPrice": 4,
       "sources": [{"monsterId": "ash_wolf", "dropChance": 0.35}]
     },
     {
       "id": "ghoul_marrow",
-      "name": "Ghoul Marrow",
+      "name": "Lavonėdos čiulpai",
       "tier": "Common",
       "sellPrice": 8,
       "sources": [{"monsterId": "cinder_ghoul", "dropChance": 0.25}]
     },
     {
       "id": "ash_bloom",
-      "name": "Ash Bloom",
+      "name": "Pelenų žiedas",
       "tier": "Common",
       "sellPrice": 3,
       "sources": [{"nodeId": "ash_bloom_patch", "zoneId": 1, "gatherSeconds": 5}]
     },
     {
       "id": "cinder_iron_ore",
-      "name": "Cinder Iron Ore",
+      "name": "Geležies rūda",
       "tier": "Uncommon",
       "sellPrice": 10,
       "sources": [
@@ -198,15 +198,15 @@
     },
     {
       "id": "cinder_iron_ingot",
-      "name": "Cinder Iron Ingot",
+      "name": "Geležies luitas",
       "tier": "Uncommon",
       "sellPrice": 30,
-      "description": "Išlydyta Cinder geležis. Naudojama daiktų stiprinimui (enhance), promote ir kalimui.",
+      "description": "Išlydyta geležis. Iš jos kalvis stiprina aprangą, kelia jos rangą ir kala naujus daiktus.",
       "sources": [{"crafterNpcId": "torvald_ashmane", "serviceId": "smelt_cinder_iron"}]
     },
     {
       "id": "riftglass_shard",
-      "name": "Riftglass Shard",
+      "name": "Plyšio stiklo šukė",
       "tier": "Rare",
       "sellPrice": 60,
       "sources": [
@@ -216,24 +216,24 @@
     },
     {
       "id": "cinder_warden_core",
-      "name": "Cinder Warden Core",
+      "name": "Kharno šerdis",
       "tier": "Epic",
       "sellPrice": 600,
       "sources": [{"monsterId": "ashen_outskirts_warden", "dropChance": 1.0}]
     },
     {
       "id": "rift_warden_heart",
-      "name": "Rift Warden Heart",
+      "name": "Izoldos širdis",
       "tier": "Legendary",
       "sellPrice": 1500,
       "sources": [{"monsterId": "shattered_rift_warden", "dropChance": 1.0}]
     },
     {
       "id": "game_meat",
-      "name": "Game Meat",
+      "name": "Žvėriena",
       "tier": "Common",
       "sellPrice": 3,
-      "description": "Šviežia žvėriena. Orla Greyfeather iš jos verda Hunter's Stew (gydo 40% HP).",
+      "description": "Šviežia žvėriena. Orla iš jos verda medžiotojo troškinį (gydo 40% HP).",
       "sources": [
         {"animalId": "ash_hare", "dropChance": 0.7, "qty": [1, 1]},
         {"animalId": "cinder_boar", "dropChance": 0.85, "qty": [1, 2]},
@@ -257,10 +257,10 @@
     },
     {
       "id": "ashen_hide",
-      "name": "Ashen Hide",
+      "name": "Pelenų kailis",
       "tier": "Common",
       "sellPrice": 5,
-      "description": "Gyvūnų oda iš Ashen Outskirts. Iš jos Orla siuva odinę aprangą.",
+      "description": "Gyvūnų kailis iš Pelenų pakraščių. Iš jo Orla siuva odinę aprangą.",
       "sources": [
         {"animalId": "ash_hare", "dropChance": 0.4, "qty": [1, 1]},
         {"animalId": "cinder_boar", "dropChance": 0.75, "qty": [1, 1]},
@@ -269,10 +269,10 @@
     },
     {
       "id": "riftglow_pelt",
-      "name": "Riftglow Pelt",
+      "name": "Plyšio kailis",
       "tier": "Uncommon",
       "sellPrice": 15,
-      "description": "Gyvūnų oda iš Shattered Rift. Iš jos Orla siuva odinę aprangą.",
+      "description": "Gyvūnų kailis iš Suskilusio Plyšio. Iš jo Orla siuva odinę aprangą.",
       "sources": [
         {"animalId": "glimmer_fox", "dropChance": 0.4, "qty": [1, 1]},
         {"animalId": "riftback_ram", "dropChance": 0.75, "qty": [1, 1]},
@@ -281,10 +281,10 @@
     },
     {
       "id": "marsh_hide",
-      "name": "Marsh Hide",
+      "name": "Pelkių oda",
       "tier": "Uncommon",
       "sellPrice": 30,
-      "description": "Gyvūnų oda iš Gloomroot Marsh. Iš jos Orla siuva odinę aprangą.",
+      "description": "Gyvūnų oda iš Niūriašaknių pelkės. Iš jos Orla siuva odinę aprangą.",
       "sources": [
         {"animalId": "bog_toad", "dropChance": 0.4, "qty": [1, 1]},
         {"animalId": "marsh_lynx", "dropChance": 0.75, "qty": [1, 1]},
@@ -293,10 +293,10 @@
     },
     {
       "id": "tidescale_hide",
-      "name": "Tidescale Hide",
+      "name": "Potvynių oda",
       "tier": "Rare",
       "sellPrice": 60,
-      "description": "Gyvūnų oda iš Sunken Bastion. Iš jos Orla siuva odinę aprangą.",
+      "description": "Gyvūnų oda iš Nuskendusio bastiono. Iš jos Orla siuva odinę aprangą.",
       "sources": [
         {"animalId": "reef_crab", "dropChance": 0.4, "qty": [1, 1]},
         {"animalId": "tidecat", "dropChance": 0.75, "qty": [1, 1]},
@@ -305,10 +305,10 @@
     },
     {
       "id": "emberscale_hide",
-      "name": "Emberscale Hide",
+      "name": "Žarijų oda",
       "tier": "Rare",
       "sellPrice": 120,
-      "description": "Gyvūnų oda iš Ember Crown Spire. Iš jos Orla siuva odinę aprangą.",
+      "description": "Gyvūnų oda iš Žarijų karūnos bokšto. Iš jos Orla siuva odinę aprangą.",
       "sources": [
         {"animalId": "ember_lizard", "dropChance": 0.4, "qty": [1, 1]},
         {"animalId": "cinderhawk", "dropChance": 0.75, "qty": [1, 1]},
@@ -317,10 +317,10 @@
     },
     {
       "id": "starfur_pelt",
-      "name": "Starfur Pelt",
+      "name": "Žvaigždžių kailis",
       "tier": "Epic",
       "sellPrice": 250,
-      "description": "Gyvūnų oda iš Hollow Star Vault. Iš jos Orla siuva odinę aprangą.",
+      "description": "Gyvūnų kailis iš Tuščiųjų žvaigždžių skliauto. Iš jo Orla siuva odinę aprangą.",
       "sources": [
         {"animalId": "starfox", "dropChance": 0.4, "qty": [1, 1]},
         {"animalId": "nebula_stag", "dropChance": 0.75, "qty": [1, 1]},
@@ -329,7 +329,7 @@
     },
     {
       "id": "dusk_stag_antler",
-      "name": "Dusk Stag Antler",
+      "name": "Sutemų elnio ragai",
       "tier": "Uncommon",
       "sellPrice": 80,
       "description": "Retas medžioklės trofėjus. Brangiai parduodamas arba naudojamas geriausiai Orlos aprangai.",
@@ -337,7 +337,7 @@
     },
     {
       "id": "shardhorn_crown",
-      "name": "Shardhorn Crown",
+      "name": "Šukaragio karūna",
       "tier": "Rare",
       "sellPrice": 220,
       "description": "Retas medžioklės trofėjus. Brangiai parduodamas arba naudojamas geriausiai Orlos aprangai.",
@@ -345,7 +345,7 @@
     },
     {
       "id": "mirebear_claw",
-      "name": "Mirebear Claw",
+      "name": "Lokio nagas",
       "tier": "Rare",
       "sellPrice": 450,
       "description": "Retas medžioklės trofėjus. Brangiai parduodamas arba naudojamas geriausiai Orlos aprangai.",
@@ -353,7 +353,7 @@
     },
     {
       "id": "tortoise_shell_plate",
-      "name": "Tortoise Shell Plate",
+      "name": "Vėžlio šarvo plokštė",
       "tier": "Epic",
       "sellPrice": 900,
       "description": "Retas medžioklės trofėjus. Brangiai parduodamas arba naudojamas geriausiai Orlos aprangai.",
@@ -361,7 +361,7 @@
     },
     {
       "id": "magma_ox_horn",
-      "name": "Magma Ox Horn",
+      "name": "Magmos jaučio ragas",
       "tier": "Epic",
       "sellPrice": 1800,
       "description": "Retas medžioklės trofėjus. Brangiai parduodamas arba naudojamas geriausiai Orlos aprangai.",
@@ -369,7 +369,7 @@
     },
     {
       "id": "starmane",
-      "name": "Starmane",
+      "name": "Žvaigždžių karčiai",
       "tier": "Legendary",
       "sellPrice": 4000,
       "description": "Retas medžioklės trofėjus. Brangiai parduodamas arba naudojamas geriausiai Orlos aprangai.",
@@ -379,7 +379,7 @@
   "monsters": [
     {
       "id": "ash_wolf",
-      "name": "Ash Wolf",
+      "name": "Pelenų vilkas",
       "zoneId": 1,
       "level": [1, 3],
       "hp": 100,
@@ -390,7 +390,7 @@
     },
     {
       "id": "cinder_ghoul",
-      "name": "Cinder Ghoul",
+      "name": "Žarijų lavonėda",
       "zoneId": 1,
       "level": [3, 5],
       "hp": 140,
@@ -401,7 +401,7 @@
     },
     {
       "id": "cinder_cutthroat",
-      "name": "Cinder Cutthroat",
+      "name": "Pelenynų galvažudys",
       "zoneId": 1,
       "level": [5, 5],
       "elite": true,
@@ -413,7 +413,7 @@
     },
     {
       "id": "ashen_outskirts_warden",
-      "name": "Kharn, the Cinder Warden",
+      "name": "Kharnas, Žarijų sargas",
       "zoneId": 1,
       "boss": true,
       "level": [6, 6],
@@ -425,7 +425,7 @@
     },
     {
       "id": "rift_stalker",
-      "name": "Rift Stalker",
+      "name": "Plyšio sekėjas",
       "zoneId": 2,
       "level": [6, 9],
       "hp": 220,
@@ -436,7 +436,7 @@
     },
     {
       "id": "shardback_crawler",
-      "name": "Shardback Crawler",
+      "name": "Šukanugaris roplys",
       "zoneId": 2,
       "level": [8, 11],
       "hp": 260,
@@ -447,7 +447,7 @@
     },
     {
       "id": "shattered_rift_warden",
-      "name": "Ysolde of the Broken Sky",
+      "name": "Izolda, Sudužusio dangaus valdovė",
       "zoneId": 2,
       "boss": true,
       "level": [12, 12],
@@ -461,60 +461,64 @@
   "npcs": [
     {
       "id": "brakka_ironjaw",
-      "name": "Brakka Ironjaw",
-      "race": "Dwarf",
+      "name": "Braka Geležinžandis",
+      "race": "Nykštukas",
       "role": "merchant",
       "districtId": "anvil_row",
-      "trait": "Niurzgus ir tiesmukas. Niekada nesiderėja, bet už kiekvieną savo kalavijo dūžį garantuoja galva."
+      "trait": "Niurzgus ir tiesmukas. Niekada nesiderėja, bet už kiekvieną savo kalavijo dūžį garantuoja galva.",
+      "profession": "Ginklininkas"
     },
     {
       "id": "sela_quickmarrow",
-      "name": "Sela Quickmarrow",
-      "race": "Half-Elf",
+      "name": "Sela Greitakaulė",
+      "race": "Pusiau elfė",
       "role": "merchant",
       "districtId": "gatehold_square",
-      "trait": "Nervinga plepė. Kalba greičiau, nei verda jos katilai, ir viską užsirašo į sudegusį sąsiuvinį."
+      "trait": "Nervinga plepė. Kalba greičiau, nei verda jos katilai, ir viską užsirašo į sudegusį sąsiuvinį.",
+      "profession": "Vaistininkė"
     },
     {
       "id": "vex_ninefingers",
-      "name": "Vex \"Nine-Fingers\"",
-      "race": "Ashborn",
+      "name": "Veksas „Devynpirštis“",
+      "race": "Pelenagimis",
       "role": "merchant",
       "districtId": "the_cinders",
-      "trait": "Mandagus, šaltas kontrabandininkas. Dešimto piršto neteko per derybas ir nuo tada nemėgsta skolininkų."
+      "trait": "Mandagus, šaltas kontrabandininkas. Dešimto piršto neteko per derybas ir nuo tada nemėgsta skolininkų.",
+      "profession": "Kontrabandininkas"
     },
     {
       "id": "torvald_ashmane",
-      "name": "Torvald Ashmane",
-      "race": "Human",
+      "name": "Torvaldas Pelenkaris",
+      "race": "Žmogus",
       "role": "crafter",
-      "profession": "Blacksmith",
+      "profession": "Kalvis",
       "districtId": "anvil_row",
       "trait": "Buvęs garnizono veteranas su perdega ranka. Kantrus mokytojas, bet nepakenčia prastos rūdos."
     },
     {
       "id": "ilsa_moonvane",
-      "name": "Ilsa Moonvane",
-      "race": "Elf",
+      "name": "Ilsa Mėnulvėjė",
+      "race": "Elfė",
       "role": "crafter",
-      "profession": "Jeweler / Runesmith",
+      "profession": "Juvelyrė",
       "districtId": "anvil_row",
-      "trait": "Tyli perfekcionistė. Riftglass skeveldras tyrinėja su lupa ir šnabžda joms kaip gyvoms."
+      "trait": "Tyli perfekcionistė. Plyšio stiklo skeveldras tyrinėja su lupa ir šnabžda joms kaip gyvoms."
     },
     {
       "id": "captain_hedda_varr",
-      "name": "Captain Hedda Varr",
-      "race": "Human",
+      "name": "Kapitonė Heda Var",
+      "race": "Žmogus",
       "role": "quest_giver",
       "districtId": "wardtower_keep",
-      "trait": "Griežta garnizono kapitonė. Vertina rezultatus, ne žodžius."
+      "trait": "Griežta garnizono kapitonė. Vertina rezultatus, ne žodžius.",
+      "profession": "Garnizono kapitonė"
     },
     {
       "id": "orla_greyfeather",
-      "name": "Orla Greyfeather",
-      "race": "Half-Orc",
+      "name": "Orla Pilkaplunksnė",
+      "race": "Pusiau orkė",
       "role": "crafter",
-      "profession": "Huntmaster / Tanner",
+      "profession": "Medžiotoja, kailiadirbė",
       "districtId": "gatehold_square",
       "trait": "Rami, bet griežta medžiotoja. Moka už kiekvieną odą ir niekada neišmeta nė kaulo."
     }
@@ -522,7 +526,7 @@
   "shops": [
     {
       "id": "split_anvil_armory",
-      "name": "The Split Anvil Armory",
+      "name": "Brakos ginklinė",
       "ownerNpcId": "brakka_ironjaw",
       "districtId": "anvil_row",
       "specialization": "Ginklai ir šarvai",
@@ -530,7 +534,7 @@
       "items": [
         {
           "id": "worn_hauberk",
-          "name": "Worn Hauberk",
+          "name": "Nudėvėti šarvamarškiniai",
           "type": "equipment",
           "slot": "Armor",
           "tier": "Common",
@@ -541,7 +545,7 @@
         },
         {
           "id": "tempered_claymore",
-          "name": "Tempered Claymore",
+          "name": "Grūdintas dvirankis",
           "type": "equipment",
           "slot": "Weapon",
           "tier": "Uncommon",
@@ -552,7 +556,7 @@
         },
         {
           "id": "tempered_greaves",
-          "name": "Tempered Greaves",
+          "name": "Grūdinti batai",
           "type": "equipment",
           "slot": "Boots",
           "tier": "Uncommon",
@@ -563,7 +567,7 @@
         },
         {
           "id": "riftforged_warblade",
-          "name": "Riftforged Warblade",
+          "name": "Plyšio kalavijas",
           "type": "equipment",
           "slot": "Weapon",
           "tier": "Rare",
@@ -571,13 +575,13 @@
           "baseBonus": {"strength": 20, "agility": 5, "intelligence": 0, "vitality": 0, "luck": 3},
           "baseDefense": 0,
           "price": 6500,
-          "requires": {"factionId": "emberwatch_garrison", "rank": "Friendly"}
+          "requires": {"factionId": "emberwatch_garrison", "rank": "Draugiškas"}
         }
       ]
     },
     {
       "id": "embervial_apothecary",
-      "name": "Embervial Apothecary",
+      "name": "Selos vaistinė",
       "ownerNpcId": "sela_quickmarrow",
       "districtId": "gatehold_square",
       "specialization": "Eliksyrai ir laikini sustiprinimai",
@@ -585,7 +589,7 @@
       "items": [
         {
           "id": "minor_healing_draught",
-          "name": "Minor Healing Draught",
+          "name": "Gydomasis gėrimas",
           "type": "consumable",
           "effect": {"kind": "heal_pct", "value": 0.25},
           "cooldownSeconds": 30,
@@ -593,7 +597,7 @@
         },
         {
           "id": "mana_tonic",
-          "name": "Mana Tonic",
+          "name": "Manos tonikas",
           "type": "consumable",
           "effect": {"kind": "mana_flat", "value": 60},
           "cooldownSeconds": 30,
@@ -601,23 +605,16 @@
         },
         {
           "id": "ironhide_elixir",
-          "name": "Ironhide Elixir",
+          "name": "Geležinės odos eliksyras",
           "type": "consumable",
           "effect": {"kind": "defense_pct", "value": 0.15, "durationSeconds": 300},
           "price": 220
-        },
-        {
-          "id": "elixir_of_fortune",
-          "name": "Elixir of Fortune",
-          "type": "consumable",
-          "effect": {"kind": "luck_flat", "value": 10, "durationSeconds": 600},
-          "price": 450
         }
       ]
     },
     {
       "id": "rift_curio",
-      "name": "The Rift Curio",
+      "name": "Vekso kontrabanda",
       "ownerNpcId": "vex_ninefingers",
       "districtId": "the_cinders",
       "specialization": "Reti komponentai ir juodoji rinka",
@@ -625,26 +622,12 @@
       "dailyRestock": true,
       "items": [
         {"id": "riftglass_shard", "type": "material", "price": 250, "dailyLimit": 5},
-        {"id": "cinder_warden_core", "type": "material", "price": 2400, "dailyLimit": 1},
-        {
-          "id": "rift_catalyst",
-          "name": "Rift Catalyst",
-          "type": "consumable",
-          "effect": {"kind": "promote_gold_cost_pct", "value": -0.25, "uses": 1},
-          "price": 800
-        },
-        {
-          "id": "unidentified_rift_cache",
-          "name": "Unidentified Rift Cache",
-          "type": "lootbox",
-          "effect": {"kind": "roll_item", "zoneId": 2, "minTier": "Uncommon"},
-          "price": 1500
-        }
+        {"id": "cinder_warden_core", "type": "material", "price": 2400, "dailyLimit": 1}
       ]
     },
     {
       "id": "hunters_lodge",
-      "name": "Hunter's Lodge",
+      "name": "Medžiotojų namelis",
       "ownerNpcId": "orla_greyfeather",
       "districtId": "gatehold_square",
       "specialization": "Medžioklės reikmenys ir trofėjų supirkimas",
@@ -652,7 +635,7 @@
       "items": [
         {
           "id": "hunters_stew",
-          "name": "Hunter's Stew",
+          "name": "Medžiotojo troškinys",
           "type": "consumable",
           "effect": {"kind": "heal_pct", "value": 0.4},
           "cooldownSeconds": 30,
@@ -668,14 +651,14 @@
       "services": [
         {
           "id": "smelt_cinder_iron",
-          "name": "Smelt: Cinder Iron Ingot",
+          "name": "Lydyti geležies luitą",
           "goldCost": 5,
           "materials": [{"id": "cinder_iron_ore", "qty": 2}],
           "outputMaterial": {"id": "cinder_iron_ingot", "qty": 1}
         },
         {
           "id": "enhance",
-          "name": "Enhance (+1)",
+          "name": "Sustiprinti (+1)",
           "appliesTo": "any_equipment",
           "goldCostFormula": "40 * itemLevel * (1 + tier) * 1.45^enhancement",
           "materials": [
@@ -686,14 +669,14 @@
         },
         {
           "id": "promote_common_uncommon",
-          "name": "Promote: Common → Uncommon",
+          "name": "Pakelti rangą: Paprastas → Neįprastas",
           "requires": {"enhancement": 5, "fromTier": "Common"},
           "goldCostFormula": "400 * itemLevel * (1 + tier)^2",
           "materials": [{"id": "cinder_iron_ingot", "qty": 3}, {"id": "ash_wolf_fang", "qty": 10}]
         },
         {
           "id": "promote_uncommon_rare",
-          "name": "Promote: Uncommon → Rare",
+          "name": "Pakelti rangą: Neįprastas → Retas",
           "requires": {"enhancement": 5, "fromTier": "Uncommon"},
           "goldCostFormula": "400 * itemLevel * (1 + tier)^2",
           "materials": [
@@ -704,13 +687,13 @@
         },
         {
           "id": "craft_emberwatch_guard_plate",
-          "name": "Craft: Emberwatch Guard Plate",
+          "name": "Nukalti: Sargybos šarvai",
           "unlockedByQuestId": "ore_for_the_anvil",
           "goldCost": 1200,
           "materials": [{"id": "cinder_iron_ingot", "qty": 6}, {"id": "ash_wolf_fang", "qty": 15}],
           "output": {
             "id": "emberwatch_guard_plate",
-            "name": "Emberwatch Guard Plate",
+            "name": "Sargybos šarvai",
             "type": "equipment",
             "slot": "Armor",
             "tier": "Uncommon",
@@ -727,26 +710,26 @@
       "services": [
         {
           "id": "promote_rare_epic",
-          "name": "Promote: Rare → Epic",
+          "name": "Pakelti rangą: Retas → Epinis",
           "requires": {"enhancement": 5, "fromTier": "Rare"},
           "goldCostFormula": "400 * itemLevel * (1 + tier)^2",
           "materials": [{"id": "riftglass_shard", "qty": 8}, {"id": "cinder_warden_core", "qty": 1}]
         },
         {
           "id": "promote_epic_legendary",
-          "name": "Promote: Epic → Legendary",
+          "name": "Pakelti rangą: Epinis → Legendinis",
           "requires": {"enhancement": 5, "fromTier": "Epic"},
           "goldCostFormula": "400 * itemLevel * (1 + tier)^2",
           "materials": [{"id": "riftglass_shard", "qty": 15}, {"id": "rift_warden_heart", "qty": 1}]
         },
         {
           "id": "craft_signet_of_embers",
-          "name": "Craft: Signet of Embers",
+          "name": "Nukalti: Žarijų antspaudas",
           "goldCost": 3000,
           "materials": [{"id": "riftglass_shard", "qty": 4}, {"id": "cinder_iron_ingot", "qty": 3}],
           "output": {
             "id": "signet_of_embers",
-            "name": "Signet of Embers",
+            "name": "Žarijų antspaudas",
             "type": "equipment",
             "slot": "Ring",
             "tier": "Rare",
@@ -763,19 +746,19 @@
       "services": [
         {
           "id": "cook_hunters_stew",
-          "name": "Cook: Hunter's Stew",
+          "name": "Virti medžiotojo troškinį",
           "goldCost": 10,
           "materials": [{"id": "game_meat", "qty": 3}],
           "outputConsumable": {"id": "hunters_stew", "qty": 1}
         },
         {
           "id": "craft_ashen_hide_boots",
-          "name": "Craft: Ashen Hide Boots",
+          "name": "Pasiūti: Pelenų kailio batai",
           "goldCost": 300,
           "materials": [{"id": "ashen_hide", "qty": 20}, {"id": "dusk_stag_antler", "qty": 1}],
           "output": {
             "id": "ashen_hide_boots",
-            "name": "Ashen Hide Boots",
+            "name": "Pelenų kailio batai",
             "type": "equipment",
             "slot": "Boots",
             "tier": "Uncommon",
@@ -786,12 +769,12 @@
         },
         {
           "id": "craft_riftglow_belt",
-          "name": "Craft: Riftglow Hunter's Belt",
+          "name": "Pasiūti: Plyšio medžiotojo diržas",
           "goldCost": 1500,
           "materials": [{"id": "riftglow_pelt", "qty": 25}, {"id": "shardhorn_crown", "qty": 2}],
           "output": {
             "id": "riftglow_belt",
-            "name": "Riftglow Hunter's Belt",
+            "name": "Plyšio medžiotojo diržas",
             "type": "equipment",
             "slot": "Belt",
             "tier": "Rare",
@@ -802,12 +785,12 @@
         },
         {
           "id": "craft_marsh_hood",
-          "name": "Craft: Marsh Stalker Hood",
+          "name": "Pasiūti: Pelkių sekėjo gobtuvas",
           "goldCost": 5000,
           "materials": [{"id": "marsh_hide", "qty": 30}, {"id": "mirebear_claw", "qty": 2}],
           "output": {
             "id": "marsh_stalker_hood",
-            "name": "Marsh Stalker Hood",
+            "name": "Pelkių sekėjo gobtuvas",
             "type": "equipment",
             "slot": "Helmet",
             "tier": "Rare",
@@ -818,12 +801,12 @@
         },
         {
           "id": "craft_tidescale_armor",
-          "name": "Craft: Tidescale Brigandine",
+          "name": "Pasiūti: Potvynių brigantina",
           "goldCost": 12000,
           "materials": [{"id": "tidescale_hide", "qty": 35}, {"id": "tortoise_shell_plate", "qty": 3}],
           "output": {
             "id": "tidescale_brigandine",
-            "name": "Tidescale Brigandine",
+            "name": "Potvynių brigantina",
             "type": "equipment",
             "slot": "Armor",
             "tier": "Epic",
@@ -834,12 +817,12 @@
         },
         {
           "id": "craft_emberscale_boots",
-          "name": "Craft: Emberscale Treads",
+          "name": "Pasiūti: Žarijų odos batai",
           "goldCost": 30000,
           "materials": [{"id": "emberscale_hide", "qty": 35}, {"id": "magma_ox_horn", "qty": 3}],
           "output": {
             "id": "emberscale_treads",
-            "name": "Emberscale Treads",
+            "name": "Žarijų odos batai",
             "type": "equipment",
             "slot": "Boots",
             "tier": "Epic",
@@ -850,12 +833,12 @@
         },
         {
           "id": "craft_starfur_mantle",
-          "name": "Craft: Starfur Mantle",
+          "name": "Pasiūti: Žvaigždžių mantija",
           "goldCost": 80000,
           "materials": [{"id": "starfur_pelt", "qty": 40}, {"id": "starmane", "qty": 3}],
           "output": {
             "id": "starfur_mantle",
-            "name": "Starfur Mantle",
+            "name": "Žvaigždžių mantija",
             "type": "equipment",
             "slot": "Armor",
             "tier": "Legendary",
@@ -870,10 +853,10 @@
   "quests": [
     {
       "id": "fangs_at_the_palisade",
-      "name": "Fangs at the Palisade",
+      "name": "Iltys prie palisado",
       "giverNpcId": "captain_hedda_varr",
       "type": "hunt",
-      "minLevel": 2,
+      "minLevel": 1,
       "prerequisiteQuestIds": [],
       "description": "Pelenų vilkai naktimis puola rytinį palisadą. Kapitonė Varr nori, kad jų gauja būtų išretinta prieš atvykstant karavanui.",
       "objectives": [{"kind": "kill", "monsterId": "ash_wolf", "count": 12, "zoneId": 1}],
@@ -886,12 +869,12 @@
     },
     {
       "id": "ore_for_the_anvil",
-      "name": "Ore for the Anvil",
+      "name": "Rūda priekalui",
       "giverNpcId": "torvald_ashmane",
       "type": "gather",
       "minLevel": 4,
       "prerequisiteQuestIds": ["fangs_at_the_palisade"],
-      "description": "Garnizonui reikia naujų šarvų, bet Torvaldo sandėlis tuščias. Atnešk Cinder Iron Ore iš gyslų Ashen Outskirts dykynėse ir vilkų iltis grūdinimui.",
+      "description": "Garnizonui reikia naujų šarvų, bet Torvaldo sandėlis tuščias. Atnešk geležies rūdos iš gyslų Pelenų pakraščių dykynėse ir vilkų iltis grūdinimui.",
       "objectives": [
         {"kind": "collect", "itemId": "cinder_iron_ore", "count": 6},
         {"kind": "collect", "itemId": "ash_wolf_fang", "count": 10}
@@ -903,7 +886,7 @@
         "items": [
           {
             "id": "tempered_girdle",
-            "name": "Tempered Girdle",
+            "name": "Grūdintas diržas",
             "type": "equipment",
             "slot": "Belt",
             "tier": "Uncommon",
@@ -918,18 +901,18 @@
     },
     {
       "id": "a_shard_too_bright",
-      "name": "A Shard Too Bright",
+      "name": "Per ryški šukė",
       "giverNpcId": "sela_quickmarrow",
       "type": "delivery",
       "minLevel": 5,
       "prerequisiteQuestIds": [],
-      "description": "Sela užsakė užantspauduotą Riftglass pavyzdį iš Vex lūšnynuose, bet pati bijo ten eiti. Paimk siuntinį The Cinders ir neatidaręs pristatyk Ilsai į Anvil Row. Kelyje gali užpulti Cinder Cutthroats.",
+      "description": "Sela užsakė užantspauduotą Plyšio stiklo pavyzdį iš Veksas lūšnynuose, bet pati bijo ten eiti. Paimk siuntinį Pelenynuose ir neatidaręs pristatyk Ilsai į Priekalų gatvėje. Kelyje gali užpulti galvažudžiai.",
       "objectives": [
         {"kind": "talk", "npcId": "vex_ninefingers", "receivesItemId": "sealed_riftglass_sample"},
         {"kind": "kill", "monsterId": "cinder_cutthroat", "count": 3, "optional": true},
         {"kind": "deliver", "itemId": "sealed_riftglass_sample", "toNpcId": "ilsa_moonvane"}
       ],
-      "questItems": [{"id": "sealed_riftglass_sample", "name": "Sealed Riftglass Sample", "type": "quest_item"}],
+      "questItems": [{"id": "sealed_riftglass_sample", "name": "Užantspauduotas stiklo pavyzdys", "type": "quest_item"}],
       "timeLimitSeconds": 900,
       "failConditions": ["quest_item_opened", "time_expired"],
       "rewards": {
@@ -939,7 +922,7 @@
         "items": [
           {
             "id": "riftforged_band",
-            "name": "Riftforged Band",
+            "name": "Plyšio žiedas",
             "type": "equipment",
             "slot": "Ring",
             "tier": "Rare",
@@ -954,12 +937,12 @@
     },
     {
       "id": "pelts_for_the_lodge",
-      "name": "Pelts for the Lodge",
+      "name": "Kailiai medžiotojams",
       "giverNpcId": "orla_greyfeather",
       "type": "gather",
       "minLevel": 2,
       "prerequisiteQuestIds": [],
-      "description": "Žiema artėja, o Orlos sandėlis tuščias. Sumedžiok gyvūnų Ashen Outskirts ir atnešk odų bei mėsos.",
+      "description": "Žiema artėja, o Orlos sandėlis tuščias. Sumedžiok gyvūnų Pelenų pakraščiai ir atnešk odų bei mėsos.",
       "objectives": [
         {"kind": "collect", "itemId": "ashen_hide", "count": 8},
         {"kind": "collect", "itemId": "game_meat", "count": 6}
@@ -975,7 +958,7 @@
   "animals": [
     {
       "id": "ash_hare",
-      "name": "Ash Hare",
+      "name": "Pelenų kiškis",
       "zoneId": 1,
       "size": "small",
       "hp": 72,
@@ -992,7 +975,7 @@
     },
     {
       "id": "cinder_boar",
-      "name": "Cinder Boar",
+      "name": "Žarijų šernas",
       "zoneId": 1,
       "size": "mid",
       "hp": 108,
@@ -1009,7 +992,7 @@
     },
     {
       "id": "dusk_stag",
-      "name": "Dusk Stag",
+      "name": "Sutemų elnias",
       "zoneId": 1,
       "size": "big",
       "hp": 168,
@@ -1027,7 +1010,7 @@
     },
     {
       "id": "glimmer_fox",
-      "name": "Glimmer Fox",
+      "name": "Žėrinčioji lapė",
       "zoneId": 2,
       "size": "small",
       "hp": 144,
@@ -1044,7 +1027,7 @@
     },
     {
       "id": "riftback_ram",
-      "name": "Riftback Ram",
+      "name": "Plyšionugaris avinas",
       "zoneId": 2,
       "size": "mid",
       "hp": 216,
@@ -1061,7 +1044,7 @@
     },
     {
       "id": "shardhorn_elk",
-      "name": "Shardhorn Elk",
+      "name": "Šukaragis briedis",
       "zoneId": 2,
       "size": "big",
       "hp": 336,
@@ -1079,7 +1062,7 @@
     },
     {
       "id": "bog_toad",
-      "name": "Bog Toad",
+      "name": "Pelkių rupūžė",
       "zoneId": 3,
       "size": "small",
       "hp": 288,
@@ -1096,7 +1079,7 @@
     },
     {
       "id": "marsh_lynx",
-      "name": "Marsh Lynx",
+      "name": "Pelkių lūšis",
       "zoneId": 3,
       "size": "mid",
       "hp": 432,
@@ -1113,7 +1096,7 @@
     },
     {
       "id": "mirebear",
-      "name": "Mirebear",
+      "name": "Klampynių lokys",
       "zoneId": 3,
       "size": "big",
       "hp": 672,
@@ -1131,7 +1114,7 @@
     },
     {
       "id": "reef_crab",
-      "name": "Reef Crab",
+      "name": "Rifų krabas",
       "zoneId": 4,
       "size": "small",
       "hp": 576,
@@ -1148,7 +1131,7 @@
     },
     {
       "id": "tidecat",
-      "name": "Tidecat",
+      "name": "Potvynių katė",
       "zoneId": 4,
       "size": "mid",
       "hp": 864,
@@ -1165,7 +1148,7 @@
     },
     {
       "id": "sunken_tortoise",
-      "name": "Sunken Tortoise",
+      "name": "Nuskendęs vėžlys",
       "zoneId": 4,
       "size": "big",
       "hp": 1344,
@@ -1183,7 +1166,7 @@
     },
     {
       "id": "ember_lizard",
-      "name": "Ember Lizard",
+      "name": "Žarijų driežas",
       "zoneId": 5,
       "size": "small",
       "hp": 1152,
@@ -1200,7 +1183,7 @@
     },
     {
       "id": "cinderhawk",
-      "name": "Cinderhawk",
+      "name": "Pelenų sakalas",
       "zoneId": 5,
       "size": "mid",
       "hp": 1728,
@@ -1217,7 +1200,7 @@
     },
     {
       "id": "magma_ox",
-      "name": "Magma Ox",
+      "name": "Magmos jautis",
       "zoneId": 5,
       "size": "big",
       "hp": 2688,
@@ -1235,7 +1218,7 @@
     },
     {
       "id": "starfox",
-      "name": "Starfox",
+      "name": "Žvaigždžių lapė",
       "zoneId": 6,
       "size": "small",
       "hp": 2304,
@@ -1252,7 +1235,7 @@
     },
     {
       "id": "nebula_stag",
-      "name": "Nebula Stag",
+      "name": "Ūko elnias",
       "zoneId": 6,
       "size": "mid",
       "hp": 3456,
@@ -1269,7 +1252,7 @@
     },
     {
       "id": "starmane_lion",
-      "name": "Starmane Lion",
+      "name": "Žvaigždžiakaris liūtas",
       "zoneId": 6,
       "size": "big",
       "hp": 5376,
