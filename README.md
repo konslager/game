@@ -7,7 +7,8 @@ Regiono duomenys (`data/regions/emberwatch.json`) įterpiami į puslapį: pakeit
 Web versijos eiga:
 - **Titulinis ekranas:** Continue / New hero → 5 klasių pasirinkimas (Gladiator, Duelist, Ashmage, Warden, Reaver).
 - **Miestas (Emberwatch):** nieko nevyksta automatiškai. Rajonai → pastatai (parduotuvės su Buy/Sell, Torvald's Forge: rūda → luitai, enhance/promote/kalimas; Moonvane Jewelers; Captain's Hall; Quest Board; Town Gate). Užduotys priimamos ir atiduodamos pas NPC.
-- **Zona:** atvykus renkiesi veiklą – medžioti ar rinkti (Cinder Vein, Ash Bloom). Offline progresas skaičiuojamas tik zonoje.
+- **Zona:** atvykus renkiesi veiklą – kovoti su monstrais, medžioti gyvūnus ar rinkti (Cinder Vein, Ash Bloom). Offline progresas skaičiuojamas tik zonoje.
+- **Gyvūnų medžioklė:** po 3 gyvūnus kiekvienoje iš 6 zonų (`animals` JSON'e: sekimo laikas, statai, loot lentelė). Loot: Game Meat, zonos oda, retas trofėjus (8% iš didžiausio gyvūno). Hunter's Lodge (Gatehold Square, Orla Greyfeather): Hunter's Stew iš mėsos, odinė apranga iš odų ir trofėjų, supirkimas, užduotis „Pelts for the Lodge“.
 - **Inventorius:** 6 slotų apranga aplink herojų, krepšys (Gear / Materials / Potions / Quest), daikto kortelė su palyginimu.
 
 ## Paleidimas

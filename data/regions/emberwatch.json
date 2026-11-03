@@ -24,7 +24,7 @@
       "type": "market",
       "safeZone": true,
       "description": "Pagrindinė turgaus aikštė prie vartų. Čia stovi užduočių lenta, vaistinė ir karavanų stovykla.",
-      "npcIds": ["sela_quickmarrow", "captain_hedda_varr"],
+      "npcIds": ["sela_quickmarrow", "captain_hedda_varr", "orla_greyfeather"],
       "features": ["quest_board", "stash", "respawn_point"],
       "buildings": [
         {
@@ -38,6 +38,14 @@
           "name": "Quest Board",
           "type": "board",
           "description": "Visi miesto darbai ir kur rasti jų davėjus."
+        },
+        {
+          "id": "hunters_lodge",
+          "name": "Hunter's Lodge",
+          "type": "lodge",
+          "shopId": "hunters_lodge",
+          "npcId": "orla_greyfeather",
+          "description": "Gyvūnų loot: virimas, odinė apranga, trofėjų supirkimas."
         },
         {
           "id": "embervial_apothecary",
@@ -219,6 +227,153 @@
       "tier": "Legendary",
       "sellPrice": 1500,
       "sources": [{"monsterId": "shattered_rift_warden", "dropChance": 1.0}]
+    },
+    {
+      "id": "game_meat",
+      "name": "Game Meat",
+      "tier": "Common",
+      "sellPrice": 3,
+      "description": "Šviežia žvėriena. Orla Greyfeather iš jos verda Hunter's Stew (gydo 40% HP).",
+      "sources": [
+        {"animalId": "ash_hare", "dropChance": 0.7, "qty": [1, 1]},
+        {"animalId": "cinder_boar", "dropChance": 0.85, "qty": [1, 2]},
+        {"animalId": "dusk_stag", "dropChance": 1.0, "qty": [1, 3]},
+        {"animalId": "glimmer_fox", "dropChance": 0.7, "qty": [1, 1]},
+        {"animalId": "riftback_ram", "dropChance": 0.85, "qty": [1, 2]},
+        {"animalId": "shardhorn_elk", "dropChance": 1.0, "qty": [1, 3]},
+        {"animalId": "bog_toad", "dropChance": 0.7, "qty": [1, 1]},
+        {"animalId": "marsh_lynx", "dropChance": 0.85, "qty": [1, 2]},
+        {"animalId": "mirebear", "dropChance": 1.0, "qty": [1, 3]},
+        {"animalId": "reef_crab", "dropChance": 0.7, "qty": [1, 1]},
+        {"animalId": "tidecat", "dropChance": 0.85, "qty": [1, 2]},
+        {"animalId": "sunken_tortoise", "dropChance": 1.0, "qty": [1, 3]},
+        {"animalId": "ember_lizard", "dropChance": 0.7, "qty": [1, 1]},
+        {"animalId": "cinderhawk", "dropChance": 0.85, "qty": [1, 2]},
+        {"animalId": "magma_ox", "dropChance": 1.0, "qty": [1, 3]},
+        {"animalId": "starfox", "dropChance": 0.7, "qty": [1, 1]},
+        {"animalId": "nebula_stag", "dropChance": 0.85, "qty": [1, 2]},
+        {"animalId": "starmane_lion", "dropChance": 1.0, "qty": [1, 3]}
+      ]
+    },
+    {
+      "id": "ashen_hide",
+      "name": "Ashen Hide",
+      "tier": "Common",
+      "sellPrice": 5,
+      "description": "Gyvūnų oda iš Ashen Outskirts. Iš jos Orla siuva odinę aprangą.",
+      "sources": [
+        {"animalId": "ash_hare", "dropChance": 0.4, "qty": [1, 1]},
+        {"animalId": "cinder_boar", "dropChance": 0.75, "qty": [1, 1]},
+        {"animalId": "dusk_stag", "dropChance": 1.0, "qty": [1, 2]}
+      ]
+    },
+    {
+      "id": "riftglow_pelt",
+      "name": "Riftglow Pelt",
+      "tier": "Uncommon",
+      "sellPrice": 15,
+      "description": "Gyvūnų oda iš Shattered Rift. Iš jos Orla siuva odinę aprangą.",
+      "sources": [
+        {"animalId": "glimmer_fox", "dropChance": 0.4, "qty": [1, 1]},
+        {"animalId": "riftback_ram", "dropChance": 0.75, "qty": [1, 1]},
+        {"animalId": "shardhorn_elk", "dropChance": 1.0, "qty": [1, 2]}
+      ]
+    },
+    {
+      "id": "marsh_hide",
+      "name": "Marsh Hide",
+      "tier": "Uncommon",
+      "sellPrice": 30,
+      "description": "Gyvūnų oda iš Gloomroot Marsh. Iš jos Orla siuva odinę aprangą.",
+      "sources": [
+        {"animalId": "bog_toad", "dropChance": 0.4, "qty": [1, 1]},
+        {"animalId": "marsh_lynx", "dropChance": 0.75, "qty": [1, 1]},
+        {"animalId": "mirebear", "dropChance": 1.0, "qty": [1, 2]}
+      ]
+    },
+    {
+      "id": "tidescale_hide",
+      "name": "Tidescale Hide",
+      "tier": "Rare",
+      "sellPrice": 60,
+      "description": "Gyvūnų oda iš Sunken Bastion. Iš jos Orla siuva odinę aprangą.",
+      "sources": [
+        {"animalId": "reef_crab", "dropChance": 0.4, "qty": [1, 1]},
+        {"animalId": "tidecat", "dropChance": 0.75, "qty": [1, 1]},
+        {"animalId": "sunken_tortoise", "dropChance": 1.0, "qty": [1, 2]}
+      ]
+    },
+    {
+      "id": "emberscale_hide",
+      "name": "Emberscale Hide",
+      "tier": "Rare",
+      "sellPrice": 120,
+      "description": "Gyvūnų oda iš Ember Crown Spire. Iš jos Orla siuva odinę aprangą.",
+      "sources": [
+        {"animalId": "ember_lizard", "dropChance": 0.4, "qty": [1, 1]},
+        {"animalId": "cinderhawk", "dropChance": 0.75, "qty": [1, 1]},
+        {"animalId": "magma_ox", "dropChance": 1.0, "qty": [1, 2]}
+      ]
+    },
+    {
+      "id": "starfur_pelt",
+      "name": "Starfur Pelt",
+      "tier": "Epic",
+      "sellPrice": 250,
+      "description": "Gyvūnų oda iš Hollow Star Vault. Iš jos Orla siuva odinę aprangą.",
+      "sources": [
+        {"animalId": "starfox", "dropChance": 0.4, "qty": [1, 1]},
+        {"animalId": "nebula_stag", "dropChance": 0.75, "qty": [1, 1]},
+        {"animalId": "starmane_lion", "dropChance": 1.0, "qty": [1, 2]}
+      ]
+    },
+    {
+      "id": "dusk_stag_antler",
+      "name": "Dusk Stag Antler",
+      "tier": "Uncommon",
+      "sellPrice": 80,
+      "description": "Retas medžioklės trofėjus. Brangiai parduodamas arba naudojamas geriausiai Orlos aprangai.",
+      "sources": [{"animalId": "dusk_stag", "dropChance": 0.08, "qty": [1, 1]}]
+    },
+    {
+      "id": "shardhorn_crown",
+      "name": "Shardhorn Crown",
+      "tier": "Rare",
+      "sellPrice": 220,
+      "description": "Retas medžioklės trofėjus. Brangiai parduodamas arba naudojamas geriausiai Orlos aprangai.",
+      "sources": [{"animalId": "shardhorn_elk", "dropChance": 0.08, "qty": [1, 1]}]
+    },
+    {
+      "id": "mirebear_claw",
+      "name": "Mirebear Claw",
+      "tier": "Rare",
+      "sellPrice": 450,
+      "description": "Retas medžioklės trofėjus. Brangiai parduodamas arba naudojamas geriausiai Orlos aprangai.",
+      "sources": [{"animalId": "mirebear", "dropChance": 0.08, "qty": [1, 1]}]
+    },
+    {
+      "id": "tortoise_shell_plate",
+      "name": "Tortoise Shell Plate",
+      "tier": "Epic",
+      "sellPrice": 900,
+      "description": "Retas medžioklės trofėjus. Brangiai parduodamas arba naudojamas geriausiai Orlos aprangai.",
+      "sources": [{"animalId": "sunken_tortoise", "dropChance": 0.08, "qty": [1, 1]}]
+    },
+    {
+      "id": "magma_ox_horn",
+      "name": "Magma Ox Horn",
+      "tier": "Epic",
+      "sellPrice": 1800,
+      "description": "Retas medžioklės trofėjus. Brangiai parduodamas arba naudojamas geriausiai Orlos aprangai.",
+      "sources": [{"animalId": "magma_ox", "dropChance": 0.08, "qty": [1, 1]}]
+    },
+    {
+      "id": "starmane",
+      "name": "Starmane",
+      "tier": "Legendary",
+      "sellPrice": 4000,
+      "description": "Retas medžioklės trofėjus. Brangiai parduodamas arba naudojamas geriausiai Orlos aprangai.",
+      "sources": [{"animalId": "starmane_lion", "dropChance": 0.08, "qty": [1, 1]}]
     }
   ],
   "monsters": [
@@ -353,6 +508,15 @@
       "role": "quest_giver",
       "districtId": "wardtower_keep",
       "trait": "Griežta garnizono kapitonė. Vertina rezultatus, ne žodžius."
+    },
+    {
+      "id": "orla_greyfeather",
+      "name": "Orla Greyfeather",
+      "race": "Half-Orc",
+      "role": "crafter",
+      "profession": "Huntmaster / Tanner",
+      "districtId": "gatehold_square",
+      "trait": "Rami, bet griežta medžiotoja. Moka už kiekvieną odą ir niekada neišmeta nė kaulo."
     }
   ],
   "shops": [
@@ -477,6 +641,24 @@
           "price": 1500
         }
       ]
+    },
+    {
+      "id": "hunters_lodge",
+      "name": "Hunter's Lodge",
+      "ownerNpcId": "orla_greyfeather",
+      "districtId": "gatehold_square",
+      "specialization": "Medžioklės reikmenys ir trofėjų supirkimas",
+      "currency": "gold",
+      "items": [
+        {
+          "id": "hunters_stew",
+          "name": "Hunter's Stew",
+          "type": "consumable",
+          "effect": {"kind": "heal_pct", "value": 0.4},
+          "cooldownSeconds": 30,
+          "price": 70
+        }
+      ]
     }
   ],
   "crafters": [
@@ -574,6 +756,115 @@
           }
         }
       ]
+    },
+    {
+      "npcId": "orla_greyfeather",
+      "station": "tanning_rack",
+      "services": [
+        {
+          "id": "cook_hunters_stew",
+          "name": "Cook: Hunter's Stew",
+          "goldCost": 10,
+          "materials": [{"id": "game_meat", "qty": 3}],
+          "outputConsumable": {"id": "hunters_stew", "qty": 1}
+        },
+        {
+          "id": "craft_ashen_hide_boots",
+          "name": "Craft: Ashen Hide Boots",
+          "goldCost": 300,
+          "materials": [{"id": "ashen_hide", "qty": 20}, {"id": "dusk_stag_antler", "qty": 1}],
+          "output": {
+            "id": "ashen_hide_boots",
+            "name": "Ashen Hide Boots",
+            "type": "equipment",
+            "slot": "Boots",
+            "tier": "Uncommon",
+            "itemLevel": 5,
+            "baseBonus": {"strength": 0, "agility": 7, "intelligence": 0, "vitality": 5, "luck": 2},
+            "baseDefense": 8
+          }
+        },
+        {
+          "id": "craft_riftglow_belt",
+          "name": "Craft: Riftglow Hunter's Belt",
+          "goldCost": 1500,
+          "materials": [{"id": "riftglow_pelt", "qty": 25}, {"id": "shardhorn_crown", "qty": 2}],
+          "output": {
+            "id": "riftglow_belt",
+            "name": "Riftglow Hunter's Belt",
+            "type": "equipment",
+            "slot": "Belt",
+            "tier": "Rare",
+            "itemLevel": 10,
+            "baseBonus": {"strength": 8, "agility": 6, "intelligence": 0, "vitality": 10, "luck": 4},
+            "baseDefense": 0
+          }
+        },
+        {
+          "id": "craft_marsh_hood",
+          "name": "Craft: Marsh Stalker Hood",
+          "goldCost": 5000,
+          "materials": [{"id": "marsh_hide", "qty": 30}, {"id": "mirebear_claw", "qty": 2}],
+          "output": {
+            "id": "marsh_stalker_hood",
+            "name": "Marsh Stalker Hood",
+            "type": "equipment",
+            "slot": "Helmet",
+            "tier": "Rare",
+            "itemLevel": 16,
+            "baseBonus": {"strength": 0, "agility": 8, "intelligence": 10, "vitality": 16, "luck": 8},
+            "baseDefense": 28
+          }
+        },
+        {
+          "id": "craft_tidescale_armor",
+          "name": "Craft: Tidescale Brigandine",
+          "goldCost": 12000,
+          "materials": [{"id": "tidescale_hide", "qty": 35}, {"id": "tortoise_shell_plate", "qty": 3}],
+          "output": {
+            "id": "tidescale_brigandine",
+            "name": "Tidescale Brigandine",
+            "type": "equipment",
+            "slot": "Armor",
+            "tier": "Epic",
+            "itemLevel": 22,
+            "baseBonus": {"strength": 10, "agility": 6, "intelligence": 0, "vitality": 40, "luck": 0},
+            "baseDefense": 40
+          }
+        },
+        {
+          "id": "craft_emberscale_boots",
+          "name": "Craft: Emberscale Treads",
+          "goldCost": 30000,
+          "materials": [{"id": "emberscale_hide", "qty": 35}, {"id": "magma_ox_horn", "qty": 3}],
+          "output": {
+            "id": "emberscale_treads",
+            "name": "Emberscale Treads",
+            "type": "equipment",
+            "slot": "Boots",
+            "tier": "Epic",
+            "itemLevel": 30,
+            "baseBonus": {"strength": 0, "agility": 26, "intelligence": 0, "vitality": 18, "luck": 6},
+            "baseDefense": 56
+          }
+        },
+        {
+          "id": "craft_starfur_mantle",
+          "name": "Craft: Starfur Mantle",
+          "goldCost": 80000,
+          "materials": [{"id": "starfur_pelt", "qty": 40}, {"id": "starmane", "qty": 3}],
+          "output": {
+            "id": "starfur_mantle",
+            "name": "Starfur Mantle",
+            "type": "equipment",
+            "slot": "Armor",
+            "tier": "Legendary",
+            "itemLevel": 38,
+            "baseBonus": {"strength": 18, "agility": 12, "intelligence": 12, "vitality": 60, "luck": 10},
+            "baseDefense": 70
+          }
+        }
+      ]
     }
   ],
   "quests": [
@@ -660,6 +951,339 @@
         ],
         "bonusIfOptionalDone": {"gold": 250}
       }
+    },
+    {
+      "id": "pelts_for_the_lodge",
+      "name": "Pelts for the Lodge",
+      "giverNpcId": "orla_greyfeather",
+      "type": "gather",
+      "minLevel": 2,
+      "prerequisiteQuestIds": [],
+      "description": "Žiema artėja, o Orlos sandėlis tuščias. Sumedžiok gyvūnų Ashen Outskirts ir atnešk odų bei mėsos.",
+      "objectives": [
+        {"kind": "collect", "itemId": "ashen_hide", "count": 8},
+        {"kind": "collect", "itemId": "game_meat", "count": 6}
+      ],
+      "rewards": {
+        "exp": 800,
+        "gold": 200,
+        "reputation": [{"factionId": "emberwatch_garrison", "amount": 100}],
+        "items": [{"id": "hunters_stew", "qty": 3}]
+      }
+    }
+  ],
+  "animals": [
+    {
+      "id": "ash_hare",
+      "name": "Ash Hare",
+      "zoneId": 1,
+      "size": "small",
+      "hp": 72,
+      "damage": 7,
+      "defense": 5,
+      "exp": 12,
+      "gold": 1,
+      "art": {"shape": "hopper", "color": "#9a8f86"},
+      "loot": [
+        {"id": "game_meat", "qty": [1, 1], "chance": 0.7},
+        {"id": "ashen_hide", "qty": [1, 1], "chance": 0.4}
+      ],
+      "trackSeconds": 4
+    },
+    {
+      "id": "cinder_boar",
+      "name": "Cinder Boar",
+      "zoneId": 1,
+      "size": "mid",
+      "hp": 108,
+      "damage": 11,
+      "defense": 5,
+      "exp": 18,
+      "gold": 2,
+      "art": {"shape": "quad", "color": "#6a4a3a", "horns": "tusk", "legs": "short"},
+      "loot": [
+        {"id": "game_meat", "qty": [1, 2], "chance": 0.85},
+        {"id": "ashen_hide", "qty": [1, 1], "chance": 0.75}
+      ],
+      "trackSeconds": 6
+    },
+    {
+      "id": "dusk_stag",
+      "name": "Dusk Stag",
+      "zoneId": 1,
+      "size": "big",
+      "hp": 168,
+      "damage": 15,
+      "defense": 5,
+      "exp": 28,
+      "gold": 4,
+      "art": {"shape": "quad", "color": "#7a5a44", "horns": "antler", "legs": "long"},
+      "loot": [
+        {"id": "game_meat", "qty": [1, 3], "chance": 1.0},
+        {"id": "ashen_hide", "qty": [1, 2], "chance": 1.0},
+        {"id": "dusk_stag_antler", "qty": [1, 1], "chance": 0.08}
+      ],
+      "trackSeconds": 9
+    },
+    {
+      "id": "glimmer_fox",
+      "name": "Glimmer Fox",
+      "zoneId": 2,
+      "size": "small",
+      "hp": 144,
+      "damage": 12,
+      "defense": 20,
+      "exp": 25,
+      "gold": 3,
+      "art": {"shape": "quad", "color": "#c98a4a", "tail": "bushy", "scale": 0.75},
+      "loot": [
+        {"id": "game_meat", "qty": [1, 1], "chance": 0.7},
+        {"id": "riftglow_pelt", "qty": [1, 1], "chance": 0.4}
+      ],
+      "trackSeconds": 4
+    },
+    {
+      "id": "riftback_ram",
+      "name": "Riftback Ram",
+      "zoneId": 2,
+      "size": "mid",
+      "hp": 216,
+      "damage": 20,
+      "defense": 20,
+      "exp": 37,
+      "gold": 5,
+      "art": {"shape": "quad", "color": "#8a80a8", "horns": "curl"},
+      "loot": [
+        {"id": "game_meat", "qty": [1, 2], "chance": 0.85},
+        {"id": "riftglow_pelt", "qty": [1, 1], "chance": 0.75}
+      ],
+      "trackSeconds": 6
+    },
+    {
+      "id": "shardhorn_elk",
+      "name": "Shardhorn Elk",
+      "zoneId": 2,
+      "size": "big",
+      "hp": 336,
+      "damage": 27,
+      "defense": 20,
+      "exp": 58,
+      "gold": 8,
+      "art": {"shape": "quad", "color": "#5a5288", "horns": "antler", "legs": "long"},
+      "loot": [
+        {"id": "game_meat", "qty": [1, 3], "chance": 1.0},
+        {"id": "riftglow_pelt", "qty": [1, 2], "chance": 1.0},
+        {"id": "shardhorn_crown", "qty": [1, 1], "chance": 0.08}
+      ],
+      "trackSeconds": 9
+    },
+    {
+      "id": "bog_toad",
+      "name": "Bog Toad",
+      "zoneId": 3,
+      "size": "small",
+      "hp": 288,
+      "damage": 23,
+      "defense": 35,
+      "exp": 52,
+      "gold": 7,
+      "art": {"shape": "hopper", "color": "#5a7a3a", "wide": true},
+      "loot": [
+        {"id": "game_meat", "qty": [1, 1], "chance": 0.7},
+        {"id": "marsh_hide", "qty": [1, 1], "chance": 0.4}
+      ],
+      "trackSeconds": 4
+    },
+    {
+      "id": "marsh_lynx",
+      "name": "Marsh Lynx",
+      "zoneId": 3,
+      "size": "mid",
+      "hp": 432,
+      "damage": 37,
+      "defense": 35,
+      "exp": 79,
+      "gold": 11,
+      "art": {"shape": "quad", "color": "#8a7a4a", "tail": "thin"},
+      "loot": [
+        {"id": "game_meat", "qty": [1, 2], "chance": 0.85},
+        {"id": "marsh_hide", "qty": [1, 1], "chance": 0.75}
+      ],
+      "trackSeconds": 6
+    },
+    {
+      "id": "mirebear",
+      "name": "Mirebear",
+      "zoneId": 3,
+      "size": "big",
+      "hp": 672,
+      "damage": 51,
+      "defense": 35,
+      "exp": 123,
+      "gold": 17,
+      "art": {"shape": "quad", "color": "#6a5038", "scale": 1.3, "legs": "short"},
+      "loot": [
+        {"id": "game_meat", "qty": [1, 3], "chance": 1.0},
+        {"id": "marsh_hide", "qty": [1, 2], "chance": 1.0},
+        {"id": "mirebear_claw", "qty": [1, 1], "chance": 0.08}
+      ],
+      "trackSeconds": 9
+    },
+    {
+      "id": "reef_crab",
+      "name": "Reef Crab",
+      "zoneId": 4,
+      "size": "small",
+      "hp": 576,
+      "damage": 44,
+      "defense": 50,
+      "exp": 111,
+      "gold": 15,
+      "art": {"shape": "crab", "color": "#c8583a"},
+      "loot": [
+        {"id": "game_meat", "qty": [1, 1], "chance": 0.7},
+        {"id": "tidescale_hide", "qty": [1, 1], "chance": 0.4}
+      ],
+      "trackSeconds": 4
+    },
+    {
+      "id": "tidecat",
+      "name": "Tidecat",
+      "zoneId": 4,
+      "size": "mid",
+      "hp": 864,
+      "damage": 70,
+      "defense": 50,
+      "exp": 166,
+      "gold": 23,
+      "art": {"shape": "quad", "color": "#3a7a8a", "tail": "thin"},
+      "loot": [
+        {"id": "game_meat", "qty": [1, 2], "chance": 0.85},
+        {"id": "tidescale_hide", "qty": [1, 1], "chance": 0.75}
+      ],
+      "trackSeconds": 6
+    },
+    {
+      "id": "sunken_tortoise",
+      "name": "Sunken Tortoise",
+      "zoneId": 4,
+      "size": "big",
+      "hp": 1344,
+      "damage": 96,
+      "defense": 50,
+      "exp": 259,
+      "gold": 35,
+      "art": {"shape": "shell", "color": "#4a6a5a"},
+      "loot": [
+        {"id": "game_meat", "qty": [1, 3], "chance": 1.0},
+        {"id": "tidescale_hide", "qty": [1, 2], "chance": 1.0},
+        {"id": "tortoise_shell_plate", "qty": [1, 1], "chance": 0.08}
+      ],
+      "trackSeconds": 9
+    },
+    {
+      "id": "ember_lizard",
+      "name": "Ember Lizard",
+      "zoneId": 5,
+      "size": "small",
+      "hp": 1152,
+      "damage": 81,
+      "defense": 65,
+      "exp": 232,
+      "gold": 30,
+      "art": {"shape": "quad", "color": "#c8642a", "legs": "short", "tail": "long", "scale": 0.8},
+      "loot": [
+        {"id": "game_meat", "qty": [1, 1], "chance": 0.7},
+        {"id": "emberscale_hide", "qty": [1, 1], "chance": 0.4}
+      ],
+      "trackSeconds": 4
+    },
+    {
+      "id": "cinderhawk",
+      "name": "Cinderhawk",
+      "zoneId": 5,
+      "size": "mid",
+      "hp": 1728,
+      "damage": 130,
+      "defense": 65,
+      "exp": 349,
+      "gold": 46,
+      "art": {"shape": "bird", "color": "#a8402a"},
+      "loot": [
+        {"id": "game_meat", "qty": [1, 2], "chance": 0.85},
+        {"id": "emberscale_hide", "qty": [1, 1], "chance": 0.75}
+      ],
+      "trackSeconds": 6
+    },
+    {
+      "id": "magma_ox",
+      "name": "Magma Ox",
+      "zoneId": 5,
+      "size": "big",
+      "hp": 2688,
+      "damage": 179,
+      "defense": 65,
+      "exp": 543,
+      "gold": 71,
+      "art": {"shape": "quad", "color": "#8a4030", "horns": "horn", "scale": 1.25},
+      "loot": [
+        {"id": "game_meat", "qty": [1, 3], "chance": 1.0},
+        {"id": "emberscale_hide", "qty": [1, 2], "chance": 1.0},
+        {"id": "magma_ox_horn", "qty": [1, 1], "chance": 0.08}
+      ],
+      "trackSeconds": 9
+    },
+    {
+      "id": "starfox",
+      "name": "Starfox",
+      "zoneId": 6,
+      "size": "small",
+      "hp": 2304,
+      "damage": 151,
+      "defense": 80,
+      "exp": 489,
+      "gold": 61,
+      "art": {"shape": "quad", "color": "#8a8ad8", "tail": "bushy", "scale": 0.75},
+      "loot": [
+        {"id": "game_meat", "qty": [1, 1], "chance": 0.7},
+        {"id": "starfur_pelt", "qty": [1, 1], "chance": 0.4}
+      ],
+      "trackSeconds": 4
+    },
+    {
+      "id": "nebula_stag",
+      "name": "Nebula Stag",
+      "zoneId": 6,
+      "size": "mid",
+      "hp": 3456,
+      "damage": 242,
+      "defense": 80,
+      "exp": 734,
+      "gold": 92,
+      "art": {"shape": "quad", "color": "#6a5ab8", "horns": "antler", "legs": "long"},
+      "loot": [
+        {"id": "game_meat", "qty": [1, 2], "chance": 0.85},
+        {"id": "starfur_pelt", "qty": [1, 1], "chance": 0.75}
+      ],
+      "trackSeconds": 6
+    },
+    {
+      "id": "starmane_lion",
+      "name": "Starmane Lion",
+      "zoneId": 6,
+      "size": "big",
+      "hp": 5376,
+      "damage": 333,
+      "defense": 80,
+      "exp": 1142,
+      "gold": 143,
+      "art": {"shape": "quad", "color": "#d8b85a", "horns": "mane", "tail": "thin", "scale": 1.15},
+      "loot": [
+        {"id": "game_meat", "qty": [1, 3], "chance": 1.0},
+        {"id": "starfur_pelt", "qty": [1, 2], "chance": 1.0},
+        {"id": "starmane", "qty": [1, 1], "chance": 0.08}
+      ],
+      "trackSeconds": 9
     }
   ]
 }
