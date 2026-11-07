@@ -34,6 +34,12 @@
           "description": "Išvykimas į zonas. Čia renkiesi, kur keliauti."
         },
         {
+          "id": "bank",
+          "name": "Žaržiūros bankas",
+          "type": "bank",
+          "description": "Saugi vieta auksui. Kas padėta banke, neprarandama, net jei žūsti."
+        },
+        {
           "id": "quest_board",
           "name": "Skelbimų lenta",
           "type": "board",
