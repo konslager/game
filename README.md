@@ -11,6 +11,8 @@ Web versija – **„Plyšio sargas“** (visas tekstas lietuviškai):
 - **Vietovė:** stovykloje renkiesi – kovoti, medžioti gyvūnus ar rinkti. Bosą iššauki pats, kai surenki 25 pergales. Offline progresas skaičiuojamas tik vietovėje.
 - **Istorija:** 22 scenos su dialogais ir portretais (`SCENES`), 3 pasirinkimai (Izolda, Veksas, Ilsa), kurie keičia atlygius ir pabaigą. Veikėjai turi biografijas ir pokalbių frazes; vietovėse sutinkami brolis Aldas, vaidilutė Rūta, kapitonas Gedas, astronomė Eglė. Metraštis (16 įrašų) ir pasiekimai (14).
 - **Pabaisos:** kiekviena vietovė turi savo pabaisas ir bosą (JSON `monsters`, išvaizda – `art`). Herojaus figūroje matoma dėvima apranga (šalmas, šarvų apvadai, batai, diržo sagtis, ginklo švytėjimas pagal retumą).
+- **Portalų ratas** (Plyšio vartai): 5 animuoti portalai į atskirus pasaulius (Liepsnų plynė, Šerkšno karalystė, Grybų giria, Sapnų sala, Kraujo mėnulio kapinės) – savi fonai, priešai, bosai, „pasaulio“ apranga ir esmės. Portalai derinami gelmių kristalais ir ankstesnio pasaulio esme (`REALMS`, zonų id 7–11).
+- **Požemiai** (Senoji šachta, Pelenynai): gylis po gylio, 4 kambariai gylyje su kelio pasirinkimu (kova, elitas, lobis, šaltinis, spąstai, šventovė), bosas kas 5 gylius. Gyvybė savaime neatsistato; grobis išsaugomas tik iškilus, žuvus – daiktai prarandami, auksas ir kristalai per pusę.
 - **Plyšio audra:** interaktyvus slibino Vortrakso įvykis (vengimas, silpnos vietos, skrynia); finale – paskutinė audra užveria Plyšį.
 - **Kuprinė:** 6 aprangos vietos aplink herojų, daiktai / medžiagos / gėrimai, daikto kortelė su palyginimu.
 

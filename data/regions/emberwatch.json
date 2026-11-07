@@ -107,6 +107,12 @@
       ],
       "buildings": [
         {
+          "id": "old_mine",
+          "name": "Senoji šachta",
+          "type": "mine",
+          "description": "Apleista kasykla, vedanti į begalines gelmes. Kuo giliau – tuo pavojingiau ir tuo brangesnis grobis."
+        },
+        {
           "id": "rift_curio",
           "name": "Vekso kontrabanda",
           "type": "shop",
@@ -142,6 +148,12 @@
       "unlock": {"type": "boss_defeated", "monsterId": "ashen_outskirts_warden"},
       "leadsToZoneId": 2,
       "buildings": [
+        {
+          "id": "portal_ring",
+          "name": "Portalų ratas",
+          "type": "portals",
+          "description": "Penki senoviniai portalai į kitus pasaulius. Užrakintus suderina gelmių kristalai ir pasaulių esmės."
+        },
         {
           "id": "riftside_portal",
           "name": "Plyšio vartai",
@@ -374,6 +386,74 @@
       "sellPrice": 4000,
       "description": "Retas medžioklės trofėjus. Brangiai parduodamas arba naudojamas geriausiai Orlos aprangai.",
       "sources": [{"animalId": "starmane_lion", "dropChance": 0.08, "qty": [1, 1]}]
+    },
+    {
+      "id": "deep_crystal",
+      "name": "Gelmių kristalas",
+      "tier": "Rare",
+      "sellPrice": 120,
+      "description": "Švytintis kristalas iš požemių gelmių. Juo derinami Portalų rato portalai.",
+      "sources": []
+    },
+    {
+      "id": "fire_essence",
+      "name": "Liepsnų esmė",
+      "tier": "Rare",
+      "sellPrice": 120,
+      "description": "Portalo pasaulio esmė. Ja derinamas kitas Portalų rato portalas.",
+      "sources": [
+        {"monsterId": "lava_imp", "dropChance": 0.2},
+        {"monsterId": "magma_hound", "dropChance": 0.2},
+        {"monsterId": "fire_titan", "dropChance": 1.0}
+      ]
+    },
+    {
+      "id": "frost_essence",
+      "name": "Šerkšno esmė",
+      "tier": "Rare",
+      "sellPrice": 220,
+      "description": "Portalo pasaulio esmė. Ja derinamas kitas Portalų rato portalas.",
+      "sources": [
+        {"monsterId": "ice_wolf", "dropChance": 0.2},
+        {"monsterId": "frost_wraith", "dropChance": 0.2},
+        {"monsterId": "ice_queen", "dropChance": 1.0}
+      ]
+    },
+    {
+      "id": "spore_essence",
+      "name": "Grybienos esmė",
+      "tier": "Epic",
+      "sellPrice": 380,
+      "description": "Portalo pasaulio esmė. Ja derinamas kitas Portalų rato portalas.",
+      "sources": [
+        {"monsterId": "spore_gnome", "dropChance": 0.2},
+        {"monsterId": "shroom_golem", "dropChance": 0.2},
+        {"monsterId": "mother_mycel", "dropChance": 1.0}
+      ]
+    },
+    {
+      "id": "dream_essence",
+      "name": "Sapnų esmė",
+      "tier": "Epic",
+      "sellPrice": 650,
+      "description": "Portalo pasaulio esmė. Ja derinamas kitas Portalų rato portalas.",
+      "sources": [
+        {"monsterId": "cloud_serpent", "dropChance": 0.2},
+        {"monsterId": "wind_spirit", "dropChance": 0.2},
+        {"monsterId": "dream_warden", "dropChance": 1.0}
+      ]
+    },
+    {
+      "id": "blood_essence",
+      "name": "Kraujo mėnulio esmė",
+      "tier": "Legendary",
+      "sellPrice": 1100,
+      "description": "Portalo pasaulio esmė. Ja derinamas kitas Portalų rato portalas.",
+      "sources": [
+        {"monsterId": "grave_bones", "dropChance": 0.2},
+        {"monsterId": "blood_wolf", "dropChance": 0.2},
+        {"monsterId": "count_bloodwalker", "dropChance": 1.0}
+      ]
     }
   ],
   "monsters": [
@@ -594,6 +674,176 @@
       "exp": 12240,
       "gold": 3840,
       "art": {"shape": "boss", "color": "#1c1838", "eye": "#e0d0ff"}
+    },
+    {
+      "id": "lava_imp",
+      "name": "Lavos impas",
+      "zoneId": 7,
+      "hp": 284,
+      "damage": 29,
+      "defense": 26,
+      "exp": 60,
+      "gold": 24,
+      "art": {"shape": "rogue", "color": "#b8401c", "eye": "#ffe060"}
+    },
+    {
+      "id": "magma_hound",
+      "name": "Magmos skalikas",
+      "zoneId": 7,
+      "hp": 347,
+      "damage": 36,
+      "defense": 26,
+      "exp": 73,
+      "gold": 29,
+      "art": {"shape": "wolf", "color": "#7a2a14", "eye": "#ffb020"}
+    },
+    {
+      "id": "fire_titan",
+      "name": "Ugnies titanas",
+      "zoneId": 7,
+      "boss": true,
+      "hp": 6320,
+      "damage": 99,
+      "defense": 52,
+      "exp": 1005,
+      "gold": 405,
+      "art": {"shape": "boss", "color": "#8a2a10", "eye": "#ffe060"}
+    },
+    {
+      "id": "ice_wolf",
+      "name": "Ledo vilkas",
+      "zoneId": 8,
+      "hp": 590,
+      "damage": 57,
+      "defense": 39,
+      "exp": 132,
+      "gold": 51,
+      "art": {"shape": "wolf", "color": "#a8c8e0", "eye": "#60e0ff"}
+    },
+    {
+      "id": "frost_wraith",
+      "name": "Šerkšno dvasia",
+      "zoneId": 8,
+      "hp": 590,
+      "damage": 57,
+      "defense": 39,
+      "exp": 132,
+      "gold": 51,
+      "art": {"shape": "ghoul", "color": "#7ab0d8", "eye": "#ffffff"}
+    },
+    {
+      "id": "ice_queen",
+      "name": "Ledo karalienė",
+      "zoneId": 8,
+      "boss": true,
+      "hp": 11800,
+      "damage": 171,
+      "defense": 78,
+      "exp": 1980,
+      "gold": 765,
+      "art": {"shape": "boss", "color": "#5a8ab8", "eye": "#e0ffff"}
+    },
+    {
+      "id": "spore_gnome",
+      "name": "Sporų nykštukas",
+      "zoneId": 9,
+      "hp": 925,
+      "damage": 84,
+      "defense": 51,
+      "exp": 215,
+      "gold": 80,
+      "art": {"shape": "ghoul", "color": "#7a4a8a", "eye": "#c0ff60"}
+    },
+    {
+      "id": "shroom_golem",
+      "name": "Grybų golemas",
+      "zoneId": 9,
+      "hp": 1233,
+      "damage": 112,
+      "defense": 51,
+      "exp": 286,
+      "gold": 106,
+      "art": {"shape": "crawler", "color": "#8a3a5a", "eye": "#ffe080"}
+    },
+    {
+      "id": "mother_mycel",
+      "name": "Motina Grybiena",
+      "zoneId": 9,
+      "boss": true,
+      "hp": 20560,
+      "damage": 282,
+      "defense": 102,
+      "exp": 3585,
+      "gold": 1335,
+      "art": {"shape": "boss", "color": "#5a2a6a", "eye": "#c0ff60"}
+    },
+    {
+      "id": "cloud_serpent",
+      "name": "Debesų gyvatė",
+      "zoneId": 10,
+      "hp": 2057,
+      "damage": 174,
+      "defense": 66,
+      "exp": 502,
+      "gold": 178,
+      "art": {"shape": "stalker", "color": "#e8d8f0", "eye": "#ff80c0"}
+    },
+    {
+      "id": "wind_spirit",
+      "name": "Vėjo dvasia",
+      "zoneId": 10,
+      "hp": 2057,
+      "damage": 174,
+      "defense": 66,
+      "exp": 502,
+      "gold": 178,
+      "art": {"shape": "ghoul", "color": "#c8a8e8", "eye": "#ffffff"}
+    },
+    {
+      "id": "dream_warden",
+      "name": "Sapnų sargas",
+      "zoneId": 10,
+      "boss": true,
+      "hp": 41140,
+      "damage": 522,
+      "defense": 132,
+      "exp": 7530,
+      "gold": 2670,
+      "art": {"shape": "boss", "color": "#8a6ab8", "eye": "#ffc0f0"}
+    },
+    {
+      "id": "grave_bones",
+      "name": "Kapinių griaučiai",
+      "zoneId": 11,
+      "hp": 3969,
+      "damage": 308,
+      "defense": 83,
+      "exp": 1022,
+      "gold": 343,
+      "art": {"shape": "rogue", "color": "#d8d0c0", "eye": "#ff3030"}
+    },
+    {
+      "id": "blood_wolf",
+      "name": "Kraujo vilkas",
+      "zoneId": 11,
+      "hp": 4852,
+      "damage": 377,
+      "defense": 83,
+      "exp": 1249,
+      "gold": 420,
+      "art": {"shape": "wolf", "color": "#6a1018", "eye": "#ff4040"}
+    },
+    {
+      "id": "count_bloodwalker",
+      "name": "Grafas Kraujaklajis",
+      "zoneId": 11,
+      "boss": true,
+      "hp": 88220,
+      "damage": 1029,
+      "defense": 166,
+      "exp": 17040,
+      "gold": 5730,
+      "art": {"shape": "boss", "color": "#3a0a14", "eye": "#ff2020"}
     }
   ],
   "npcs": [
