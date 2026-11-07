@@ -278,6 +278,36 @@ button.danger { color: var(--hp); }
 details.lootinfo { background: var(--surface); border-radius: 6px; padding: 8px 10px; }
 details.lootinfo summary { cursor: pointer; font-weight: 700; color: var(--brass); }
 details.lootinfo .row { margin-top: 6px; background: var(--raised); }
+#dlg { position: fixed; inset: 0; z-index: 25; }
+.dlg-bg { position: absolute; inset: 0; background: linear-gradient(transparent 30%, rgba(5,4,12,.85)); }
+.dlg-box { position: absolute; left: 0; right: 0; bottom: 0; max-width: 560px; margin: 0 auto; display: grid; gap: 10px; cursor: pointer;
+  padding: 16px max(16px, env(safe-area-inset-right, 0px)) calc(18px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+  background: linear-gradient(180deg, #22203a, #14121f); border-top: 1px solid var(--brass); border-radius: 14px 14px 0 0; box-shadow: 0 -10px 40px rgba(0,0,0,.6); animation: cardUp .35s ease-out; }
+@keyframes cardUp { from { transform: translateY(40px); opacity: 0; } }
+.dlg-head { display: flex; gap: 12px; align-items: end; margin-top: -60px; }
+#dlgPor { width: 100px; height: 110px; border-radius: 10px; border: 2px solid var(--brass); box-shadow: 0 6px 20px rgba(0,0,0,.6); background: #15131f; }
+.dlg-name { font: 700 1.2rem var(--display); color: var(--brass); }
+.dlg-role { font-size: .8rem; color: var(--muted); }
+.dlg-text { margin: 0; font-size: 1.05rem; line-height: 1.5; min-height: 4.5em; }
+.dlg-box.narr .dlg-head { margin-top: 0; } .dlg-box.narr .dlg-text { font-style: italic; color: #cfc8e8; }
+.dlg-acts { display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; }
+.dlg-acts .choice { flex: 1 1 100%; text-align: left; border-color: var(--brass); }
+#toast { position: fixed; left: 50%; top: calc(10px + env(safe-area-inset-top, 0px)); z-index: 40; transform: translateX(-50%); max-width: 92vw; padding: 10px 14px; border-radius: 10px;
+  background: rgba(16,14,28,.95); border: 1px solid var(--tc); color: var(--fg); font-weight: 700; font-size: .9rem; box-shadow: 0 0 20px color-mix(in srgb, var(--tc) 40%, transparent); }
+#toast.show { animation: toastIn 2.6s ease both; }
+@keyframes toastIn { 0% { opacity: 0; transform: translate(-50%, -20px); } 10%, 85% { opacity: 1; transform: translate(-50%, 0); } 100% { opacity: 0; transform: translate(-50%, -10px); } }
+.pcard { display: grid; grid-template-columns: 60px minmax(0, 1fr); gap: 10px; align-items: start; }
+.pcard canvas { width: 60px; height: 66px; border-radius: 8px; border: 1px solid var(--line); }
+.pcard p { margin: 4px 0; }
+.pcard details summary, details.lore summary { cursor: pointer; color: var(--brass); font-size: .85rem; font-weight: 700; }
+.pcard .btnrow { margin-top: 6px; }
+.g-por { width: 48px; height: 52px; border-radius: 8px; border: 1px solid var(--brass); }
+details.lore { background: var(--surface); border-radius: 6px; padding: 8px 10px; }
+details.lore p { margin: 6px 0 0; font-size: .9rem; color: var(--fg); }
+.achs { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 6px; }
+.ach { display: grid; gap: 2px; padding: 8px; border-radius: 6px; background: var(--surface); color: var(--muted); font-size: .78rem; }
+.ach b { font-size: .85rem; }
+.ach.ok { color: var(--fg); border: 1px solid color-mix(in srgb, var(--xp) 50%, var(--line)); } .ach.ok b { color: var(--xp); }
 @media (prefers-reduced-motion: reduce) { .bar > i { transition: none; } .hit.crit { animation: none; } }
 </style>
 
@@ -325,6 +355,10 @@ details.lootinfo .row { margin-top: 6px; background: var(--raised); }
   <div class="st-corner"><button id="stMute">♪ įj.</button><button id="stFlee">Bėgti</button></div>
   <div class="st-card" id="stCard" role="dialog" hidden></div>
 </section>
+<section id="dlg" hidden aria-live="polite"><div class="dlg-bg"></div><div class="dlg-box" id="dlgBox" role="dialog">
+  <div class="dlg-head"><canvas id="dlgPor" width="200" height="220"></canvas><div><div class="dlg-name" id="dlgName"></div><div class="dlg-role" id="dlgRole"></div></div></div>
+  <p class="dlg-text" id="dlgText"></p><div class="dlg-acts" id="dlgActs"></div></div></section>
+<div id="toast" hidden></div>
 <section id="start" hidden>
   <div class="start-in">
     <div id="startTitle">
@@ -347,7 +381,7 @@ details.lootinfo .row { margin-top: 6px; background: var(--raised); }
 
 <!-- Region data: generated from data/regions/emberwatch.json by tools/embed_region.py — edit the JSON, not this block. -->
 <script id="region-data" type="application/json">
-{"schemaVersion":1,"region":{"id":"emberwatch_march","name":"Žaržiūros pasienis","levelRange":[1,11],"zoneIds":[1,2],"description":"Pasienio kraštas prie Plyšio. Prieš 40 metų dangus čia suskilo, ir nuo tada be paliovos krenta pelenai. Gyvenvietė Žaržiūra – paskutinė tvirtovė prieš Pelenų pakraščių dykynes ir Suskilusį Plyšį."},"settlement":{"id":"emberwatch","name":"Žaržiūra","type":"frontier_fortress_town","population":3200,"faction":"emberwatch_garrison","atmosphere":"Tamsi pasienio tvirtovė ant senojo sargybos bokšto griuvėsių. Stogai pilki nuo pelenų, gatvėse dega žarijų žibintai, o naktį Plyšys nušviečia dangų violetine šviesa. Gyventojai pavargę, bet atkaklūs: čia visi kažkam skolingi – garnizonui, kalviui ar kontrabandininkams.","ambience":{"weather":"ash_fall","music":"low_drums_strings","dayNightCycle":true},"respawnPoint":"gatehold_square"},"districts":[{"id":"gatehold_square","name":"Vartų aikštė","type":"market","safeZone":true,"description":"Pagrindinė turgaus aikštė prie vartų. Čia stovi užduočių lenta, vaistinė ir karavanų stovykla.","npcIds":["sela_quickmarrow","captain_hedda_varr","orla_greyfeather"],"features":["quest_board","stash","respawn_point"],"buildings":[{"id":"town_gate","name":"Miesto vartai","type":"gate","description":"Išvykimas į zonas. Čia renkiesi, kur keliauti."},{"id":"quest_board","name":"Skelbimų lenta","type":"board","description":"Visi miesto darbai ir kur rasti jų davėjus."},{"id":"hunters_lodge","name":"Medžiotojų namelis","type":"lodge","shopId":"hunters_lodge","npcId":"orla_greyfeather","description":"Gyvūnų grobis: virimas, odinė apranga, trofėjų supirkimas."},{"id":"embervial_apothecary","name":"Selos vaistinė","type":"shop","shopId":"embervial_apothecary","npcId":"sela_quickmarrow"}]},{"id":"anvil_row","name":"Priekalų gatvė","type":"craft_quarter","safeZone":true,"description":"Amatininkų kvartalas. Kalvių kūjų dūžiai girdimi per visą miestą, o oras dvokia anglimi ir ištirpusiu metalu.","npcIds":["brakka_ironjaw","torvald_ashmane","ilsa_moonvane"],"features":["forge","jeweler_bench","salvage_station"],"buildings":[{"id":"torvald_forge","name":"Torvaldo kalvė","type":"forge","npcId":"torvald_ashmane","description":"Rūdos lydymas į luitus, sustiprinimas, rango kėlimas (Paprastas→Retas) ir kalimas."},{"id":"moonvane_jewelers","name":"Ilsos juvelyrinė","type":"jeweler","npcId":"ilsa_moonvane","description":"Rango kėlimas Retas→Legendinis ir žiedų kūrimas."},{"id":"split_anvil_armory","name":"Brakos ginklinė","type":"shop","shopId":"split_anvil_armory","npcId":"brakka_ironjaw"}]},{"id":"the_cinders","name":"Pelenynai","type":"slums","safeZone":false,"levelRange":[4,6],"description":"Pavojingieji lūšnynai sudegusiame rytiniame kvartale. Čia valdo kontrabandininkai, o neatsargų keliautoją užpuola galvažudžiai.","npcIds":["vex_ninefingers"],"features":["black_market"],"monsterIds":["cinder_cutthroat"],"events":[{"id":"cutthroat_ambush","chancePerVisit":0.2,"spawn":{"monsterId":"cinder_cutthroat","count":3}}],"buildings":[{"id":"rift_curio","name":"Vekso kontrabanda","type":"shop","shopId":"rift_curio","npcId":"vex_ninefingers"}]},{"id":"wardtower_keep","name":"Sargybos bokštas","type":"garrison","safeZone":true,"description":"Garnizono štabas. Čia saugomi bosų vartai į Pelenų pakraščių gilumą ir reputacijos kvartirmeisteris.","npcIds":["captain_hedda_varr"],"features":["boss_gate","reputation_vendor"],"buildings":[{"id":"captains_hall","name":"Kapitonės salė","type":"garrison","npcId":"captain_hedda_varr","description":"Kapitonės užduotys, garnizono reputacija ir bosų vartų žinios."}]},{"id":"riftside_gate","name":"Plyšio vartai","type":"zone_exit","safeZone":true,"description":"Užantspauduoti vartai į Suskilusį Plyšį. Atsidaro nugalėjus Kharną, Žarijų sargą.","unlock":{"type":"boss_defeated","monsterId":"ashen_outskirts_warden"},"leadsToZoneId":2,"buildings":[{"id":"riftside_portal","name":"Plyšio vartai","type":"gate","zoneIds":[2],"description":"Tiesus kelias į Suskilusį Plyšį."}]}],"factions":[{"id":"emberwatch_garrison","name":"Žaržiūros garnizonas","ranks":[{"rank":"Neutralus","minRep":0,"shopDiscount":0.0},{"rank":"Draugiškas","minRep":500,"shopDiscount":0.05},{"rank":"Gerbiamas","minRep":1500,"shopDiscount":0.1},{"rank":"Šlovinamas","minRep":4000,"shopDiscount":0.15}]}],"materials":[{"id":"ash_wolf_fang","name":"Vilko iltis","tier":"Common","sellPrice":4,"sources":[{"monsterId":"ash_wolf","dropChance":0.35}]},{"id":"ghoul_marrow","name":"Lavonėdos čiulpai","tier":"Common","sellPrice":8,"sources":[{"monsterId":"cinder_ghoul","dropChance":0.25}]},{"id":"ash_bloom","name":"Pelenų žiedas","tier":"Common","sellPrice":3,"sources":[{"nodeId":"ash_bloom_patch","zoneId":1,"gatherSeconds":5}]},{"id":"cinder_iron_ore","name":"Geležies rūda","tier":"Uncommon","sellPrice":10,"sources":[{"nodeId":"cinder_vein","zoneId":1,"gatherSeconds":8},{"monsterId":"cinder_ghoul","dropChance":0.15}]},{"id":"cinder_iron_ingot","name":"Geležies luitas","tier":"Uncommon","sellPrice":30,"description":"Išlydyta geležis. Iš jos kalvis stiprina aprangą, kelia jos rangą ir kala naujus daiktus.","sources":[{"crafterNpcId":"torvald_ashmane","serviceId":"smelt_cinder_iron"}]},{"id":"riftglass_shard","name":"Plyšio stiklo šukė","tier":"Rare","sellPrice":60,"sources":[{"monsterId":"rift_stalker","dropChance":0.12},{"monsterId":"shardback_crawler","dropChance":0.12}]},{"id":"cinder_warden_core","name":"Kharno šerdis","tier":"Epic","sellPrice":600,"sources":[{"monsterId":"ashen_outskirts_warden","dropChance":1.0}]},{"id":"rift_warden_heart","name":"Izoldos širdis","tier":"Legendary","sellPrice":1500,"sources":[{"monsterId":"shattered_rift_warden","dropChance":1.0}]},{"id":"game_meat","name":"Žvėriena","tier":"Common","sellPrice":3,"description":"Šviežia žvėriena. Orla iš jos verda medžiotojo troškinį (gydo 40% HP).","sources":[{"animalId":"ash_hare","dropChance":0.7,"qty":[1,1]},{"animalId":"cinder_boar","dropChance":0.85,"qty":[1,2]},{"animalId":"dusk_stag","dropChance":1.0,"qty":[1,3]},{"animalId":"glimmer_fox","dropChance":0.7,"qty":[1,1]},{"animalId":"riftback_ram","dropChance":0.85,"qty":[1,2]},{"animalId":"shardhorn_elk","dropChance":1.0,"qty":[1,3]},{"animalId":"bog_toad","dropChance":0.7,"qty":[1,1]},{"animalId":"marsh_lynx","dropChance":0.85,"qty":[1,2]},{"animalId":"mirebear","dropChance":1.0,"qty":[1,3]},{"animalId":"reef_crab","dropChance":0.7,"qty":[1,1]},{"animalId":"tidecat","dropChance":0.85,"qty":[1,2]},{"animalId":"sunken_tortoise","dropChance":1.0,"qty":[1,3]},{"animalId":"ember_lizard","dropChance":0.7,"qty":[1,1]},{"animalId":"cinderhawk","dropChance":0.85,"qty":[1,2]},{"animalId":"magma_ox","dropChance":1.0,"qty":[1,3]},{"animalId":"starfox","dropChance":0.7,"qty":[1,1]},{"animalId":"nebula_stag","dropChance":0.85,"qty":[1,2]},{"animalId":"starmane_lion","dropChance":1.0,"qty":[1,3]}]},{"id":"ashen_hide","name":"Pelenų kailis","tier":"Common","sellPrice":5,"description":"Gyvūnų kailis iš Pelenų pakraščių. Iš jo Orla siuva odinę aprangą.","sources":[{"animalId":"ash_hare","dropChance":0.4,"qty":[1,1]},{"animalId":"cinder_boar","dropChance":0.75,"qty":[1,1]},{"animalId":"dusk_stag","dropChance":1.0,"qty":[1,2]}]},{"id":"riftglow_pelt","name":"Plyšio kailis","tier":"Uncommon","sellPrice":15,"description":"Gyvūnų kailis iš Suskilusio Plyšio. Iš jo Orla siuva odinę aprangą.","sources":[{"animalId":"glimmer_fox","dropChance":0.4,"qty":[1,1]},{"animalId":"riftback_ram","dropChance":0.75,"qty":[1,1]},{"animalId":"shardhorn_elk","dropChance":1.0,"qty":[1,2]}]},{"id":"marsh_hide","name":"Pelkių oda","tier":"Uncommon","sellPrice":30,"description":"Gyvūnų oda iš Niūriašaknių pelkės. Iš jos Orla siuva odinę aprangą.","sources":[{"animalId":"bog_toad","dropChance":0.4,"qty":[1,1]},{"animalId":"marsh_lynx","dropChance":0.75,"qty":[1,1]},{"animalId":"mirebear","dropChance":1.0,"qty":[1,2]}]},{"id":"tidescale_hide","name":"Potvynių oda","tier":"Rare","sellPrice":60,"description":"Gyvūnų oda iš Nuskendusio bastiono. Iš jos Orla siuva odinę aprangą.","sources":[{"animalId":"reef_crab","dropChance":0.4,"qty":[1,1]},{"animalId":"tidecat","dropChance":0.75,"qty":[1,1]},{"animalId":"sunken_tortoise","dropChance":1.0,"qty":[1,2]}]},{"id":"emberscale_hide","name":"Žarijų oda","tier":"Rare","sellPrice":120,"description":"Gyvūnų oda iš Žarijų karūnos bokšto. Iš jos Orla siuva odinę aprangą.","sources":[{"animalId":"ember_lizard","dropChance":0.4,"qty":[1,1]},{"animalId":"cinderhawk","dropChance":0.75,"qty":[1,1]},{"animalId":"magma_ox","dropChance":1.0,"qty":[1,2]}]},{"id":"starfur_pelt","name":"Žvaigždžių kailis","tier":"Epic","sellPrice":250,"description":"Gyvūnų kailis iš Tuščiųjų žvaigždžių skliauto. Iš jo Orla siuva odinę aprangą.","sources":[{"animalId":"starfox","dropChance":0.4,"qty":[1,1]},{"animalId":"nebula_stag","dropChance":0.75,"qty":[1,1]},{"animalId":"starmane_lion","dropChance":1.0,"qty":[1,2]}]},{"id":"dusk_stag_antler","name":"Sutemų elnio ragai","tier":"Uncommon","sellPrice":80,"description":"Retas medžioklės trofėjus. Brangiai parduodamas arba naudojamas geriausiai Orlos aprangai.","sources":[{"animalId":"dusk_stag","dropChance":0.08,"qty":[1,1]}]},{"id":"shardhorn_crown","name":"Šukaragio karūna","tier":"Rare","sellPrice":220,"description":"Retas medžioklės trofėjus. Brangiai parduodamas arba naudojamas geriausiai Orlos aprangai.","sources":[{"animalId":"shardhorn_elk","dropChance":0.08,"qty":[1,1]}]},{"id":"mirebear_claw","name":"Lokio nagas","tier":"Rare","sellPrice":450,"description":"Retas medžioklės trofėjus. Brangiai parduodamas arba naudojamas geriausiai Orlos aprangai.","sources":[{"animalId":"mirebear","dropChance":0.08,"qty":[1,1]}]},{"id":"tortoise_shell_plate","name":"Vėžlio šarvo plokštė","tier":"Epic","sellPrice":900,"description":"Retas medžioklės trofėjus. Brangiai parduodamas arba naudojamas geriausiai Orlos aprangai.","sources":[{"animalId":"sunken_tortoise","dropChance":0.08,"qty":[1,1]}]},{"id":"magma_ox_horn","name":"Magmos jaučio ragas","tier":"Epic","sellPrice":1800,"description":"Retas medžioklės trofėjus. Brangiai parduodamas arba naudojamas geriausiai Orlos aprangai.","sources":[{"animalId":"magma_ox","dropChance":0.08,"qty":[1,1]}]},{"id":"starmane","name":"Žvaigždžių karčiai","tier":"Legendary","sellPrice":4000,"description":"Retas medžioklės trofėjus. Brangiai parduodamas arba naudojamas geriausiai Orlos aprangai.","sources":[{"animalId":"starmane_lion","dropChance":0.08,"qty":[1,1]}]}],"monsters":[{"id":"ash_wolf","name":"Pelenų vilkas","zoneId":1,"level":[1,3],"hp":100,"damage":12,"defense":5,"exp":18,"gold":7},{"id":"cinder_ghoul","name":"Žarijų lavonėda","zoneId":1,"level":[3,5],"hp":140,"damage":16,"defense":5,"exp":22,"gold":9},{"id":"cinder_cutthroat","name":"Pelenynų galvažudys","zoneId":1,"level":[5,5],"elite":true,"hp":300,"damage":22,"defense":10,"exp":60,"gold":25},{"id":"ashen_outskirts_warden","name":"Kharnas, Žarijų sargas","zoneId":1,"boss":true,"level":[6,6],"hp":2400,"damage":42,"defense":10,"exp":300,"gold":120},{"id":"rift_stalker","name":"Plyšio sekėjas","zoneId":2,"level":[6,9],"hp":220,"damage":24,"defense":20,"exp":40,"gold":15},{"id":"shardback_crawler","name":"Šukanugaris roplys","zoneId":2,"level":[8,11],"hp":260,"damage":26,"defense":20,"exp":44,"gold":17},{"id":"shattered_rift_warden","name":"Izolda, Sudužusio dangaus valdovė","zoneId":2,"boss":true,"level":[12,12],"hp":4800,"damage":75,"defense":40,"exp":630,"gold":240}],"npcs":[{"id":"brakka_ironjaw","name":"Braka Geležinžandis","race":"Nykštukas","role":"merchant","districtId":"anvil_row","trait":"Niurzgus ir tiesmukas. Niekada nesiderėja, bet už kiekvieną savo kalavijo dūžį garantuoja galva.","profession":"Ginklininkas"},{"id":"sela_quickmarrow","name":"Sela Greitakaulė","race":"Pusiau elfė","role":"merchant","districtId":"gatehold_square","trait":"Nervinga plepė. Kalba greičiau, nei verda jos katilai, ir viską užsirašo į sudegusį sąsiuvinį.","profession":"Vaistininkė"},{"id":"vex_ninefingers","name":"Veksas „Devynpirštis“","race":"Pelenagimis","role":"merchant","districtId":"the_cinders","trait":"Mandagus, šaltas kontrabandininkas. Dešimto piršto neteko per derybas ir nuo tada nemėgsta skolininkų.","profession":"Kontrabandininkas"},{"id":"torvald_ashmane","name":"Torvaldas Pelenkaris","race":"Žmogus","role":"crafter","profession":"Kalvis","districtId":"anvil_row","trait":"Buvęs garnizono veteranas su perdega ranka. Kantrus mokytojas, bet nepakenčia prastos rūdos."},{"id":"ilsa_moonvane","name":"Ilsa Mėnulvėjė","race":"Elfė","role":"crafter","profession":"Juvelyrė","districtId":"anvil_row","trait":"Tyli perfekcionistė. Plyšio stiklo skeveldras tyrinėja su lupa ir šnabžda joms kaip gyvoms."},{"id":"captain_hedda_varr","name":"Kapitonė Heda Var","race":"Žmogus","role":"quest_giver","districtId":"wardtower_keep","trait":"Griežta garnizono kapitonė. Vertina rezultatus, ne žodžius.","profession":"Garnizono kapitonė"},{"id":"orla_greyfeather","name":"Orla Pilkaplunksnė","race":"Pusiau orkė","role":"crafter","profession":"Medžiotoja, kailiadirbė","districtId":"gatehold_square","trait":"Rami, bet griežta medžiotoja. Moka už kiekvieną odą ir niekada neišmeta nė kaulo."}],"shops":[{"id":"split_anvil_armory","name":"Brakos ginklinė","ownerNpcId":"brakka_ironjaw","districtId":"anvil_row","specialization":"Ginklai ir šarvai","currency":"gold","items":[{"id":"worn_hauberk","name":"Nudėvėti šarvamarškiniai","type":"equipment","slot":"Armor","tier":"Common","itemLevel":3,"baseBonus":{"strength":2,"agility":0,"intelligence":0,"vitality":10,"luck":0},"baseDefense":6,"price":350},{"id":"tempered_claymore","name":"Grūdintas dvirankis","type":"equipment","slot":"Weapon","tier":"Uncommon","itemLevel":4,"baseBonus":{"strength":12,"agility":3,"intelligence":0,"vitality":0,"luck":2},"baseDefense":0,"price":900},{"id":"tempered_greaves","name":"Grūdinti batai","type":"equipment","slot":"Boots","tier":"Uncommon","itemLevel":5,"baseBonus":{"strength":0,"agility":7,"intelligence":0,"vitality":4,"luck":0},"baseDefense":10,"price":1100},{"id":"riftforged_warblade","name":"Plyšio kalavijas","type":"equipment","slot":"Weapon","tier":"Rare","itemLevel":8,"baseBonus":{"strength":20,"agility":5,"intelligence":0,"vitality":0,"luck":3},"baseDefense":0,"price":6500,"requires":{"factionId":"emberwatch_garrison","rank":"Draugiškas"}}]},{"id":"embervial_apothecary","name":"Selos vaistinė","ownerNpcId":"sela_quickmarrow","districtId":"gatehold_square","specialization":"Eliksyrai ir laikini sustiprinimai","currency":"gold","items":[{"id":"minor_healing_draught","name":"Gydomasis gėrimas","type":"consumable","effect":{"kind":"heal_pct","value":0.25},"cooldownSeconds":30,"price":40},{"id":"mana_tonic","name":"Manos tonikas","type":"consumable","effect":{"kind":"mana_flat","value":60},"cooldownSeconds":30,"price":35},{"id":"ironhide_elixir","name":"Geležinės odos eliksyras","type":"consumable","effect":{"kind":"defense_pct","value":0.15,"durationSeconds":300},"price":220}]},{"id":"rift_curio","name":"Vekso kontrabanda","ownerNpcId":"vex_ninefingers","districtId":"the_cinders","specialization":"Reti komponentai ir juodoji rinka","currency":"gold","dailyRestock":true,"items":[{"id":"riftglass_shard","type":"material","price":250,"dailyLimit":5},{"id":"cinder_warden_core","type":"material","price":2400,"dailyLimit":1}]},{"id":"hunters_lodge","name":"Medžiotojų namelis","ownerNpcId":"orla_greyfeather","districtId":"gatehold_square","specialization":"Medžioklės reikmenys ir trofėjų supirkimas","currency":"gold","items":[{"id":"hunters_stew","name":"Medžiotojo troškinys","type":"consumable","effect":{"kind":"heal_pct","value":0.4},"cooldownSeconds":30,"price":70}]}],"crafters":[{"npcId":"torvald_ashmane","station":"forge","services":[{"id":"smelt_cinder_iron","name":"Lydyti geležies luitą","goldCost":5,"materials":[{"id":"cinder_iron_ore","qty":2}],"outputMaterial":{"id":"cinder_iron_ingot","qty":1}},{"id":"enhance","name":"Sustiprinti (+1)","appliesTo":"any_equipment","goldCostFormula":"40 * itemLevel * (1 + tier) * 1.45^enhancement","materials":[{"id":"cinder_iron_ingot","qtyFormula":"1 + floor(enhancement / 3)"},{"id":"riftglass_shard","qtyFormula":"enhancement >= 5 ? 1 : 0"}],"maxEnhancement":10},{"id":"promote_common_uncommon","name":"Pakelti rangą: Paprastas → Neįprastas","requires":{"enhancement":5,"fromTier":"Common"},"goldCostFormula":"400 * itemLevel * (1 + tier)^2","materials":[{"id":"cinder_iron_ingot","qty":3},{"id":"ash_wolf_fang","qty":10}]},{"id":"promote_uncommon_rare","name":"Pakelti rangą: Neįprastas → Retas","requires":{"enhancement":5,"fromTier":"Uncommon"},"goldCostFormula":"400 * itemLevel * (1 + tier)^2","materials":[{"id":"cinder_iron_ingot","qty":5},{"id":"ghoul_marrow","qty":6},{"id":"riftglass_shard","qty":3}]},{"id":"craft_emberwatch_guard_plate","name":"Nukalti: Sargybos šarvai","unlockedByQuestId":"ore_for_the_anvil","goldCost":1200,"materials":[{"id":"cinder_iron_ingot","qty":6},{"id":"ash_wolf_fang","qty":15}],"output":{"id":"emberwatch_guard_plate","name":"Sargybos šarvai","type":"equipment","slot":"Armor","tier":"Uncommon","itemLevel":6,"baseBonus":{"strength":4,"agility":0,"intelligence":0,"vitality":16,"luck":0},"baseDefense":12}}]},{"npcId":"ilsa_moonvane","station":"jeweler_bench","services":[{"id":"promote_rare_epic","name":"Pakelti rangą: Retas → Epinis","requires":{"enhancement":5,"fromTier":"Rare"},"goldCostFormula":"400 * itemLevel * (1 + tier)^2","materials":[{"id":"riftglass_shard","qty":8},{"id":"cinder_warden_core","qty":1}]},{"id":"promote_epic_legendary","name":"Pakelti rangą: Epinis → Legendinis","requires":{"enhancement":5,"fromTier":"Epic"},"goldCostFormula":"400 * itemLevel * (1 + tier)^2","materials":[{"id":"riftglass_shard","qty":15},{"id":"rift_warden_heart","qty":1}]},{"id":"craft_signet_of_embers","name":"Nukalti: Žarijų antspaudas","goldCost":3000,"materials":[{"id":"riftglass_shard","qty":4},{"id":"cinder_iron_ingot","qty":3}],"output":{"id":"signet_of_embers","name":"Žarijų antspaudas","type":"equipment","slot":"Ring","tier":"Rare","itemLevel":8,"baseBonus":{"strength":5,"agility":5,"intelligence":5,"vitality":0,"luck":10},"baseDefense":0}}]},{"npcId":"orla_greyfeather","station":"tanning_rack","services":[{"id":"cook_hunters_stew","name":"Virti medžiotojo troškinį","goldCost":10,"materials":[{"id":"game_meat","qty":3}],"outputConsumable":{"id":"hunters_stew","qty":1}},{"id":"craft_ashen_hide_boots","name":"Pasiūti: Pelenų kailio batai","goldCost":300,"materials":[{"id":"ashen_hide","qty":20},{"id":"dusk_stag_antler","qty":1}],"output":{"id":"ashen_hide_boots","name":"Pelenų kailio batai","type":"equipment","slot":"Boots","tier":"Uncommon","itemLevel":5,"baseBonus":{"strength":0,"agility":7,"intelligence":0,"vitality":5,"luck":2},"baseDefense":8}},{"id":"craft_riftglow_belt","name":"Pasiūti: Plyšio medžiotojo diržas","goldCost":1500,"materials":[{"id":"riftglow_pelt","qty":25},{"id":"shardhorn_crown","qty":2}],"output":{"id":"riftglow_belt","name":"Plyšio medžiotojo diržas","type":"equipment","slot":"Belt","tier":"Rare","itemLevel":10,"baseBonus":{"strength":8,"agility":6,"intelligence":0,"vitality":10,"luck":4},"baseDefense":0}},{"id":"craft_marsh_hood","name":"Pasiūti: Pelkių sekėjo gobtuvas","goldCost":5000,"materials":[{"id":"marsh_hide","qty":30},{"id":"mirebear_claw","qty":2}],"output":{"id":"marsh_stalker_hood","name":"Pelkių sekėjo gobtuvas","type":"equipment","slot":"Helmet","tier":"Rare","itemLevel":16,"baseBonus":{"strength":0,"agility":8,"intelligence":10,"vitality":16,"luck":8},"baseDefense":28}},{"id":"craft_tidescale_armor","name":"Pasiūti: Potvynių brigantina","goldCost":12000,"materials":[{"id":"tidescale_hide","qty":35},{"id":"tortoise_shell_plate","qty":3}],"output":{"id":"tidescale_brigandine","name":"Potvynių brigantina","type":"equipment","slot":"Armor","tier":"Epic","itemLevel":22,"baseBonus":{"strength":10,"agility":6,"intelligence":0,"vitality":40,"luck":0},"baseDefense":40}},{"id":"craft_emberscale_boots","name":"Pasiūti: Žarijų odos batai","goldCost":30000,"materials":[{"id":"emberscale_hide","qty":35},{"id":"magma_ox_horn","qty":3}],"output":{"id":"emberscale_treads","name":"Žarijų odos batai","type":"equipment","slot":"Boots","tier":"Epic","itemLevel":30,"baseBonus":{"strength":0,"agility":26,"intelligence":0,"vitality":18,"luck":6},"baseDefense":56}},{"id":"craft_starfur_mantle","name":"Pasiūti: Žvaigždžių mantija","goldCost":80000,"materials":[{"id":"starfur_pelt","qty":40},{"id":"starmane","qty":3}],"output":{"id":"starfur_mantle","name":"Žvaigždžių mantija","type":"equipment","slot":"Armor","tier":"Legendary","itemLevel":38,"baseBonus":{"strength":18,"agility":12,"intelligence":12,"vitality":60,"luck":10},"baseDefense":70}}]}],"quests":[{"id":"fangs_at_the_palisade","name":"Iltys prie palisado","giverNpcId":"captain_hedda_varr","type":"hunt","minLevel":1,"prerequisiteQuestIds":[],"description":"Pelenų vilkai naktimis puola rytinį palisadą. Kapitonė Varr nori, kad jų gauja būtų išretinta prieš atvykstant karavanui.","objectives":[{"kind":"kill","monsterId":"ash_wolf","count":12,"zoneId":1}],"rewards":{"exp":600,"gold":150,"reputation":[{"factionId":"emberwatch_garrison","amount":150}],"items":[{"id":"minor_healing_draught","qty":3}]}},{"id":"ore_for_the_anvil","name":"Rūda priekalui","giverNpcId":"torvald_ashmane","type":"gather","minLevel":4,"prerequisiteQuestIds":["fangs_at_the_palisade"],"description":"Garnizonui reikia naujų šarvų, bet Torvaldo sandėlis tuščias. Atnešk geležies rūdos iš gyslų Pelenų pakraščių dykynėse ir vilkų iltis grūdinimui.","objectives":[{"kind":"collect","itemId":"cinder_iron_ore","count":6},{"kind":"collect","itemId":"ash_wolf_fang","count":10}],"rewards":{"exp":1500,"gold":400,"reputation":[{"factionId":"emberwatch_garrison","amount":200}],"items":[{"id":"tempered_girdle","name":"Grūdintas diržas","type":"equipment","slot":"Belt","tier":"Uncommon","itemLevel":4,"baseBonus":{"strength":4,"agility":0,"intelligence":0,"vitality":6,"luck":0},"baseDefense":0,"qty":1}],"unlocks":["craft_emberwatch_guard_plate"]}},{"id":"a_shard_too_bright","name":"Per ryški šukė","giverNpcId":"sela_quickmarrow","type":"delivery","minLevel":5,"prerequisiteQuestIds":[],"description":"Sela užsakė užantspauduotą Plyšio stiklo pavyzdį iš Veksas lūšnynuose, bet pati bijo ten eiti. Paimk siuntinį Pelenynuose ir neatidaręs pristatyk Ilsai į Priekalų gatvėje. Kelyje gali užpulti galvažudžiai.","objectives":[{"kind":"talk","npcId":"vex_ninefingers","receivesItemId":"sealed_riftglass_sample"},{"kind":"kill","monsterId":"cinder_cutthroat","count":3,"optional":true},{"kind":"deliver","itemId":"sealed_riftglass_sample","toNpcId":"ilsa_moonvane"}],"questItems":[{"id":"sealed_riftglass_sample","name":"Užantspauduotas stiklo pavyzdys","type":"quest_item"}],"timeLimitSeconds":900,"failConditions":["quest_item_opened","time_expired"],"rewards":{"exp":4000,"gold":900,"reputation":[{"factionId":"emberwatch_garrison","amount":300}],"items":[{"id":"riftforged_band","name":"Plyšio žiedas","type":"equipment","slot":"Ring","tier":"Rare","itemLevel":7,"baseBonus":{"strength":4,"agility":4,"intelligence":4,"vitality":0,"luck":9},"baseDefense":0,"qty":1}],"bonusIfOptionalDone":{"gold":250}}},{"id":"pelts_for_the_lodge","name":"Kailiai medžiotojams","giverNpcId":"orla_greyfeather","type":"gather","minLevel":2,"prerequisiteQuestIds":[],"description":"Žiema artėja, o Orlos sandėlis tuščias. Sumedžiok gyvūnų Pelenų pakraščiai ir atnešk odų bei mėsos.","objectives":[{"kind":"collect","itemId":"ashen_hide","count":8},{"kind":"collect","itemId":"game_meat","count":6}],"rewards":{"exp":800,"gold":200,"reputation":[{"factionId":"emberwatch_garrison","amount":100}],"items":[{"id":"hunters_stew","qty":3}]}}],"animals":[{"id":"ash_hare","name":"Pelenų kiškis","zoneId":1,"size":"small","hp":72,"damage":7,"defense":5,"exp":12,"gold":1,"art":{"shape":"hopper","color":"#9a8f86"},"loot":[{"id":"game_meat","qty":[1,1],"chance":0.7},{"id":"ashen_hide","qty":[1,1],"chance":0.4}],"trackSeconds":4},{"id":"cinder_boar","name":"Žarijų šernas","zoneId":1,"size":"mid","hp":108,"damage":11,"defense":5,"exp":18,"gold":2,"art":{"shape":"quad","color":"#6a4a3a","horns":"tusk","legs":"short"},"loot":[{"id":"game_meat","qty":[1,2],"chance":0.85},{"id":"ashen_hide","qty":[1,1],"chance":0.75}],"trackSeconds":6},{"id":"dusk_stag","name":"Sutemų elnias","zoneId":1,"size":"big","hp":168,"damage":15,"defense":5,"exp":28,"gold":4,"art":{"shape":"quad","color":"#7a5a44","horns":"antler","legs":"long"},"loot":[{"id":"game_meat","qty":[1,3],"chance":1.0},{"id":"ashen_hide","qty":[1,2],"chance":1.0},{"id":"dusk_stag_antler","qty":[1,1],"chance":0.08}],"trackSeconds":9},{"id":"glimmer_fox","name":"Žėrinčioji lapė","zoneId":2,"size":"small","hp":144,"damage":12,"defense":20,"exp":25,"gold":3,"art":{"shape":"quad","color":"#c98a4a","tail":"bushy","scale":0.75},"loot":[{"id":"game_meat","qty":[1,1],"chance":0.7},{"id":"riftglow_pelt","qty":[1,1],"chance":0.4}],"trackSeconds":4},{"id":"riftback_ram","name":"Plyšionugaris avinas","zoneId":2,"size":"mid","hp":216,"damage":20,"defense":20,"exp":37,"gold":5,"art":{"shape":"quad","color":"#8a80a8","horns":"curl"},"loot":[{"id":"game_meat","qty":[1,2],"chance":0.85},{"id":"riftglow_pelt","qty":[1,1],"chance":0.75}],"trackSeconds":6},{"id":"shardhorn_elk","name":"Šukaragis briedis","zoneId":2,"size":"big","hp":336,"damage":27,"defense":20,"exp":58,"gold":8,"art":{"shape":"quad","color":"#5a5288","horns":"antler","legs":"long"},"loot":[{"id":"game_meat","qty":[1,3],"chance":1.0},{"id":"riftglow_pelt","qty":[1,2],"chance":1.0},{"id":"shardhorn_crown","qty":[1,1],"chance":0.08}],"trackSeconds":9},{"id":"bog_toad","name":"Pelkių rupūžė","zoneId":3,"size":"small","hp":288,"damage":23,"defense":35,"exp":52,"gold":7,"art":{"shape":"hopper","color":"#5a7a3a","wide":true},"loot":[{"id":"game_meat","qty":[1,1],"chance":0.7},{"id":"marsh_hide","qty":[1,1],"chance":0.4}],"trackSeconds":4},{"id":"marsh_lynx","name":"Pelkių lūšis","zoneId":3,"size":"mid","hp":432,"damage":37,"defense":35,"exp":79,"gold":11,"art":{"shape":"quad","color":"#8a7a4a","tail":"thin"},"loot":[{"id":"game_meat","qty":[1,2],"chance":0.85},{"id":"marsh_hide","qty":[1,1],"chance":0.75}],"trackSeconds":6},{"id":"mirebear","name":"Klampynių lokys","zoneId":3,"size":"big","hp":672,"damage":51,"defense":35,"exp":123,"gold":17,"art":{"shape":"quad","color":"#6a5038","scale":1.3,"legs":"short"},"loot":[{"id":"game_meat","qty":[1,3],"chance":1.0},{"id":"marsh_hide","qty":[1,2],"chance":1.0},{"id":"mirebear_claw","qty":[1,1],"chance":0.08}],"trackSeconds":9},{"id":"reef_crab","name":"Rifų krabas","zoneId":4,"size":"small","hp":576,"damage":44,"defense":50,"exp":111,"gold":15,"art":{"shape":"crab","color":"#c8583a"},"loot":[{"id":"game_meat","qty":[1,1],"chance":0.7},{"id":"tidescale_hide","qty":[1,1],"chance":0.4}],"trackSeconds":4},{"id":"tidecat","name":"Potvynių katė","zoneId":4,"size":"mid","hp":864,"damage":70,"defense":50,"exp":166,"gold":23,"art":{"shape":"quad","color":"#3a7a8a","tail":"thin"},"loot":[{"id":"game_meat","qty":[1,2],"chance":0.85},{"id":"tidescale_hide","qty":[1,1],"chance":0.75}],"trackSeconds":6},{"id":"sunken_tortoise","name":"Nuskendęs vėžlys","zoneId":4,"size":"big","hp":1344,"damage":96,"defense":50,"exp":259,"gold":35,"art":{"shape":"shell","color":"#4a6a5a"},"loot":[{"id":"game_meat","qty":[1,3],"chance":1.0},{"id":"tidescale_hide","qty":[1,2],"chance":1.0},{"id":"tortoise_shell_plate","qty":[1,1],"chance":0.08}],"trackSeconds":9},{"id":"ember_lizard","name":"Žarijų driežas","zoneId":5,"size":"small","hp":1152,"damage":81,"defense":65,"exp":232,"gold":30,"art":{"shape":"quad","color":"#c8642a","legs":"short","tail":"long","scale":0.8},"loot":[{"id":"game_meat","qty":[1,1],"chance":0.7},{"id":"emberscale_hide","qty":[1,1],"chance":0.4}],"trackSeconds":4},{"id":"cinderhawk","name":"Pelenų sakalas","zoneId":5,"size":"mid","hp":1728,"damage":130,"defense":65,"exp":349,"gold":46,"art":{"shape":"bird","color":"#a8402a"},"loot":[{"id":"game_meat","qty":[1,2],"chance":0.85},{"id":"emberscale_hide","qty":[1,1],"chance":0.75}],"trackSeconds":6},{"id":"magma_ox","name":"Magmos jautis","zoneId":5,"size":"big","hp":2688,"damage":179,"defense":65,"exp":543,"gold":71,"art":{"shape":"quad","color":"#8a4030","horns":"horn","scale":1.25},"loot":[{"id":"game_meat","qty":[1,3],"chance":1.0},{"id":"emberscale_hide","qty":[1,2],"chance":1.0},{"id":"magma_ox_horn","qty":[1,1],"chance":0.08}],"trackSeconds":9},{"id":"starfox","name":"Žvaigždžių lapė","zoneId":6,"size":"small","hp":2304,"damage":151,"defense":80,"exp":489,"gold":61,"art":{"shape":"quad","color":"#8a8ad8","tail":"bushy","scale":0.75},"loot":[{"id":"game_meat","qty":[1,1],"chance":0.7},{"id":"starfur_pelt","qty":[1,1],"chance":0.4}],"trackSeconds":4},{"id":"nebula_stag","name":"Ūko elnias","zoneId":6,"size":"mid","hp":3456,"damage":242,"defense":80,"exp":734,"gold":92,"art":{"shape":"quad","color":"#6a5ab8","horns":"antler","legs":"long"},"loot":[{"id":"game_meat","qty":[1,2],"chance":0.85},{"id":"starfur_pelt","qty":[1,1],"chance":0.75}],"trackSeconds":6},{"id":"starmane_lion","name":"Žvaigždžiakaris liūtas","zoneId":6,"size":"big","hp":5376,"damage":333,"defense":80,"exp":1142,"gold":143,"art":{"shape":"quad","color":"#d8b85a","horns":"mane","tail":"thin","scale":1.15},"loot":[{"id":"game_meat","qty":[1,3],"chance":1.0},{"id":"starfur_pelt","qty":[1,2],"chance":1.0},{"id":"starmane","qty":[1,1],"chance":0.08}],"trackSeconds":9}]}
+{"schemaVersion":1,"region":{"id":"emberwatch_march","name":"Žaržiūros pasienis","levelRange":[1,11],"zoneIds":[1,2],"description":"Pasienio kraštas prie Plyšio. Prieš 40 metų dangus čia suskilo, ir nuo tada be paliovos krenta pelenai. Gyvenvietė Žaržiūra – paskutinė tvirtovė prieš Pelenų pakraščių dykynes ir Suskilusį Plyšį."},"settlement":{"id":"emberwatch","name":"Žaržiūra","type":"frontier_fortress_town","population":3200,"faction":"emberwatch_garrison","atmosphere":"Tamsi pasienio tvirtovė ant senojo sargybos bokšto griuvėsių. Stogai pilki nuo pelenų, gatvėse dega žarijų žibintai, o naktį Plyšys nušviečia dangų violetine šviesa. Gyventojai pavargę, bet atkaklūs: čia visi kažkam skolingi – garnizonui, kalviui ar kontrabandininkams.","ambience":{"weather":"ash_fall","music":"low_drums_strings","dayNightCycle":true},"respawnPoint":"gatehold_square"},"districts":[{"id":"gatehold_square","name":"Vartų aikštė","type":"market","safeZone":true,"description":"Pagrindinė turgaus aikštė prie vartų. Čia stovi užduočių lenta, vaistinė ir karavanų stovykla.","npcIds":["sela_quickmarrow","captain_hedda_varr","orla_greyfeather"],"features":["quest_board","stash","respawn_point"],"buildings":[{"id":"town_gate","name":"Miesto vartai","type":"gate","description":"Išvykimas į zonas. Čia renkiesi, kur keliauti."},{"id":"quest_board","name":"Skelbimų lenta","type":"board","description":"Visi miesto darbai ir kur rasti jų davėjus."},{"id":"hunters_lodge","name":"Medžiotojų namelis","type":"lodge","shopId":"hunters_lodge","npcId":"orla_greyfeather","description":"Gyvūnų grobis: virimas, odinė apranga, trofėjų supirkimas."},{"id":"embervial_apothecary","name":"Selos vaistinė","type":"shop","shopId":"embervial_apothecary","npcId":"sela_quickmarrow"}]},{"id":"anvil_row","name":"Priekalų gatvė","type":"craft_quarter","safeZone":true,"description":"Amatininkų kvartalas. Kalvių kūjų dūžiai girdimi per visą miestą, o oras dvokia anglimi ir ištirpusiu metalu.","npcIds":["brakka_ironjaw","torvald_ashmane","ilsa_moonvane"],"features":["forge","jeweler_bench","salvage_station"],"buildings":[{"id":"torvald_forge","name":"Torvaldo kalvė","type":"forge","npcId":"torvald_ashmane","description":"Rūdos lydymas į luitus, sustiprinimas, rango kėlimas (Paprastas→Retas) ir kalimas."},{"id":"moonvane_jewelers","name":"Ilsos juvelyrinė","type":"jeweler","npcId":"ilsa_moonvane","description":"Rango kėlimas Retas→Legendinis ir žiedų kūrimas."},{"id":"split_anvil_armory","name":"Brakos ginklinė","type":"shop","shopId":"split_anvil_armory","npcId":"brakka_ironjaw"}]},{"id":"the_cinders","name":"Pelenynai","type":"slums","safeZone":false,"levelRange":[4,6],"description":"Pavojingieji lūšnynai sudegusiame rytiniame kvartale. Čia valdo kontrabandininkai, o neatsargų keliautoją užpuola galvažudžiai.","npcIds":["vex_ninefingers"],"features":["black_market"],"monsterIds":["cinder_cutthroat"],"events":[{"id":"cutthroat_ambush","chancePerVisit":0.2,"spawn":{"monsterId":"cinder_cutthroat","count":3}}],"buildings":[{"id":"rift_curio","name":"Vekso kontrabanda","type":"shop","shopId":"rift_curio","npcId":"vex_ninefingers"}]},{"id":"wardtower_keep","name":"Sargybos bokštas","type":"garrison","safeZone":true,"description":"Garnizono štabas. Čia saugomi bosų vartai į Pelenų pakraščių gilumą ir reputacijos kvartirmeisteris.","npcIds":["captain_hedda_varr"],"features":["boss_gate","reputation_vendor"],"buildings":[{"id":"captains_hall","name":"Kapitonės salė","type":"garrison","npcId":"captain_hedda_varr","description":"Kapitonės užduotys, garnizono reputacija ir bosų vartų žinios."}]},{"id":"riftside_gate","name":"Plyšio vartai","type":"zone_exit","safeZone":true,"description":"Užantspauduoti vartai į Suskilusį Plyšį. Atsidaro nugalėjus Kharną, Žarijų sargą.","unlock":{"type":"boss_defeated","monsterId":"ashen_outskirts_warden"},"leadsToZoneId":2,"buildings":[{"id":"riftside_portal","name":"Plyšio vartai","type":"gate","zoneIds":[2],"description":"Tiesus kelias į Suskilusį Plyšį."}]}],"factions":[{"id":"emberwatch_garrison","name":"Žaržiūros garnizonas","ranks":[{"rank":"Neutralus","minRep":0,"shopDiscount":0.0},{"rank":"Draugiškas","minRep":500,"shopDiscount":0.05},{"rank":"Gerbiamas","minRep":1500,"shopDiscount":0.1},{"rank":"Šlovinamas","minRep":4000,"shopDiscount":0.15}]}],"materials":[{"id":"ash_wolf_fang","name":"Vilko iltis","tier":"Common","sellPrice":4,"sources":[{"monsterId":"ash_wolf","dropChance":0.35}]},{"id":"ghoul_marrow","name":"Lavonėdos čiulpai","tier":"Common","sellPrice":8,"sources":[{"monsterId":"cinder_ghoul","dropChance":0.25}]},{"id":"ash_bloom","name":"Pelenų žiedas","tier":"Common","sellPrice":3,"sources":[{"nodeId":"ash_bloom_patch","zoneId":1,"gatherSeconds":5}]},{"id":"cinder_iron_ore","name":"Geležies rūda","tier":"Uncommon","sellPrice":10,"sources":[{"nodeId":"cinder_vein","zoneId":1,"gatherSeconds":8},{"monsterId":"cinder_ghoul","dropChance":0.15}]},{"id":"cinder_iron_ingot","name":"Geležies luitas","tier":"Uncommon","sellPrice":30,"description":"Išlydyta geležis. Iš jos kalvis stiprina aprangą, kelia jos rangą ir kala naujus daiktus.","sources":[{"crafterNpcId":"torvald_ashmane","serviceId":"smelt_cinder_iron"}]},{"id":"riftglass_shard","name":"Plyšio stiklo šukė","tier":"Rare","sellPrice":60,"sources":[{"monsterId":"rift_stalker","dropChance":0.12},{"monsterId":"shardback_crawler","dropChance":0.12}]},{"id":"cinder_warden_core","name":"Kharno šerdis","tier":"Epic","sellPrice":600,"sources":[{"monsterId":"ashen_outskirts_warden","dropChance":1.0}]},{"id":"rift_warden_heart","name":"Izoldos širdis","tier":"Legendary","sellPrice":1500,"sources":[{"monsterId":"shattered_rift_warden","dropChance":1.0}]},{"id":"game_meat","name":"Žvėriena","tier":"Common","sellPrice":3,"description":"Šviežia žvėriena. Orla iš jos verda medžiotojo troškinį (gydo 40% HP).","sources":[{"animalId":"ash_hare","dropChance":0.7,"qty":[1,1]},{"animalId":"cinder_boar","dropChance":0.85,"qty":[1,2]},{"animalId":"dusk_stag","dropChance":1.0,"qty":[1,3]},{"animalId":"glimmer_fox","dropChance":0.7,"qty":[1,1]},{"animalId":"riftback_ram","dropChance":0.85,"qty":[1,2]},{"animalId":"shardhorn_elk","dropChance":1.0,"qty":[1,3]},{"animalId":"bog_toad","dropChance":0.7,"qty":[1,1]},{"animalId":"marsh_lynx","dropChance":0.85,"qty":[1,2]},{"animalId":"mirebear","dropChance":1.0,"qty":[1,3]},{"animalId":"reef_crab","dropChance":0.7,"qty":[1,1]},{"animalId":"tidecat","dropChance":0.85,"qty":[1,2]},{"animalId":"sunken_tortoise","dropChance":1.0,"qty":[1,3]},{"animalId":"ember_lizard","dropChance":0.7,"qty":[1,1]},{"animalId":"cinderhawk","dropChance":0.85,"qty":[1,2]},{"animalId":"magma_ox","dropChance":1.0,"qty":[1,3]},{"animalId":"starfox","dropChance":0.7,"qty":[1,1]},{"animalId":"nebula_stag","dropChance":0.85,"qty":[1,2]},{"animalId":"starmane_lion","dropChance":1.0,"qty":[1,3]}]},{"id":"ashen_hide","name":"Pelenų kailis","tier":"Common","sellPrice":5,"description":"Gyvūnų kailis iš Pelenų pakraščių. Iš jo Orla siuva odinę aprangą.","sources":[{"animalId":"ash_hare","dropChance":0.4,"qty":[1,1]},{"animalId":"cinder_boar","dropChance":0.75,"qty":[1,1]},{"animalId":"dusk_stag","dropChance":1.0,"qty":[1,2]}]},{"id":"riftglow_pelt","name":"Plyšio kailis","tier":"Uncommon","sellPrice":15,"description":"Gyvūnų kailis iš Suskilusio Plyšio. Iš jo Orla siuva odinę aprangą.","sources":[{"animalId":"glimmer_fox","dropChance":0.4,"qty":[1,1]},{"animalId":"riftback_ram","dropChance":0.75,"qty":[1,1]},{"animalId":"shardhorn_elk","dropChance":1.0,"qty":[1,2]}]},{"id":"marsh_hide","name":"Pelkių oda","tier":"Uncommon","sellPrice":30,"description":"Gyvūnų oda iš Niūriašaknių pelkės. Iš jos Orla siuva odinę aprangą.","sources":[{"animalId":"bog_toad","dropChance":0.4,"qty":[1,1]},{"animalId":"marsh_lynx","dropChance":0.75,"qty":[1,1]},{"animalId":"mirebear","dropChance":1.0,"qty":[1,2]}]},{"id":"tidescale_hide","name":"Potvynių oda","tier":"Rare","sellPrice":60,"description":"Gyvūnų oda iš Nuskendusio bastiono. Iš jos Orla siuva odinę aprangą.","sources":[{"animalId":"reef_crab","dropChance":0.4,"qty":[1,1]},{"animalId":"tidecat","dropChance":0.75,"qty":[1,1]},{"animalId":"sunken_tortoise","dropChance":1.0,"qty":[1,2]}]},{"id":"emberscale_hide","name":"Žarijų oda","tier":"Rare","sellPrice":120,"description":"Gyvūnų oda iš Žarijų karūnos bokšto. Iš jos Orla siuva odinę aprangą.","sources":[{"animalId":"ember_lizard","dropChance":0.4,"qty":[1,1]},{"animalId":"cinderhawk","dropChance":0.75,"qty":[1,1]},{"animalId":"magma_ox","dropChance":1.0,"qty":[1,2]}]},{"id":"starfur_pelt","name":"Žvaigždžių kailis","tier":"Epic","sellPrice":250,"description":"Gyvūnų kailis iš Tuščiųjų žvaigždžių skliauto. Iš jo Orla siuva odinę aprangą.","sources":[{"animalId":"starfox","dropChance":0.4,"qty":[1,1]},{"animalId":"nebula_stag","dropChance":0.75,"qty":[1,1]},{"animalId":"starmane_lion","dropChance":1.0,"qty":[1,2]}]},{"id":"dusk_stag_antler","name":"Sutemų elnio ragai","tier":"Uncommon","sellPrice":80,"description":"Retas medžioklės trofėjus. Brangiai parduodamas arba naudojamas geriausiai Orlos aprangai.","sources":[{"animalId":"dusk_stag","dropChance":0.08,"qty":[1,1]}]},{"id":"shardhorn_crown","name":"Šukaragio karūna","tier":"Rare","sellPrice":220,"description":"Retas medžioklės trofėjus. Brangiai parduodamas arba naudojamas geriausiai Orlos aprangai.","sources":[{"animalId":"shardhorn_elk","dropChance":0.08,"qty":[1,1]}]},{"id":"mirebear_claw","name":"Lokio nagas","tier":"Rare","sellPrice":450,"description":"Retas medžioklės trofėjus. Brangiai parduodamas arba naudojamas geriausiai Orlos aprangai.","sources":[{"animalId":"mirebear","dropChance":0.08,"qty":[1,1]}]},{"id":"tortoise_shell_plate","name":"Vėžlio šarvo plokštė","tier":"Epic","sellPrice":900,"description":"Retas medžioklės trofėjus. Brangiai parduodamas arba naudojamas geriausiai Orlos aprangai.","sources":[{"animalId":"sunken_tortoise","dropChance":0.08,"qty":[1,1]}]},{"id":"magma_ox_horn","name":"Magmos jaučio ragas","tier":"Epic","sellPrice":1800,"description":"Retas medžioklės trofėjus. Brangiai parduodamas arba naudojamas geriausiai Orlos aprangai.","sources":[{"animalId":"magma_ox","dropChance":0.08,"qty":[1,1]}]},{"id":"starmane","name":"Žvaigždžių karčiai","tier":"Legendary","sellPrice":4000,"description":"Retas medžioklės trofėjus. Brangiai parduodamas arba naudojamas geriausiai Orlos aprangai.","sources":[{"animalId":"starmane_lion","dropChance":0.08,"qty":[1,1]}]}],"monsters":[{"id":"ash_wolf","name":"Pelenų vilkas","zoneId":1,"level":[1,3],"hp":100,"damage":12,"defense":5,"exp":18,"gold":7},{"id":"cinder_ghoul","name":"Žarijų lavonėda","zoneId":1,"level":[3,5],"hp":140,"damage":16,"defense":5,"exp":22,"gold":9},{"id":"cinder_cutthroat","name":"Pelenynų galvažudys","zoneId":1,"level":[5,5],"elite":true,"hp":300,"damage":22,"defense":10,"exp":60,"gold":25},{"id":"ashen_outskirts_warden","name":"Kharnas, Žarijų sargas","zoneId":1,"boss":true,"level":[6,6],"hp":2400,"damage":42,"defense":10,"exp":300,"gold":120,"art":{"shape":"boss","color":"#5a2224","eye":"#ffd040"}},{"id":"rift_stalker","name":"Plyšio sekėjas","zoneId":2,"level":[6,9],"hp":220,"damage":24,"defense":20,"exp":40,"gold":15},{"id":"shardback_crawler","name":"Šukanugaris roplys","zoneId":2,"level":[8,11],"hp":260,"damage":26,"defense":20,"exp":44,"gold":17},{"id":"shattered_rift_warden","name":"Izolda, Sudužusio dangaus valdovė","zoneId":2,"boss":true,"level":[12,12],"hp":4800,"damage":75,"defense":40,"exp":630,"gold":240,"art":{"shape":"boss","color":"#4a3a8a","eye":"#e0c0ff"}},{"id":"marsh_slug","name":"Pelkių šliužas","zoneId":3,"hp":432,"damage":42,"defense":35,"exp":79,"gold":28,"art":{"shape":"ghoul","color":"#4f6a3a","eye":"#d0ff70"}},{"id":"root_strangler","name":"Šaknų smaugikas","zoneId":3,"hp":528,"damage":47,"defense":35,"exp":96,"gold":35,"art":{"shape":"crawler","color":"#5a4630","eye":"#ffcf60"}},{"id":"marsh_mother","name":"Pelkių motina","zoneId":3,"boss":true,"hp":9600,"damage":141,"defense":70,"exp":1320,"gold":480,"art":{"shape":"boss","color":"#3e5a2e","eye":"#c8ff60"}},{"id":"bastion_ghost","name":"Bastiono vaiduoklis","zoneId":4,"hp":864,"damage":79,"defense":50,"exp":166,"gold":57,"art":{"shape":"ghoul","color":"#7fa6c0","eye":"#e0ffff"}},{"id":"drowned_sailor","name":"Nuskendęs jūreivis","zoneId":4,"hp":1056,"damage":88,"defense":50,"exp":203,"gold":70,"art":{"shape":"rogue","color":"#2f5a64","eye":"#80f0ff"}},{"id":"drowned_king","name":"Nuskendęs karalius","zoneId":4,"boss":true,"hp":19200,"damage":264,"defense":100,"exp":2775,"gold":960,"art":{"shape":"boss","color":"#2a4a5a","eye":"#80f0ff"}},{"id":"tower_spitfire","name":"Bokšto ugniaspiris","zoneId":5,"hp":1728,"damage":163,"defense":65,"exp":349,"gold":115,"art":{"shape":"stalker","color":"#a8482a","eye":"#ffd060"}},{"id":"ember_golem","name":"Žarijų golemas","zoneId":5,"hp":2304,"damage":146,"defense":65,"exp":465,"gold":153,"art":{"shape":"ghoul","color":"#5a2a20","eye":"#ff9040"}},{"id":"ember_crown_lord","name":"Žarijų karūnos valdovas","zoneId":5,"boss":true,"hp":38400,"damage":489,"defense":130,"exp":5820,"gold":1920,"art":{"shape":"boss","color":"#6a2018","eye":"#ffcf40"}},{"id":"vault_shade","name":"Skliauto šešėlis","zoneId":6,"hp":3456,"damage":303,"defense":80,"exp":734,"gold":230,"art":{"shape":"rogue","color":"#2a2448","eye":"#c0a0ff"}},{"id":"star_devourer","name":"Žvaigždžių ryjikas","zoneId":6,"hp":4224,"damage":303,"defense":80,"exp":897,"gold":281,"art":{"shape":"stalker","color":"#3a3a7a","eye":"#ffffff"}},{"id":"void_warden","name":"Tuštumos sargas","zoneId":6,"boss":true,"hp":76800,"damage":909,"defense":160,"exp":12240,"gold":3840,"art":{"shape":"boss","color":"#1c1838","eye":"#e0d0ff"}}],"npcs":[{"id":"brakka_ironjaw","name":"Braka Geležinžandis","race":"Nykštukas","role":"merchant","districtId":"anvil_row","trait":"Niurzgus ir tiesmukas. Niekada nesiderėja, bet už kiekvieną savo kalavijo dūžį garantuoja galva.","profession":"Ginklininkas","portrait":{"skin":"#d9a27a","hair":"#9a3e1c","style":"bald","beard":"braided","eyes":"#3a5a8a","cloth":"#5a4634","cloth2":"#8a8a96","acc":"earring","scar":1,"old":1,"bg":"#3a2a22","wide":1},"bio":"Braka užaugo kalnų kasyklose ir atvyko į Žaržiūrą, kai Plyšys užvertė jo giminės šachtas. Kiekvieną ginklą jis bando ant savo paties šalmo – todėl šalmas kiaurai įlenktas. Svajoja vieną dieną grįžti į kalnus su kirviu, kurio nesulaužytų net Plyšys."},{"id":"sela_quickmarrow","name":"Sela Greitakaulė","race":"Pusiau elfė","role":"merchant","districtId":"gatehold_square","trait":"Nervinga plepė. Kalba greičiau, nei verda jos katilai, ir viską užsirašo į sudegusį sąsiuvinį.","profession":"Vaistininkė","portrait":{"skin":"#f0cdb0","hair":"#d0a850","style":"bun","ears":"halfelf","eyes":"#5aa060","cloth":"#3a6a5a","cloth2":"#d8c8a8","acc":"quill","bg":"#24332c"},"bio":"Sela – pusiau elfė, išmesta iš elfų akademijos už sprogusį katilą. Žaržiūroje ji vienintelė, kuri moka gydyti Plyšio nudegimus. Bijo tamsos ir Pelenynų, bet niekad neatsisako padėti sužeistam."},{"id":"vex_ninefingers","name":"Veksas „Devynpirštis“","race":"Pelenagimis","role":"merchant","districtId":"the_cinders","trait":"Mandagus, šaltas kontrabandininkas. Dešimto piršto neteko per derybas ir nuo tada nemėgsta skolininkų.","profession":"Kontrabandininkas","portrait":{"skin":"#8c8c96","hair":"#16161c","style":"slick","eyes":"#ff7a40","glow":1,"cloth":"#26262e","cloth2":"#8a2a2a","acc":"earring","beard":"goatee","bg":"#1c1a22"},"bio":"Pelenagimis – gimęs tą naktį, kai Plyšys atsivėrė, todėl jo oda pilka, o akys rusena. Miestas jo nekenčia, bet visi pas jį perka. Dešimto piršto neteko, kai bandė apgauti Tuštumos chorą."},{"id":"torvald_ashmane","name":"Torvaldas Pelenkaris","race":"Žmogus","role":"crafter","profession":"Kalvis","districtId":"anvil_row","trait":"Buvęs garnizono veteranas su perdega ranka. Kantrus mokytojas, bet nepakenčia prastos rūdos.","portrait":{"skin":"#e0b896","hair":"#bcb6ae","style":"short","beard":"full","eyes":"#6a5a4a","cloth":"#4a3a30","cloth2":"#2e2622","scar":1,"old":1,"burn":1,"bg":"#33231c"},"bio":"Buvęs garnizono šarvininkas. Jis nukalė šarvus Kharnui – geriausiam Žaržiūros sargui. Kai Plyšys Kharną pasiėmė, Torvaldas laikė jį už įkaitusių šarvų, kol nudegė ranka. Nuo tada kala tik tiems, kurie grįžta."},{"id":"ilsa_moonvane","name":"Ilsa Mėnulvėjė","race":"Elfė","role":"crafter","profession":"Juvelyrė","districtId":"anvil_row","trait":"Tyli perfekcionistė. Plyšio stiklo skeveldras tyrinėja su lupa ir šnabžda joms kaip gyvoms.","portrait":{"skin":"#f4e2d4","hair":"#e6e8f6","style":"long","ears":"elf","eyes":"#7ab8ff","cloth":"#34467a","cloth2":"#c8c8e8","acc":"lens","bg":"#1e2440"},"bio":"Elfė juvelyrė, girdinti, kaip skamba kristalai. Atvyko tyrinėti Plyšio stiklo ir pasiliko – stiklas jai šnabžda daugiau nei bet kuri knyga. Pastaruoju metu ji vis rečiau miega."},{"id":"captain_hedda_varr","name":"Kapitonė Heda Var","race":"Žmogus","role":"quest_giver","districtId":"wardtower_keep","trait":"Griežta garnizono kapitonė. Vertina rezultatus, ne žodžius.","profession":"Garnizono kapitonė","portrait":{"skin":"#e8c0a0","hair":"#3a2a20","style":"braid","eyes":"#4a6a5a","cloth":"#7a2a2a","cloth2":"#9a9aa6","scar":1,"pauldrons":1,"bg":"#2c1e1e"},"bio":"Garnizono kapitonė jau dvidešimt metų. Jos vyresnioji sesuo Izolda buvo pirmoji Plyšio sargė ir dingo jame, kai Hedai buvo dvylika. Heda niekam apie tai nekalba ir niekada nesiunčia kareivių ten, kur pati neitų."},{"id":"orla_greyfeather","name":"Orla Pilkaplunksnė","race":"Pusiau orkė","role":"crafter","profession":"Medžiotoja, kailiadirbė","districtId":"gatehold_square","trait":"Rami, bet griežta medžiotoja. Moka už kiekvieną odą ir niekada neišmeta nė kaulo.","portrait":{"skin":"#8aa070","hair":"#2a2a2a","style":"mohawk","tusks":1,"eyes":"#d0a040","cloth":"#5a4a2a","cloth2":"#a89070","acc":"feather","bg":"#2a2a1c"},"bio":"Pusiau orkė medžiotoja iš sudegusio Pilkaplunksnių kaimo. Ji neturi namų, tik lanką ir pareigą: kad žiemą niekas neliktų alkanas. Gyvūnus gerbia labiau nei žmones – gyvūnai bent jau nemeluoja."},{"id":"brother_aldas","name":"Brolis Aldas","race":"Žmogus","role":"pilgrim","profession":"Pabėgęs Choro vienuolis","zoneId":2,"trait":"Ramus, kalba tyliai, bet kiekvienas žodis sunkus kaip akmuo.","bio":"Kadaise jis giedojo Tuštumos chore ir tikėjo, kad Plyšys – durys į rojų. Vieną naktį pažvelgė pro jas ir pamatė tik alkį. Dabar gyvena prie Plyšio krašto ir bando atitaisyti, ką padarė.","portrait":{"skin":"#d8b090","hair":"#000000","style":"bald","beard":"stubble","eyes":"#9a7aff","glow":1,"cloth":"#4a3a6a","cloth2":"#2a2040","acc":"glyph","bg":"#1e1830"}},{"id":"ruta_vaidilute","name":"Vaidilutė Rūta","race":"Žmogus","role":"seer","profession":"Senojo tikėjimo saugotoja","zoneId":3,"trait":"Jauna, bet kalba kaip šimtametė. Dažnai nutyla vidury sakinio ir klausosi šaknų.","bio":"Paskutinė vaidilutė, sauganti šventą ugnį Niūriašaknių pelkės saloje. Šaknys jai pasakoja, kas vyksta po žeme. Ji žino seną giesmę, kuri gali užverti Plyšį – bet tik tada, kai krenta visi penki jo sargai.","portrait":{"skin":"#f0d4bc","hair":"#a86a3a","style":"long","eyes":"#5a8a4a","cloth":"#e8e0d0","cloth2":"#9a3a3a","acc":"wreath","bg":"#1e2a1c"}},{"id":"captain_gedas","name":"Kapitonas Gedas","race":"Vaiduoklis","role":"ghost","profession":"Nuskendusio bastiono kapitonas","zoneId":4,"trait":"Juokiasi garsiai, nors jo balsas skamba lyg iš po vandens.","bio":"Prieš keturiasdešimt metų jis vadovavo bastiono įgulai. Kai Plyšys atsivėrė, jūra per vieną naktį užliejo tvirtovę. Gedas atsisakė palikti savo vyrus – ir liko su jais amžinai.","portrait":{"skin":"#c0d8e8","hair":"#e0e8f0","style":"wild","beard":"full","eyes":"#80f0ff","glow":1,"cloth":"#2a4a6a","cloth2":"#c8a050","acc":"hat","ghost":1,"old":1,"bg":"#14283a"}},{"id":"egle_astronome","name":"Eglė Žvaigždėvarta","race":"Žmogė","role":"scholar","profession":"Astronomė","zoneId":6,"trait":"Visada skaičiuoja. Net kalbėdama – skaičiuoja.","bio":"Mokslininkė, nuo vaikystės sekanti Plyšį pro teleskopą. Ji pirmoji suprato, kad Plyšys – ne žaizda danguje, o burna. Į Tuščiųjų žvaigždžių skliautą atėjo viena, nes niekas jai netikėjo.","portrait":{"skin":"#e8c8b0","hair":"#2a2a4a","style":"bun","eyes":"#c0c0ff","cloth":"#1a2a5a","cloth2":"#c8a050","acc":"star","bg":"#10142a"}}],"shops":[{"id":"split_anvil_armory","name":"Brakos ginklinė","ownerNpcId":"brakka_ironjaw","districtId":"anvil_row","specialization":"Ginklai ir šarvai","currency":"gold","items":[{"id":"worn_hauberk","name":"Nudėvėti šarvamarškiniai","type":"equipment","slot":"Armor","tier":"Common","itemLevel":3,"baseBonus":{"strength":2,"agility":0,"intelligence":0,"vitality":10,"luck":0},"baseDefense":6,"price":350},{"id":"tempered_claymore","name":"Grūdintas dvirankis","type":"equipment","slot":"Weapon","tier":"Uncommon","itemLevel":4,"baseBonus":{"strength":12,"agility":3,"intelligence":0,"vitality":0,"luck":2},"baseDefense":0,"price":900},{"id":"tempered_greaves","name":"Grūdinti batai","type":"equipment","slot":"Boots","tier":"Uncommon","itemLevel":5,"baseBonus":{"strength":0,"agility":7,"intelligence":0,"vitality":4,"luck":0},"baseDefense":10,"price":1100},{"id":"riftforged_warblade","name":"Plyšio kalavijas","type":"equipment","slot":"Weapon","tier":"Rare","itemLevel":8,"baseBonus":{"strength":20,"agility":5,"intelligence":0,"vitality":0,"luck":3},"baseDefense":0,"price":6500,"requires":{"factionId":"emberwatch_garrison","rank":"Draugiškas"}}]},{"id":"embervial_apothecary","name":"Selos vaistinė","ownerNpcId":"sela_quickmarrow","districtId":"gatehold_square","specialization":"Eliksyrai ir laikini sustiprinimai","currency":"gold","items":[{"id":"minor_healing_draught","name":"Gydomasis gėrimas","type":"consumable","effect":{"kind":"heal_pct","value":0.25},"cooldownSeconds":30,"price":40},{"id":"mana_tonic","name":"Manos tonikas","type":"consumable","effect":{"kind":"mana_flat","value":60},"cooldownSeconds":30,"price":35},{"id":"ironhide_elixir","name":"Geležinės odos eliksyras","type":"consumable","effect":{"kind":"defense_pct","value":0.15,"durationSeconds":300},"price":220}]},{"id":"rift_curio","name":"Vekso kontrabanda","ownerNpcId":"vex_ninefingers","districtId":"the_cinders","specialization":"Reti komponentai ir juodoji rinka","currency":"gold","dailyRestock":true,"items":[{"id":"riftglass_shard","type":"material","price":250,"dailyLimit":5},{"id":"cinder_warden_core","type":"material","price":2400,"dailyLimit":1}]},{"id":"hunters_lodge","name":"Medžiotojų namelis","ownerNpcId":"orla_greyfeather","districtId":"gatehold_square","specialization":"Medžioklės reikmenys ir trofėjų supirkimas","currency":"gold","items":[{"id":"hunters_stew","name":"Medžiotojo troškinys","type":"consumable","effect":{"kind":"heal_pct","value":0.4},"cooldownSeconds":30,"price":70}]}],"crafters":[{"npcId":"torvald_ashmane","station":"forge","services":[{"id":"smelt_cinder_iron","name":"Lydyti geležies luitą","goldCost":5,"materials":[{"id":"cinder_iron_ore","qty":2}],"outputMaterial":{"id":"cinder_iron_ingot","qty":1}},{"id":"enhance","name":"Sustiprinti (+1)","appliesTo":"any_equipment","goldCostFormula":"40 * itemLevel * (1 + tier) * 1.45^enhancement","materials":[{"id":"cinder_iron_ingot","qtyFormula":"1 + floor(enhancement / 3)"},{"id":"riftglass_shard","qtyFormula":"enhancement >= 5 ? 1 : 0"}],"maxEnhancement":10},{"id":"promote_common_uncommon","name":"Pakelti rangą: Paprastas → Neįprastas","requires":{"enhancement":5,"fromTier":"Common"},"goldCostFormula":"400 * itemLevel * (1 + tier)^2","materials":[{"id":"cinder_iron_ingot","qty":3},{"id":"ash_wolf_fang","qty":10}]},{"id":"promote_uncommon_rare","name":"Pakelti rangą: Neįprastas → Retas","requires":{"enhancement":5,"fromTier":"Uncommon"},"goldCostFormula":"400 * itemLevel * (1 + tier)^2","materials":[{"id":"cinder_iron_ingot","qty":5},{"id":"ghoul_marrow","qty":6},{"id":"riftglass_shard","qty":3}]},{"id":"craft_emberwatch_guard_plate","name":"Nukalti: Sargybos šarvai","unlockedByQuestId":"ore_for_the_anvil","goldCost":1200,"materials":[{"id":"cinder_iron_ingot","qty":6},{"id":"ash_wolf_fang","qty":15}],"output":{"id":"emberwatch_guard_plate","name":"Sargybos šarvai","type":"equipment","slot":"Armor","tier":"Uncommon","itemLevel":6,"baseBonus":{"strength":4,"agility":0,"intelligence":0,"vitality":16,"luck":0},"baseDefense":12}}]},{"npcId":"ilsa_moonvane","station":"jeweler_bench","services":[{"id":"promote_rare_epic","name":"Pakelti rangą: Retas → Epinis","requires":{"enhancement":5,"fromTier":"Rare"},"goldCostFormula":"400 * itemLevel * (1 + tier)^2","materials":[{"id":"riftglass_shard","qty":8},{"id":"cinder_warden_core","qty":1}]},{"id":"promote_epic_legendary","name":"Pakelti rangą: Epinis → Legendinis","requires":{"enhancement":5,"fromTier":"Epic"},"goldCostFormula":"400 * itemLevel * (1 + tier)^2","materials":[{"id":"riftglass_shard","qty":15},{"id":"rift_warden_heart","qty":1}]},{"id":"craft_signet_of_embers","name":"Nukalti: Žarijų antspaudas","goldCost":3000,"materials":[{"id":"riftglass_shard","qty":4},{"id":"cinder_iron_ingot","qty":3}],"output":{"id":"signet_of_embers","name":"Žarijų antspaudas","type":"equipment","slot":"Ring","tier":"Rare","itemLevel":8,"baseBonus":{"strength":5,"agility":5,"intelligence":5,"vitality":0,"luck":10},"baseDefense":0}}]},{"npcId":"orla_greyfeather","station":"tanning_rack","services":[{"id":"cook_hunters_stew","name":"Virti medžiotojo troškinį","goldCost":10,"materials":[{"id":"game_meat","qty":3}],"outputConsumable":{"id":"hunters_stew","qty":1}},{"id":"craft_ashen_hide_boots","name":"Pasiūti: Pelenų kailio batai","goldCost":300,"materials":[{"id":"ashen_hide","qty":20},{"id":"dusk_stag_antler","qty":1}],"output":{"id":"ashen_hide_boots","name":"Pelenų kailio batai","type":"equipment","slot":"Boots","tier":"Uncommon","itemLevel":5,"baseBonus":{"strength":0,"agility":7,"intelligence":0,"vitality":5,"luck":2},"baseDefense":8}},{"id":"craft_riftglow_belt","name":"Pasiūti: Plyšio medžiotojo diržas","goldCost":1500,"materials":[{"id":"riftglow_pelt","qty":25},{"id":"shardhorn_crown","qty":2}],"output":{"id":"riftglow_belt","name":"Plyšio medžiotojo diržas","type":"equipment","slot":"Belt","tier":"Rare","itemLevel":10,"baseBonus":{"strength":8,"agility":6,"intelligence":0,"vitality":10,"luck":4},"baseDefense":0}},{"id":"craft_marsh_hood","name":"Pasiūti: Pelkių sekėjo gobtuvas","goldCost":5000,"materials":[{"id":"marsh_hide","qty":30},{"id":"mirebear_claw","qty":2}],"output":{"id":"marsh_stalker_hood","name":"Pelkių sekėjo gobtuvas","type":"equipment","slot":"Helmet","tier":"Rare","itemLevel":16,"baseBonus":{"strength":0,"agility":8,"intelligence":10,"vitality":16,"luck":8},"baseDefense":28}},{"id":"craft_tidescale_armor","name":"Pasiūti: Potvynių brigantina","goldCost":12000,"materials":[{"id":"tidescale_hide","qty":35},{"id":"tortoise_shell_plate","qty":3}],"output":{"id":"tidescale_brigandine","name":"Potvynių brigantina","type":"equipment","slot":"Armor","tier":"Epic","itemLevel":22,"baseBonus":{"strength":10,"agility":6,"intelligence":0,"vitality":40,"luck":0},"baseDefense":40}},{"id":"craft_emberscale_boots","name":"Pasiūti: Žarijų odos batai","goldCost":30000,"materials":[{"id":"emberscale_hide","qty":35},{"id":"magma_ox_horn","qty":3}],"output":{"id":"emberscale_treads","name":"Žarijų odos batai","type":"equipment","slot":"Boots","tier":"Epic","itemLevel":30,"baseBonus":{"strength":0,"agility":26,"intelligence":0,"vitality":18,"luck":6},"baseDefense":56}},{"id":"craft_starfur_mantle","name":"Pasiūti: Žvaigždžių mantija","goldCost":80000,"materials":[{"id":"starfur_pelt","qty":40},{"id":"starmane","qty":3}],"output":{"id":"starfur_mantle","name":"Žvaigždžių mantija","type":"equipment","slot":"Armor","tier":"Legendary","itemLevel":38,"baseBonus":{"strength":18,"agility":12,"intelligence":12,"vitality":60,"luck":10},"baseDefense":70}}]}],"quests":[{"id":"fangs_at_the_palisade","name":"Iltys prie palisado","giverNpcId":"captain_hedda_varr","type":"hunt","minLevel":1,"prerequisiteQuestIds":[],"description":"Pelenų vilkai naktimis puola rytinį palisadą. Kapitonė Varr nori, kad jų gauja būtų išretinta prieš atvykstant karavanui.","objectives":[{"kind":"kill","monsterId":"ash_wolf","count":12,"zoneId":1}],"rewards":{"exp":600,"gold":150,"reputation":[{"factionId":"emberwatch_garrison","amount":150}],"items":[{"id":"minor_healing_draught","qty":3}]}},{"id":"ore_for_the_anvil","name":"Rūda priekalui","giverNpcId":"torvald_ashmane","type":"gather","minLevel":4,"prerequisiteQuestIds":["fangs_at_the_palisade"],"description":"Garnizonui reikia naujų šarvų, bet Torvaldo sandėlis tuščias. Atnešk geležies rūdos iš gyslų Pelenų pakraščių dykynėse ir vilkų iltis grūdinimui.","objectives":[{"kind":"collect","itemId":"cinder_iron_ore","count":6},{"kind":"collect","itemId":"ash_wolf_fang","count":10}],"rewards":{"exp":1500,"gold":400,"reputation":[{"factionId":"emberwatch_garrison","amount":200}],"items":[{"id":"tempered_girdle","name":"Grūdintas diržas","type":"equipment","slot":"Belt","tier":"Uncommon","itemLevel":4,"baseBonus":{"strength":4,"agility":0,"intelligence":0,"vitality":6,"luck":0},"baseDefense":0,"qty":1}],"unlocks":["craft_emberwatch_guard_plate"]}},{"id":"a_shard_too_bright","name":"Per ryški šukė","giverNpcId":"sela_quickmarrow","type":"delivery","minLevel":5,"prerequisiteQuestIds":[],"description":"Sela užsakė užantspauduotą Plyšio stiklo pavyzdį iš Veksas lūšnynuose, bet pati bijo ten eiti. Paimk siuntinį Pelenynuose ir neatidaręs pristatyk Ilsai į Priekalų gatvėje. Kelyje gali užpulti galvažudžiai.","objectives":[{"kind":"talk","npcId":"vex_ninefingers","receivesItemId":"sealed_riftglass_sample"},{"kind":"kill","monsterId":"cinder_cutthroat","count":3,"optional":true},{"kind":"deliver","itemId":"sealed_riftglass_sample","toNpcId":"ilsa_moonvane"}],"questItems":[{"id":"sealed_riftglass_sample","name":"Užantspauduotas stiklo pavyzdys","type":"quest_item"}],"timeLimitSeconds":900,"failConditions":["quest_item_opened","time_expired"],"rewards":{"exp":4000,"gold":900,"reputation":[{"factionId":"emberwatch_garrison","amount":300}],"items":[{"id":"riftforged_band","name":"Plyšio žiedas","type":"equipment","slot":"Ring","tier":"Rare","itemLevel":7,"baseBonus":{"strength":4,"agility":4,"intelligence":4,"vitality":0,"luck":9},"baseDefense":0,"qty":1}],"bonusIfOptionalDone":{"gold":250}}},{"id":"pelts_for_the_lodge","name":"Kailiai medžiotojams","giverNpcId":"orla_greyfeather","type":"gather","minLevel":2,"prerequisiteQuestIds":[],"description":"Žiema artėja, o Orlos sandėlis tuščias. Sumedžiok gyvūnų Pelenų pakraščiai ir atnešk odų bei mėsos.","objectives":[{"kind":"collect","itemId":"ashen_hide","count":8},{"kind":"collect","itemId":"game_meat","count":6}],"rewards":{"exp":800,"gold":200,"reputation":[{"factionId":"emberwatch_garrison","amount":100}],"items":[{"id":"hunters_stew","qty":3}]}}],"animals":[{"id":"ash_hare","name":"Pelenų kiškis","zoneId":1,"size":"small","hp":72,"damage":7,"defense":5,"exp":12,"gold":1,"art":{"shape":"hopper","color":"#9a8f86"},"loot":[{"id":"game_meat","qty":[1,1],"chance":0.7},{"id":"ashen_hide","qty":[1,1],"chance":0.4}],"trackSeconds":4},{"id":"cinder_boar","name":"Žarijų šernas","zoneId":1,"size":"mid","hp":108,"damage":11,"defense":5,"exp":18,"gold":2,"art":{"shape":"quad","color":"#6a4a3a","horns":"tusk","legs":"short"},"loot":[{"id":"game_meat","qty":[1,2],"chance":0.85},{"id":"ashen_hide","qty":[1,1],"chance":0.75}],"trackSeconds":6},{"id":"dusk_stag","name":"Sutemų elnias","zoneId":1,"size":"big","hp":168,"damage":15,"defense":5,"exp":28,"gold":4,"art":{"shape":"quad","color":"#7a5a44","horns":"antler","legs":"long"},"loot":[{"id":"game_meat","qty":[1,3],"chance":1.0},{"id":"ashen_hide","qty":[1,2],"chance":1.0},{"id":"dusk_stag_antler","qty":[1,1],"chance":0.08}],"trackSeconds":9},{"id":"glimmer_fox","name":"Žėrinčioji lapė","zoneId":2,"size":"small","hp":144,"damage":12,"defense":20,"exp":25,"gold":3,"art":{"shape":"quad","color":"#c98a4a","tail":"bushy","scale":0.75},"loot":[{"id":"game_meat","qty":[1,1],"chance":0.7},{"id":"riftglow_pelt","qty":[1,1],"chance":0.4}],"trackSeconds":4},{"id":"riftback_ram","name":"Plyšionugaris avinas","zoneId":2,"size":"mid","hp":216,"damage":20,"defense":20,"exp":37,"gold":5,"art":{"shape":"quad","color":"#8a80a8","horns":"curl"},"loot":[{"id":"game_meat","qty":[1,2],"chance":0.85},{"id":"riftglow_pelt","qty":[1,1],"chance":0.75}],"trackSeconds":6},{"id":"shardhorn_elk","name":"Šukaragis briedis","zoneId":2,"size":"big","hp":336,"damage":27,"defense":20,"exp":58,"gold":8,"art":{"shape":"quad","color":"#5a5288","horns":"antler","legs":"long"},"loot":[{"id":"game_meat","qty":[1,3],"chance":1.0},{"id":"riftglow_pelt","qty":[1,2],"chance":1.0},{"id":"shardhorn_crown","qty":[1,1],"chance":0.08}],"trackSeconds":9},{"id":"bog_toad","name":"Pelkių rupūžė","zoneId":3,"size":"small","hp":288,"damage":23,"defense":35,"exp":52,"gold":7,"art":{"shape":"hopper","color":"#5a7a3a","wide":true},"loot":[{"id":"game_meat","qty":[1,1],"chance":0.7},{"id":"marsh_hide","qty":[1,1],"chance":0.4}],"trackSeconds":4},{"id":"marsh_lynx","name":"Pelkių lūšis","zoneId":3,"size":"mid","hp":432,"damage":37,"defense":35,"exp":79,"gold":11,"art":{"shape":"quad","color":"#8a7a4a","tail":"thin"},"loot":[{"id":"game_meat","qty":[1,2],"chance":0.85},{"id":"marsh_hide","qty":[1,1],"chance":0.75}],"trackSeconds":6},{"id":"mirebear","name":"Klampynių lokys","zoneId":3,"size":"big","hp":672,"damage":51,"defense":35,"exp":123,"gold":17,"art":{"shape":"quad","color":"#6a5038","scale":1.3,"legs":"short"},"loot":[{"id":"game_meat","qty":[1,3],"chance":1.0},{"id":"marsh_hide","qty":[1,2],"chance":1.0},{"id":"mirebear_claw","qty":[1,1],"chance":0.08}],"trackSeconds":9},{"id":"reef_crab","name":"Rifų krabas","zoneId":4,"size":"small","hp":576,"damage":44,"defense":50,"exp":111,"gold":15,"art":{"shape":"crab","color":"#c8583a"},"loot":[{"id":"game_meat","qty":[1,1],"chance":0.7},{"id":"tidescale_hide","qty":[1,1],"chance":0.4}],"trackSeconds":4},{"id":"tidecat","name":"Potvynių katė","zoneId":4,"size":"mid","hp":864,"damage":70,"defense":50,"exp":166,"gold":23,"art":{"shape":"quad","color":"#3a7a8a","tail":"thin"},"loot":[{"id":"game_meat","qty":[1,2],"chance":0.85},{"id":"tidescale_hide","qty":[1,1],"chance":0.75}],"trackSeconds":6},{"id":"sunken_tortoise","name":"Nuskendęs vėžlys","zoneId":4,"size":"big","hp":1344,"damage":96,"defense":50,"exp":259,"gold":35,"art":{"shape":"shell","color":"#4a6a5a"},"loot":[{"id":"game_meat","qty":[1,3],"chance":1.0},{"id":"tidescale_hide","qty":[1,2],"chance":1.0},{"id":"tortoise_shell_plate","qty":[1,1],"chance":0.08}],"trackSeconds":9},{"id":"ember_lizard","name":"Žarijų driežas","zoneId":5,"size":"small","hp":1152,"damage":81,"defense":65,"exp":232,"gold":30,"art":{"shape":"quad","color":"#c8642a","legs":"short","tail":"long","scale":0.8},"loot":[{"id":"game_meat","qty":[1,1],"chance":0.7},{"id":"emberscale_hide","qty":[1,1],"chance":0.4}],"trackSeconds":4},{"id":"cinderhawk","name":"Pelenų sakalas","zoneId":5,"size":"mid","hp":1728,"damage":130,"defense":65,"exp":349,"gold":46,"art":{"shape":"bird","color":"#a8402a"},"loot":[{"id":"game_meat","qty":[1,2],"chance":0.85},{"id":"emberscale_hide","qty":[1,1],"chance":0.75}],"trackSeconds":6},{"id":"magma_ox","name":"Magmos jautis","zoneId":5,"size":"big","hp":2688,"damage":179,"defense":65,"exp":543,"gold":71,"art":{"shape":"quad","color":"#8a4030","horns":"horn","scale":1.25},"loot":[{"id":"game_meat","qty":[1,3],"chance":1.0},{"id":"emberscale_hide","qty":[1,2],"chance":1.0},{"id":"magma_ox_horn","qty":[1,1],"chance":0.08}],"trackSeconds":9},{"id":"starfox","name":"Žvaigždžių lapė","zoneId":6,"size":"small","hp":2304,"damage":151,"defense":80,"exp":489,"gold":61,"art":{"shape":"quad","color":"#8a8ad8","tail":"bushy","scale":0.75},"loot":[{"id":"game_meat","qty":[1,1],"chance":0.7},{"id":"starfur_pelt","qty":[1,1],"chance":0.4}],"trackSeconds":4},{"id":"nebula_stag","name":"Ūko elnias","zoneId":6,"size":"mid","hp":3456,"damage":242,"defense":80,"exp":734,"gold":92,"art":{"shape":"quad","color":"#6a5ab8","horns":"antler","legs":"long"},"loot":[{"id":"game_meat","qty":[1,2],"chance":0.85},{"id":"starfur_pelt","qty":[1,1],"chance":0.75}],"trackSeconds":6},{"id":"starmane_lion","name":"Žvaigždžiakaris liūtas","zoneId":6,"size":"big","hp":5376,"damage":333,"defense":80,"exp":1142,"gold":143,"art":{"shape":"quad","color":"#d8b85a","horns":"mane","tail":"thin","scale":1.15},"loot":[{"id":"game_meat","qty":[1,3],"chance":1.0},{"id":"starfur_pelt","qty":[1,2],"chance":1.0},{"id":"starmane","qty":[1,1],"chance":0.08}],"trackSeconds":9}],"storyPortraits":{"kharn":{"skin":"#5a3a30","hair":"#2a1a14","style":"helm","eyes":"#ffb040","glow":1,"cloth":"#4a2a22","cloth2":"#ff7a30","pauldrons":1,"scar":1,"bg":"#2a1410"},"izolda":{"skin":"#d8d0f0","hair":"#c8b8ff","style":"braid","eyes":"#ffffff","glow":1,"cloth":"#4a3a8a","cloth2":"#c8b8ff","acc":"circlet","ghost":1,"bg":"#1a1430"}}}
 </script>
 
 <script>
@@ -705,7 +739,7 @@ function act(m) {
 }
 function dropMats(m) {
   if (!G.loot) return;
-  const list = m.mid ? (DROPS[m.mid] || []) : GENERIC_DROPS;
+  const list = (m.mid && DROPS[m.mid]) || (Z().id > 2 ? GENERIC_DROPS : []);
   for (const d of list) if (Math.random() < d.chance) {
     addMat(G.p, d.id);
     const t = MAT[d.id] ? TIER_IX[MAT[d.id].tier] : 0;
@@ -730,6 +764,7 @@ function animalLoot(m) {
     const n = l.qty[0] + rand(l.qty[1] - l.qty[0] + 1); addMat(G.p, l.id, n); got.push({ id: l.id, n });
   }
   G.lastLoot = { name: m.name, got };
+  if (got.some(g => /antler|crown|claw|plate|horn|starmane/.test(g.id))) G.p.stats.trophies = (G.p.stats.trophies || 0) + 1;
   G.huntTally = G.huntTally || {};
   for (const g of got) G.huntTally[g.id] = (G.huntTally[g.id] || 0) + g.n;
   const rare = got.find(g => TIER_IX[MAT[g.id].tier] >= 1 && /antler|crown|claw|plate|horn|mane/i.test(MAT[g.id].name));
@@ -741,12 +776,14 @@ function killed(m) {
   if (m.animal) {
     fx('kill', { mon: m });
     if (gainExp(p, m.exp)) { emit(`Naujas lygis! Dabar ${p.level} lygis.`, 'up'); fx('level'); }
+    p.stats = p.stats || {}; p.stats.animals = (p.stats.animals || 0) + 1;
     p.gold += m.gold; p.killsBy[m.aid] = (p.killsBy[m.aid] || 0) + 1; p.stormCharge = Math.min(100, (p.stormCharge ?? 100) + 1);
     if (G.loot) animalLoot(m);
     G.mon = null; return;
   }
   fx('kill', { mon: m });
   if (gainExp(p, m.exp)) { emit(`Naujas lygis! Dabar ${p.level} lygis.`, 'up'); fx('level'); }
+  p.stats = p.stats || {}; p.stats.kills = (p.stats.kills || 0) + 1;
   p.gold += m.gold; if (!wasAmbush && !m.boss) p.stormCharge = Math.min(100, (p.stormCharge ?? 100) + 2);
   if (m.mid) { p.killsBy[m.mid] = (p.killsBy[m.mid] || 0) + 1; questKill(m.mid); }
   dropMats(m);
@@ -1019,36 +1056,79 @@ const qDone = id => !!(G.p.q[id] && G.p.q[id].state === 'done');
 const qActive = id => !!(G.p.q[id] && G.p.q[id].state === 'active');
 const bossBeaten = z => !!(G.p.bossDone && G.p.bossDone[z]) || G.p.hz > z;
 const anyEnh = () => Object.values(G.p.eq).some(i => i.enh > 0);
+const seen = id => !!(G.p.scenes && G.p.scenes[id]);
+const mat = id => G.p.mats[id] || 0;
+const kb = id => G.p.killsBy[id] || 0;
+const choice = k => (G.p.choices || {})[k];
 const killsTxt = z => `${Math.min(G.zone === z ? G.kills : 0, ZONES[z - 1].kills)}/${ZONES[z - 1].kills} pergalių`;
 const bossStep = z => ({ t: `Laimėk ${ZONES[z - 1].kills} kovas ir nugalėk bosą: ${bossName(z)}`, done: () => bossBeaten(z), prog: () => killsTxt(z), go: { zone: z, act: 'fight', boss: true } });
 const lvlStep = (lv, z) => ({ t: `Pasiek ${lv} lygį (kovok, kad gautum patirties)`, done: () => G.p.level >= lv, prog: () => `${G.p.level}/${lv} lygis`, go: { zone: z, act: 'fight' } });
+const sceneStep = (t, id, where) => ({ t, done: () => seen(id), go: { ...where, scene: id }, talk: id });
 const STORY = [
-  { title: 'Pelenų pakraščiai', text: 'Žaržiūrą puola pelenų vilkai, o už jų tyko Kharnas, Žarijų sargas. Kapitonė Heda laukia naujoko.', steps: [
-    { t: 'Užeik pas kapitonę Hedą (Sargybos bokštas) ir priimk užduotį', done: () => !!G.p.q.fangs_at_the_palisade, go: { bld: 'captains_hall' } },
+  { title: 'Pelenų pakraščiai', text: 'Žaržiūrą puola pelenų vilkai, o už jų tyko Kharnas – buvęs geriausias miesto sargas. Kapitonė Heda laukia naujoko.', steps: [
+    sceneStep('Prisistatyk kapitonei Hedai (Sargybos bokštas)', 'heda_intro', { bld: 'captains_hall' }),
     { t: 'Išeik iš miesto ir nugalėk 12 pelenų vilkų', done: () => qDone('fangs_at_the_palisade') || (qActive('fangs_at_the_palisade') && G.p.q.fangs_at_the_palisade.prog[0] >= 12), prog: () => `${Math.min(12, G.p.q.fangs_at_the_palisade?.prog[0] || 0)}/12 vilkų`, go: { zone: 1, act: 'fight' } },
     { t: 'Grįžk pas kapitonę ir atsiimk atlygį', done: () => qDone('fangs_at_the_palisade'), go: { bld: 'captains_hall' } },
-    { t: 'Prikask 2 geležies rūdos Pelenų pakraščiuose', done: () => (G.p.mats.cinder_iron_ore || 0) >= 2 || (G.p.mats.cinder_iron_ingot || 0) > 0 || anyEnh(), prog: () => `${Math.min(2, G.p.mats.cinder_iron_ore || 0)}/2 rūdos`, go: { zone: 1, act: 'cinder_vein' } },
-    { t: 'Torvaldo kalvėje išsilydyk luitą ir sustiprink ginklą', done: anyEnh, go: { bld: 'torvald_forge' } },
+    { t: 'Prikask 2 geležies rūdos Pelenų pakraščiuose', done: () => mat('cinder_iron_ore') >= 2 || mat('cinder_iron_ingot') > 0 || anyEnh(), prog: () => `${Math.min(2, mat('cinder_iron_ore'))}/2 rūdos`, go: { zone: 1, act: 'cinder_vein' } },
+    { t: 'Torvaldo kalvėje išsilydyk luitą ir sustiprink ginklą', done: anyEnh, go: { bld: 'torvald_forge', scene: 'torvald_intro' } },
     bossStep(1),
+    sceneStep('Papasakok kapitonei, ką sušnibždėjo mirštantis Kharnas', 'kharn_fall', { bld: 'captains_hall' }),
   ] },
-  { title: 'Suskilęs Plyšys', text: 'Plyšio vartai atsivėrė. Anapus – stiklo pabaisos ir Izolda, Sudužusio dangaus valdovė.', steps: [
-    { t: 'Padėk Orlai: sumedžiok gyvūnų ir atnešk jai 8 pelenų kailius bei 6 žvėrienos', done: () => qDone('pelts_for_the_lodge'),
-      prog: () => qActive('pelts_for_the_lodge') ? `${Math.min(8, G.p.mats.ashen_hide || 0)}/8 kailių, ${Math.min(6, G.p.mats.game_meat || 0)}/6 žvėrienos` : '',
+  { title: 'Suskilęs Plyšys', text: 'Kharnas kalbėjo apie Izoldą – Hedos seserį, pirmąją Plyšio sargę. Plyšio vartai atviri, bet pirma reikia pasiruošti.', steps: [
+    sceneStep('Susipažink su medžiotoja Orla (Medžiotojų namelis)', 'orla_intro', { bld: 'hunters_lodge' }),
+    { t: 'Sumedžiok gyvūnų ir atnešk Orlai 8 pelenų kailius bei 6 žvėrienos', done: () => qDone('pelts_for_the_lodge'),
+      prog: () => qActive('pelts_for_the_lodge') ? `${Math.min(8, mat('ashen_hide'))}/8 kailių, ${Math.min(6, mat('game_meat'))}/6 žvėrienos` : '',
       go: () => !qActive('pelts_for_the_lodge') || qComplete(QST.pelts_for_the_lodge, G.p.q.pelts_for_the_lodge) ? { bld: 'hunters_lodge' } : { zone: 1, act: 'hunt' } },
+    sceneStep('Parodyk Kharno šerdį juvelyrei Ilsai', 'ilsa_core', { bld: 'moonvane_jewelers' }),
     lvlStep(6, 1),
-    { t: 'Nukeliauk į Suskilusį Plyšį', done: () => !!(G.p.seen && G.p.seen[2]), go: { zone: 2, act: 'fight' } },
+    sceneStep('Keliauk į Suskilusį Plyšį ir surask, kas kūrena laužą prie krašto', 'aldas_meet', { zone: 2 }),
+    { t: 'Surink broliui Aldui 6 Plyšio stiklo šukes (numeta Plyšio pabaisos)', done: () => mat('riftglass_shard') >= 6, prog: () => `${Math.min(6, mat('riftglass_shard'))}/6 šukių`, go: { zone: 2, act: 'fight' } },
+    sceneStep('Atiduok šukes broliui Aldui', 'aldas_shards', { zone: 2 }),
     bossStep(2),
+    sceneStep('Grįžk pas Hedą – ji turi išgirsti, kas nutiko jos seseriai', 'heda_izolda', { bld: 'captains_hall' }),
   ] },
-  { title: 'Niūriašaknių pelkė', text: 'Plyšio šaknys nusidriekė į pelkes. Ten bręsta Pelkių motina.', steps: [lvlStep(12, 2), bossStep(3)] },
-  { title: 'Nuskendęs bastionas', text: 'Senoji tvirtovė po vandeniu vėl gyva – jos karalius nebemiega.', steps: [lvlStep(19, 3), bossStep(4)] },
-  { title: 'Žarijų karūnos bokštas', text: 'Bokšte, kur gimsta pelenai, sėdi Žarijų karūnos valdovas.', steps: [lvlStep(27, 4), bossStep(5)] },
-  { title: 'Tuščiųjų žvaigždžių skliautas', text: 'Paskutinė vieta prieš Plyšio širdį. Ją saugo Tuštumos sargas.', steps: [lvlStep(36, 5), bossStep(6)] },
-  { title: 'Užverk Plyšį', text: 'Vortraksas, Dangaus Ryjikas, išnirs paskutinį kartą. Nugalėk jį – ir Plyšys užsivers.', steps: [
+  { title: 'Niūriašaknių pelkė', text: 'Izoldai kritus, Plyšys liko be vartų sargės ir ima plėstis. Jo šaknys slenka į pelkę, kur gyvena paskutinė vaidilutė.', steps: [
+    lvlStep(12, 2),
+    sceneStep('Nukeliauk į pelkę ir surask vaidilutę Rūtą', 'ruta_meet', { zone: 3 }),
+    { t: 'Sumedžiok 6 pasiutusias pelkių lūšis', done: () => kb('marsh_lynx') >= 6, prog: () => `${Math.min(6, kb('marsh_lynx'))}/6 lūšių`, go: { zone: 3, act: 'hunt' } },
+    { t: 'Turėk 4 pelkių odas Rūtos amuletui', done: () => mat('marsh_hide') >= 4, prog: () => `${Math.min(4, mat('marsh_hide'))}/4 odų`, go: { zone: 3, act: 'hunt' } },
+    sceneStep('Nunešk odas Rūtai', 'ruta_amulet', { zone: 3 }),
+    bossStep(3),
+    sceneStep('Pasikalbėk su Rūta po Pelkių motinos žūties', 'ruta_after', { zone: 3 }),
+  ] },
+  { title: 'Nuskendęs bastionas', text: 'Rūta jaučia, kad bastione po vandeniu kažkas šaukiasi pagalbos. O mieste tavęs ieško Veksas – ir tai niekada nebūna gera žinia.', steps: [
+    sceneStep('Veksas „Devynpirštis“ nori pasikalbėti akis į akį (Pelenynai)', 'vex_secret', { bld: 'rift_curio' }),
+    lvlStep(19, 3),
+    sceneStep('Nukeliauk į Nuskendusį bastioną', 'gedas_meet', { zone: 4 }),
+    { t: 'Išvaduok kapitono Gedo įgulą: nugalėk 15 bastiono vaiduoklių', done: () => kb('bastion_ghost') >= 15, prog: () => `${Math.min(15, kb('bastion_ghost'))}/15 vaiduoklių`, go: { zone: 4, act: 'fight' } },
+    sceneStep('Grįžk pas kapitoną Gedą', 'gedas_free', { zone: 4 }),
+    bossStep(4),
+    sceneStep('Atsisveikink su kapitonu Gedu', 'gedas_end', { zone: 4 }),
+  ] },
+  { title: 'Žarijų karūnos bokštas', text: 'Trys sargai krito. Rūta siunčia žinią: Plyšiui užverti reikės rakto. O Ilsa jau kelias dienas neišeina iš dirbtuvės.', steps: [
+    sceneStep('Torvaldas gavo Rūtos laišką – užeik į kalvę', 'torvald_key', { bld: 'torvald_forge' }),
+    { t: 'Atnešk Torvaldui 10 geležies luitų ir Kharno šerdį', done: () => mat('cinder_iron_ingot') >= 10 && mat('cinder_warden_core') >= 1,
+      prog: () => `${Math.min(10, mat('cinder_iron_ingot'))}/10 luitų · šerdis ${Math.min(1, mat('cinder_warden_core'))}/1`,
+      go: () => mat('cinder_warden_core') < 1 ? { zone: 1, act: 'fight', boss: true } : mat('cinder_iron_ore') >= 2 ? { bld: 'torvald_forge' } : { zone: 1, act: 'cinder_vein' } },
+    sceneStep('Atiduok medžiagas Torvaldui – tegul kala raktą', 'torvald_key_done', { bld: 'torvald_forge' }),
+    sceneStep('Patikrink, kas nutiko Ilsai', 'ilsa_whisper', { bld: 'moonvane_jewelers' }),
+    lvlStep(27, 4),
+    bossStep(5),
+  ] },
+  { title: 'Tuščiųjų žvaigždžių skliautas', text: 'Keturi sargai krito. Liko paskutinis – tas, kuris laiko Vortrakso grandines. Skliaute tavęs kažkas laukia.', steps: [
+    lvlStep(36, 5),
+    sceneStep('Nukeliauk į skliautą ir surask astronomę', 'egle_meet', { zone: 6 }),
+    { t: 'Sumedžiok žvaigždžių gyvūnų ir surink 10 žvaigždžių kailių', done: () => mat('starfur_pelt') >= 10, prog: () => `${Math.min(10, mat('starfur_pelt'))}/10 kailių`, go: { zone: 6, act: 'hunt' } },
+    sceneStep('Nunešk kailius Eglei', 'egle_cloak', { zone: 6 }),
+    bossStep(6),
+    sceneStep('Paskutinis pokalbis su Heda prieš audrą', 'final_prep', { bld: 'captains_hall' }),
+  ] },
+  { title: 'Užverk Plyšį', text: 'Vortraksas, Dangaus Ryjikas, išnirs paskutinį kartą. Raktas pas tave. Nugalėk jį – ir Plyšys užsivers.', steps: [
     { t: 'Atlaikyk paskutinę Plyšio audrą ir nugalėk Vortraksą', done: () => !!G.p.won, go: { storm: true } },
   ] },
 ];
 // A step stays done once reached (e.g. a newer, unenhanced weapon must not undo "enhance your weapon").
-const stepDone = (c, i) => { const sd = G.p.sd || (G.p.sd = {}), k = c + '.' + i; if (sd[k]) return true; if (STORY[c].steps[i].done()) { sd[k] = 1; return true; } return false; };
+const stepDone = (c, i) => { const sd = G.p.sd2 || (G.p.sd2 = {}), k = c + '.' + i; if (sd[k]) return true; if (STORY[c].steps[i].done()) { sd[k] = 1; return true; } return false; };
 function storyNow() {
   for (let c = 0; c < STORY.length; c++) {
     const st = STORY[c].steps, i = st.findIndex((s, j) => !stepDone(c, j));
@@ -1056,31 +1136,346 @@ function storyNow() {
   }
   return null;
 }
+const sceneWho = id => (SCENES[id].lines.find(l => l[0] !== 'narr' && l[0] !== 'hero') || ['narr'])[0];
 function goLabel(g) {
   if (g.storm) return 'Kviesti audrą';
+  if (g.scene) { const w = g.bld ? BLD[g.bld].npcId : sceneWho(g.scene), nm = speakerName(w).split(' '); return `Kalbėti: ${nm[0] === 'Kapitonė' || nm[0] === 'Kapitonas' || nm[0] === 'Brolis' || nm[0] === 'Vaidilutė' ? nm[1] : nm[0]}`; }
   if (g.bld) return `Eiti: ${BLD[g.bld].name}`;
   const z = ZONES[g.zone - 1];
-  if (g.boss && G.loc === 'zone' && G.zone === g.zone && bossAvail()) return G.p.level < z.req ? `Reikia ${z.req} lygio` : `Iššaukti: ${bossShort(g.zone)}`;
+  if (G.p.level < z.req) return `Reikia ${z.req} lygio`;
+  if (g.boss && G.loc === 'zone' && G.zone === g.zone && bossAvail()) return `Iššaukti: ${bossShort(g.zone)}`;
   if (G.loc === 'zone' && G.zone === g.zone && (G.activity === g.act || G.mode === 'boss')) return '';
   return { fight: 'Eiti kovoti', hunt: 'Eiti medžioti', cinder_vein: 'Eiti kasti rūdos' }[g.act] || `Keliauti: ${z.name}`;
 }
 function goDo(g) {
   if (g.storm) { openStorm(true); return true; }
-  if (g.bld) { goBuilding(g.bld); tab = 'world'; return false; }
+  if (g.bld) { goBuilding(g.bld); tab = 'world'; if (g.scene && !seen(g.scene) && !ambush()) playScene(g.scene); return false; }
+  if (g.scene) { if (!(G.loc === 'zone' && G.zone === g.zone)) travel(g.zone, null); tab = 'world'; playScene(g.scene); return false; }
   if (g.boss && G.loc === 'zone' && G.zone === g.zone && bossAvail() && G.p.level >= Z().req) { startBoss(); return false; }
   if (G.loc === 'zone' && G.zone === g.zone) setActivity(g.act); else travel(g.zone, g.act);
   tab = 'world'; return false;
 }
 function goalHtml() {
   const n = storyNow();
-  if (!n) return `<div class="goal done"><div class="g-kick">Istorija baigta</div><h3>Plyšys užvertas!</h3><p>Žaržiūra išgelbėta. Gali toliau stiprėti, medžioti ir kovoti su grįžtančiomis audromis.</p></div>`;
+  if (!n) return `<div class="goal done"><div class="g-kick">Istorija baigta</div><h3>Plyšys užvertas!</h3><p>Žaržiūra išgelbėta. Gali toliau stiprėti, rinkti pasiekimus ir kovoti su grįžtančiomis audromis.</p></div>`;
   const g = typeof n.step.go === 'function' ? n.step.go() : n.step.go, lbl = goLabel(g), pr = n.step.prog ? n.step.prog() : '';
-  const total = n.ch.steps.length, pct = n.i / total * 100;
+  const total = n.ch.steps.length, pct = n.i / total * 100, who = g.scene ? (g.bld ? BLD[g.bld].npcId : sceneWho(g.scene)) : null;
   return `<div class="goal"><div class="g-kick">Skyrius ${n.c + 1} iš ${STORY.length} · ${esc(n.ch.title)}</div>
     <div class="cd q"><i style="width:${pct}%"></i></div>
-    <div class="g-step"><span class="g-num">${n.i + 1}/${total}</span><div><b>${esc(n.step.t)}</b>${pr ? `<div class="meta">${esc(pr)}</div>` : ''}</div></div>
+    <div class="g-step">${who ? `<canvas class="g-por" width="96" height="104" data-por="${who}"></canvas>` : `<span class="g-num">${n.i + 1}/${total}</span>`}<div><b>${esc(n.step.t)}</b>${pr ? `<div class="meta">${esc(pr)}</div>` : ''}</div></div>
     ${lbl ? btn(esc(lbl), 'data-act="goal"', !/^Reikia/.test(lbl), 'big go') : '<div class="meta g-busy">Vyksta… palauk arba žiūrėk kovą.</div>'}</div>`;
 }
+
+// ===== Veikėjai, scenos ir dialogai =====
+const STORY_NAMES = { kharn: 'Kharnas', izolda: 'Izolda', hero: '', narr: '' };
+const speakerName = id => id === 'hero' ? (G ? G.p.name : 'Tu') : NPC[id] ? NPC[id].name : STORY_NAMES[id] || '';
+const speakerRole = id => id === 'hero' ? cls(G.p).name : NPC[id] ? NPC[id].profession || '' : { kharn: 'Buvęs Žarijų sargas', izolda: 'Pirmoji Plyšio sargė' }[id] || '';
+const portraitOf = id => id === 'hero' ? heroPortraitSpec(G.p) : NPC[id] ? NPC[id].portrait : (R.storyPortraits || {})[id];
+function storyItem(name, slot, tier, ilvl, base, def = 0) {
+  const it = { id: Math.random().toString(36).slice(2), name, slot, tier, ilvl, enh: 0, base, def, story: true };
+  const out = receive(G.p, it); emit(`Gavai: ${name} (${TIERS[tier].toLowerCase()}) — ${out}`, 'loot t' + tier); toast(`Gavai: ${name}`, TCOL[tier]);
+}
+function giveReward(gold, expMul) { const p = G.p, e = Math.round(expToNext(p.level) * expMul); p.gold += gold; if (gainExp(p, e)) fx('level'); emit(`Atlygis: +${fmt(gold)} aukso, +${fmt(e)} patirties.`, 'quest'); }
+const SCENES = {
+  heda_intro: { lore: ['zarziura', 'plysys'], lines: [
+    ['narr', 'Sargybos bokšto salėje kvepia vašku ir šlapiu plienu. Prie žemėlapio stovi moteris su randu skruoste.'],
+    ['captain_hedda_varr', 'Dar vienas naujokas. Gerai. Man nereikia didvyrių – man reikia žmonių, kurie grįžta gyvi.'],
+    ['captain_hedda_varr', 'Prieš keturiasdešimt metų dangus virš šių kalvų perplyšo. Nuo tada krenta pelenai, o iš Plyšio lenda tai, kas neturėtų egzistuoti.'],
+    ['hero', 'Ką turiu daryti?'],
+    ['captain_hedda_varr', 'Pradėk nuo mažo. Pelenų vilkai naktimis puola rytinį palisadą. Dvylika galvų – ir pažiūrėsim, ko vertas.'],
+    ['captain_hedda_varr', 'Ir dar. Jei sutiksi Kharną – nebūk kvailys. Jis buvo mūsų geriausias sargas, kol Plyšys jį pasiėmė.'],
+  ], end: () => { if (!G.p.q.fangs_at_the_palisade) acceptQuest('fangs_at_the_palisade'); } },
+  torvald_intro: { lore: ['torvald'], lines: [
+    ['torvald_ashmane', 'Rūda? Duok šen. Ne, ne taip – rūdos neįkalsi. Ją pirma reikia išlydyti.'],
+    ['torvald_ashmane', 'Dvi rūdos – vienas luitas. Luitu sutvirtinu tavo ginklą. Kiekvienas smūgis kūju – dešimtadalis stiprumo.'],
+    ['torvald_ashmane', 'Kai daiktas pasieks +5, galėsim pakelti jo rangą. Tada jis taps visai kitas.'],
+    ['hero', 'Kas nutiko tavo rankai?'],
+    ['torvald_ashmane', '…Kharno šarvus kaliau aš. Kai Plyšys jį pasiėmė, šarvai įkaito kaip žarijos. Aš jį laikiau, kol galėjau.'],
+  ] },
+  kharn_fall: { lore: ['kharn', 'izolda'], lines: [
+    ['narr', 'Prisimeni paskutinę kovos akimirką. Kharnas krito ant kelių, jo šarvai užgeso, o balsas staiga tapo žmogiškas.'],
+    ['kharn', 'Ačiū… sargybini. Pasakyk Hedai… jos sesuo vis dar ten. Izolda… ji šaukia mus visus.'],
+    ['narr', 'Heda ilgai tyli. Paskui nusisuka į langą.'],
+    ['captain_hedda_varr', 'Izolda. Mano vyresnioji sesuo. Pirmoji Plyšio sargė. Ji įėjo į Plyšį, kai man buvo dvylika, ir negrįžo.'],
+    ['captain_hedda_varr', 'Jei ji gyva – ji jau nebe ta. Ir jei ji ten valdo… tu eisi pas ją. Bet pirma sustiprėk.'],
+    ['captain_hedda_varr', 'Orla Vartų aikštėje išmokys tave medžioti. Kailiai ir mėsa šiame krašte išgelbėjo daugiau gyvybių nei kardai.'],
+  ], end: () => giveReward(300, .3) },
+  orla_intro: { lore: ['orla'], lines: [
+    ['orla_greyfeather', 'Hm. Kvepi miestu. Miesto žmonės medžioja garsiai.'],
+    ['orla_greyfeather', 'Gyvūnai Pelenų pakraščiuose dar sveiki – kol kas. Sek pėdsakus ir nešvaistyk kailių.'],
+    ['orla_greyfeather', 'Atnešk aštuonis kailius ir šešis gabalus žvėrienos. Išvirsiu troškinio garnizonui. Ir tau.'],
+    ['hero', 'Kodėl tau rūpi garnizonas?'],
+    ['orla_greyfeather', 'Man rūpi ne garnizonas. Man rūpi, kad žiemą niekas nebemirtų iš bado. Mano kaimo nebėra. Žiema liko.'],
+  ], end: () => { if (!G.p.q.pelts_for_the_lodge) acceptQuest('pelts_for_the_lodge'); } },
+  ilsa_core: { lore: ['vortraksas'], lines: [
+    ['ilsa_moonvane', 'Padėk ją ant stalo. Lėtai.'],
+    ['narr', 'Kharno šerdis tamsiai švyti. Ilsa prisilenkia prie jos su lupa ir sulaiko kvapą.'],
+    ['ilsa_moonvane', 'Girdi? Ne? …Ji šnabžda. Visos Plyšio šukės šnabžda, bet ši – kitaip. Ji kartoja vardą.'],
+    ['hero', 'Kokį vardą?'],
+    ['ilsa_moonvane', 'Vortraksas. Senose knygose jis vadinamas Dangaus Ryjiku. Plyšio valia.'],
+    ['ilsa_moonvane', 'Imk. Iš šerdies nuolaužos išgryninau žiedą. Jis tave saugos nuo šnabždesių… bent kurį laiką.'],
+  ], end: () => storyItem('Šnabždesių žiedas', 'Ring', 2, 7, A(3, 3, 6, 0, 8)) },
+  aldas_meet: { lore: ['choras'], lines: [
+    ['narr', 'Prie Plyšio krašto rusena laužas. Prie jo sėdi plikas vyras violetiniu apsiaustu, o jo kaktoje švyti Plyšio ženklas.'],
+    ['brother_aldas', 'Nebijok. Aš – brolis Aldas. Kadaise giedojau Tuštumos chore.'],
+    ['brother_aldas', 'Choras tiki, kad Plyšys – durys į rojų. Aš pažvelgiau pro jas. Ten nėra rojaus. Tik alkis.'],
+    ['hero', 'Ir ką dabar darai čia, ant krašto?'],
+    ['brother_aldas', 'Atgailauju. Surink man šešias Plyšio stiklo šukes – iš jų supinsiu maldą, kuri parodys, kur slepiasi Izolda.'],
+  ] },
+  aldas_shards: { lines: [
+    ['brother_aldas', 'Šešios. Gerai. Dabar klausyk.'],
+    ['narr', 'Šukės sužimba Aldo delnuose ir susilieja į ploną šviesos giją, kuri nusidriekia į Plyšio gilumą.'],
+    ['brother_aldas', 'Ji ten, sudužusio dangaus širdyje. Ir… ji nėra pikta. Ji kenčia. Plyšys ją laiko kaip vartų sargę.'],
+    ['brother_aldas', 'Kai sutiksi ją – kovok. Bet nepamiršk, kad kažkada ji buvo žmogus.'],
+  ], end: () => { G.p.mats.riftglass_shard -= 6; giveReward(800, .35); G.p.cons.hunters_stew = (G.p.cons.hunters_stew || 0) + 3; } },
+  heda_izolda: { lore: ['izolda_end'], lines: [
+    ['narr', 'Izolda išsisklaidė kaip stiklo dulkės. Paskutinis jos žodis buvo sesers vardas.'],
+    ['captain_hedda_varr', '…Ji kažką pasakė?'],
+    ['hero', '„Heda.“ Tik tiek.'],
+    ['narr', 'Kapitonė ilgai žiūri į tave. Jos ranka ant stalo dreba, nors balsas lieka tvirtas.'],
+  ], choice: { key: 'izolda', q: 'Ką pasakysi Hedai?', opts: [
+    { v: 'peace', t: '„Ji kentėjo. Dabar ji laisva.“', lines: [['captain_hedda_varr', 'Laisva… Taip. Ačiū, kad taip sakai. Tikiuosi, tai tiesa.']] },
+    { v: 'oath', t: '„Prisiekiu, Plyšys už tai sumokės.“', lines: [['captain_hedda_varr', 'Kerštas – prastas kompasas. Bet šiandien… šiandien jis rodo teisinga kryptimi.']] },
+  ] }, after: [
+    ['captain_hedda_varr', 'Ji buvo vartų sargė. Kai ji krito, vartai liko be sargo. Plyšys plėsis. Šaknys jau slenka į Niūriašaknių pelkę.'],
+    ['captain_hedda_varr', 'Pelkėje gyvena vaidilutė Rūta. Jei kas nors žino, kaip Plyšį užverti – tai ji.'],
+  ], end: () => giveReward(1500, .35) },
+  ruta_meet: { lore: ['penki_sargai'], lines: [
+    ['narr', 'Ant kelmo tarp rūko sėdi jauna moteris baltais lininiais drabužiais. Ant galvos – žiedų vainikas, kuris niekada nenuvysta.'],
+    ['ruta_vaidilute', 'Tave atvedė šaknys. Jos šnabždėjo, kad ateis sargas su pelenais ant batų.'],
+    ['ruta_vaidilute', 'Plyšio neužversi kardu. Jis užsiveria tik tada, kai krenta visi penki jo sargai, o jų esmės grįžta į žemę.'],
+    ['ruta_vaidilute', 'Kharnas. Izolda. Dar trys. Pelkių motina – trečioji.'],
+    ['ruta_vaidilute', 'Bet pirma: pelkių lūšys pasiuto nuo Plyšio šaknų. Sumedžiok šešias ir atnešk man jų odų. Iš jų supinsiu tau amuletą.'],
+  ] },
+  ruta_amulet: { lines: [
+    ['ruta_vaidilute', 'Jos dabar ramios. Ačiū, kad nekankinai.'],
+    ['narr', 'Rūta pina odos juosteles su šaknimis ir šventos ugnies pelenais. Amuletas šiltas, lyg gyvas.'],
+    ['ruta_vaidilute', 'Nešiok. Kol jis ant tavęs, šaknys tavęs neįsitrauks.'],
+  ], end: () => { G.p.mats.marsh_hide -= 4; storyItem('Rūtos amuletas', 'Ring', 3, 14, A(6, 6, 10, 6, 12)); } },
+  ruta_after: { lines: [
+    ['ruta_vaidilute', 'Jaučiu… trečioji esmė grįžo į žemę. Šaknys nurimo pirmą kartą per keturiasdešimt metų.'],
+    ['ruta_vaidilute', 'Bet Nuskendusiame bastione kažkas šaukiasi pagalbos. Ne pabaisa. Žmogus. Ar buvęs žmogus.'],
+    ['ruta_vaidilute', 'Ir dar: tau reikės rakto. Ne geležinio – iš sargų esmių. Parašysiu tavo kalviui.'],
+  ], end: () => giveReward(3000, .3) },
+  vex_secret: { lore: ['vex'], lines: [
+    ['vex_ninefingers', 'Sargas. Užeik, užeik. Ir užverk duris – sienos čia turi ausis.'],
+    ['vex_ninefingers', 'Pasakysiu tau tiesą, nes tiesa šiandien pigi. Plyšio stiklą, kurį tu man parduodi, aš perparduodu Tuštumos chorui.'],
+    ['vex_ninefingers', 'Choras renka šukes, kad atvertų Plyšį iki galo. Galvojau – tegul. Bet dabar jie nori, kad pristatyčiau jiems ir Ilsą.'],
+    ['hero', 'Ilsą? Kodėl?'],
+    ['vex_ninefingers', 'Ji girdi stiklą geriau nei bet kas. Jiems reikia balso, kuriuo kalbėti su Vortraksu. Aš atsisakiau. Taip netekau dar vieno… na, beveik netekau.'],
+    ['vex_ninefingers', 'Taigi. Gali eiti pas kapitonę ir mane įskųsti. Arba paimti šitą žemėlapį – ten Choro slėptuvė bastione – ir patylėti.'],
+  ], choice: { key: 'vex', q: 'Ką darysi su Veksu?', opts: [
+    { v: 'report', t: 'Pranešti kapitonei apie Veksą', lines: [['vex_ninefingers', 'Kaip nori. Pasistengsiu būti toli, kai ji ateis. Bet, sargas… Choras nesustos dėl to, kad aš sėdėsiu kalėjime.']], fx: () => { G.p.rep += 400; giveReward(600, .1); } },
+    { v: 'map', t: 'Paimti žemėlapį ir patylėti', lines: [['vex_ninefingers', 'Protinga. Atsimink – dabar aš tau skolingas, ne tu man. O skolas aš grąžinu. Kartais.']], fx: () => { G.p.flags = { ...(G.p.flags || {}), choirMap: 1 }; } },
+  ] } },
+  gedas_meet: { lore: ['bastionas'], lines: [
+    ['narr', 'Iš juodo vandens išnyra permatoma figūra kapitono skrybėle. Ji kalba, nors lūpos nejuda.'],
+    ['captain_gedas', 'Cha! Gyvas! Seniai bemačiau gyvą. Aš – kapitonas Gedas. Šis bastionas buvo mano.'],
+    ['captain_gedas', 'Kai Plyšys atsivėrė, jūra užliejo mus per vieną naktį. Mano vyrai vis dar čia. Vaiduokliai, kurie kovoja patys su savimi.'],
+    ['captain_gedas', 'Išvaduok juos. Penkiolika vaiduoklių. Tada mūsų karalius liks vienas – ir jį bus galima nugalėti.'],
+  ] },
+  gedas_free: { lines: [
+    ['captain_gedas', 'Jaučiu juos… Jie ilsisi. Pirmą kartą per keturiasdešimt metų mano vyrai ilsisi.'],
+    ['captain_gedas', 'Imk mano diržą. Jis išlaikė mane ant denio per šimtą audrų. Išlaikys ir tave.'],
+  ], end: () => {
+    storyItem('Kapitono Gedo diržas', 'Belt', 3, 21, A(14, 0, 0, 14, 6));
+    if (choice('vex') === 'map') { G.p.gold += 4000; emit('Pagal Vekso žemėlapį Gedo kajutėje radai Choro slėptuvę: +4000 aukso.', 'loot t3'); toast('Choro slėptuvė: +4000 aukso', TCOL[3]); }
+  } },
+  gedas_end: { lines: [
+    ['narr', 'Bastionas tyli. Vanduo nuslūgsta nuo laiptų, ir pro skyles sienose matosi tikra, pilka jūra.'],
+    ['captain_gedas', 'Girdi? Bangos. Tikros bangos, ne Plyšio šnabždesiai.'],
+    ['captain_gedas', 'Laikas man eiti pas savo vyrus. Sėkmės, sargybini. Ir jei kada nors plauksi – plauk į vakarus. Ten jūra švariausia.'],
+  ], end: () => giveReward(6000, .3) },
+  torvald_key: { lore: ['raktas'], lines: [
+    ['torvald_ashmane', 'Rūta atsiuntė laišką. Varnas atnešė. Varnas! Kas dar siunčia laiškus varnais?'],
+    ['torvald_ashmane', 'Rašo, kad reikia rakto. Ne geležinio – iš visų sargų esmių. Pirmoji esmė – Kharno šerdis.'],
+    ['torvald_ashmane', 'Aš nukaliau Kharno šarvus. Nukalsiu ir tai. Atnešk dešimt luitų ir jo šerdį.'],
+  ] },
+  torvald_key_done: { lines: [
+    ['narr', 'Torvaldas dirba visą naktį. Kalvėje dega violetinė ugnis, o kūjo dūžiai skamba kaip varpai.'],
+    ['torvald_ashmane', 'Štai. Raktas. Jis šiltas – Kharnas jame.'],
+    ['torvald_ashmane', 'Ir dar… liko metalo. Nukaliau tau ginklą. Pavadinau jį „Torvaldo paveldas“. Nesulaužyk – kito nebus.'],
+  ], end: () => {
+    G.p.mats.cinder_iron_ingot -= 10; G.p.mats.cinder_warden_core -= 1; G.p.flags = { ...(G.p.flags || {}), riftKey: 1 };
+    const m = cls(G.p).dmgStat === 'm';
+    storyItem('Torvaldo paveldas', 'Weapon', 3, 29, m ? A(0, 14, 60, 0, 10) : A(60, 14, 0, 0, 10));
+  } },
+  ilsa_whisper: { lore: ['ilsa'], lines: [
+    ['narr', 'Dirbtuvėje tamsu. Ilsa stovi prie lango, nugara į tave. Jos akys – baltos, be vyzdžių.'],
+    ['ilsa_moonvane', '…jie gieda… choras… jis nori, kad atidaryčiau duris…'],
+    ['hero', 'Ilsa! Grįžk!'],
+    ['ilsa_moonvane', 'Sargas? Aš… girdžiu jį net dabar. Šukė įaugo man į kaktą, kai tyrinėjau Kharno šerdį.'],
+    ['ilsa_moonvane', 'Yra du keliai. Sudaužyk šukę – prarasiu dovaną girdėti stiklą, gal ir dalį savęs. Arba palik ją – tada galėsiu pasakyti, kur Vortraksas silpniausias. Bet jis girdės ir mane.'],
+  ], choice: { key: 'ilsa', q: 'Ką darysi?', opts: [
+    { v: 'break', t: 'Sudaužyti šukę ir išgelbėti Ilsą', lines: [['narr', 'Šukė sutrupa tarp tavo pirštų. Ilsa sudejuoja ir susmunka. Kai atsimerkia, jos akys vėl mėlynos.'], ['ilsa_moonvane', '…Tylu. Pirmą kartą per metus – tylu. Ačiū.']], fx: () => giveReward(5000, .2) },
+    { v: 'keep', t: 'Palikti šukę – žinios svarbesnės', lines: [['ilsa_moonvane', 'Gerai. Tada klausyk: kai jis kvėpuoja ugnimi, jo akys aklos. Silpnos vietos švies ilgiau, o tavo smūgiai kirs giliau.'], ['narr', 'Paskutinėje audroje silpnos vietos švies ilgiau ir duos daugiau žalos.']] },
+  ] } },
+  egle_meet: { lore: ['burna'], lines: [
+    ['narr', 'Tarp sustingusių žvaigždžių stovi moteris su žalvariniu teleskopu. Ji net neatsisuka.'],
+    ['egle_astronome', 'Pagaliau. Skaičiavau, kad ateisi prieš tris dienas. Žvaigždės retai klysta. Sargai vėluoja dažnai.'],
+    ['egle_astronome', 'Aš – Eglė. Seku Plyšį nuo vaikystės. Jis nėra žaizda danguje. Jis – burna.'],
+    ['egle_astronome', 'Tuštumos sargas laiko Vortrakso grandines. Nugalėsi sargą – ir Vortraksas išsilaisvins.'],
+    ['hero', 'Tada kaip jį sustabdyti?'],
+    ['egle_astronome', 'Nugalėk jį čia, mūsų pasaulyje, kol raktas pas tave. Tada burna užsivers jam už nugaros.'],
+    ['egle_astronome', 'Žvaigždžių kailiai sugeria Plyšio šviesą. Atnešk dešimt – pasiūsiu tau mantiją, su kuria atlaikysi audrą.'],
+  ] },
+  egle_cloak: { lines: [
+    ['egle_astronome', 'Dešimt. Tiksliai. Man patinka tikslumas.'],
+    ['narr', 'Eglė dirba be žodžių. Mantija mirguliuoja, lyg joje būtų įausta tikra naktis.'],
+    ['egle_astronome', 'Tavo tikimybė išgyventi dabar – šešiasdešimt vienas procentas. Anksčiau buvo dvylika. Progresas.'],
+  ], end: () => { G.p.mats.starfur_pelt -= 10; storyItem('Eglės žvaigždžių mantija', 'Armor', 4, 38, A(10, 0, 10, 60, 10), 80); } },
+  final_prep: { lines: [
+    ['narr', 'Žaržiūra nemiega. Ant sienų dega visi žibintai, o danguje Plyšys pulsuoja kaip širdis.'],
+    ['captain_hedda_varr', 'Penki sargai krito. Liko jis. Vortraksas.'],
+    ['captain_hedda_varr', 'Kai atėjai, maniau – dar vienas naujokas. Dabar visas miestas žiūri į tave.'],
+    ['captain_hedda_varr', 'Grįžk gyvas. Tai įsakymas.'],
+  ], end: () => { G.p.stormCharge = 100; } },
+  ending: { lore: ['pabaiga'], lines: [
+    ['narr', 'Vortraksas krenta atgal į Plyšį, o raktas tavo rankoje įkaista. Dangus susiveria kaip žaizda, kurią kažkas pagaliau susiuvo.'],
+    ['narr', 'Pirmą kartą per keturiasdešimt metų virš Žaržiūros nekrenta pelenai.'],
+  ] },
+};
+// Ending lines depend on the choices made along the way.
+function endingLines() {
+  const L = [...SCENES.ending.lines];
+  L.push(choice('izolda') === 'peace' ? ['captain_hedda_varr', 'Sakei, kad ji laisva. Šiandien aš tuo tikiu. Ačiū tau, sargybini.'] : ['captain_hedda_varr', 'Prisiekei, kad Plyšys sumokės. Jis sumokėjo. Izolda gali ilsėtis.']);
+  L.push(choice('ilsa') === 'keep' ? ['narr', 'Ilsa tą naktį dingo. Kitą rytą ant jos stalo radai suskilusią šukę ir raštelį: „Kažkas turi saugoti duris iš vidaus.“'] : ['ilsa_moonvane', 'Pirmą kartą girdžiu tik vėją. Jis gražus.']);
+  L.push(choice('vex') === 'report' ? ['narr', 'Veksas pabėgo dar prieš atvykstant sargybai. Pelenynuose sako, kad jis dabar prekiauja kažkur pajūryje.'] : ['vex_ninefingers', 'Skola grąžinta, sargas. Ir… ačiū. Nesakyk niekam, kad tai pasakiau.']);
+  L.push(['captain_hedda_varr', 'Žaržiūra tavo skolininkė. Bet jei Plyšys kada nors vėl atsivertų… tikiuosi, tu būsi čia.']);
+  return L;
+}
+const CHAT = {
+  brakka_ironjaw: ['Šitas kirvis? Kirto tris trolius. Na, du su puse.', 'Nesiderėk. Kaina – kaip smūgis: vieną kartą ir teisingai.', 'Kalnuose geležis dainuoja. Čia ji tik dejuoja nuo pelenų.'],
+  sela_quickmarrow: ['O! Tu sužeistas? Ne? Gerai. Bet jei būsi – ateik, turiu naują receptą, beveik nesprogsta!', 'Užsirašau viską: kas, kada, kiek gėrimų… Vieną dieną parašysiu knygą apie Žaržiūrą.', 'Pelenynuose nevaikščiok vienas. Aš ten nevaikščioju net su kitais.'],
+  vex_ninefingers: ['Viskas turi kainą, sargas. Net tyla.', 'Devyni pirštai – ir visi skaičiuoja tiksliau nei garnizono iždininkas.', 'Choras vis dar perka. Aš vis dar neparduodu. Kol kas.'],
+  torvald_ashmane: ['Luitas, ne rūda. Kiek kartų kartoti?', 'Geras šarvas – kaip geras draugas: pastebi tik tada, kai jo neturi.', 'Kartais naktį vis dar jaučiu Kharno šarvų karštį delne.'],
+  ilsa_moonvane: ['Šš… klausyk. Šis akmuo dainuoja apie jūrą, kurios niekada nematė.', 'Stiklas neprisimena, kas jį sudaužė. Žmonės prisimena.', 'Nemiegojau tris naktis. Šukės kalba garsiau, kai tamsu.'],
+  captain_hedda_varr: ['Grįžai gyvas. Gerai. Tęsk.', 'Garnizone visi pavargę. Bet niekas neišeina.', 'Sesuo sakydavo: sargas – tai tas, kuris stovi, kai visi kiti bėga.'],
+  orla_greyfeather: ['Gyvūnas, kurį nužudai, turi tau ką nors palikti. Kitaip tai ne medžioklė, o žudynės.', 'Troškinys šiandien su pelenų pipirais. Juokauju.', 'Mano kaimas buvo už tos kalvos. Dabar ten tik varnos.'],
+  brother_aldas: ['Choras gieda ir dabar. Jei įsiklausysi į vėją – išgirsi.', 'Atgaila nėra žodis. Tai darbas.', 'Plyšys nemeluoja. Jis tiesiog alksta.'],
+  ruta_vaidilute: ['Šaknys sako, kad tavo širdis plaka greičiau nei vakar.', 'Šventa ugnis dega devyniasdešimt metų. Neleisk jai užgesti.', 'Kiekvienas sargas – siūlas. Plyšys – skylė audinyje.'],
+  captain_gedas: ['Cha! Gyvas žmogus mano denyje!', 'Jūra viską grąžina. Tik ne laiku.', 'Mano vyrai buvo geri. Būtų tave pamėgę.'],
+  egle_astronome: ['Žvaigždės čia nejuda. Jos klausosi.', 'Kai viskas baigsis, pavadinsiu kometą tavo vardu. Jei kometos dar bus.', 'Skaičiuoju. Nesitrukdyk. Ne, tu netrukdai. Skaičiuoju ir tave.'],
+};
+const LORE = {
+  zarziura: ['Žaržiūra', 'Tvirtovė ant senojo sargybos bokšto griuvėsių. Kai prieš 40 metų danguje atsivėrė Plyšys, čia susibėgo visi, kas išgyveno pasienyje. Miestas pavargęs, bet niekas iš jo neišeina.'],
+  plysys: ['Plyšys', 'Violetinė žaizda danguje virš Pelenų pakraščių. Iš jos krenta pelenai, o naktimis girdėti tarsi tolimas choras. Niekas nežino, kas jį atvėrė.'],
+  torvald: ['Torvaldo ranka', 'Kalvis Torvaldas nukalė Kharno šarvus. Kai Plyšys Kharną pasiėmė, Torvaldas laikė jį už įkaitusio plieno, kol nudegė ranką iki kaulų.'],
+  kharn: ['Kharnas, Žarijų sargas', 'Geriausias Žaržiūros sargas. Plyšys jį pavertė pirmuoju iš penkių savo sargų. Mirdamas jis vėl tapo žmogumi – bent akimirkai.'],
+  izolda: ['Izolda', 'Kapitonės Hedos vyresnioji sesuo, pirmoji Plyšio sargė. Įėjo į Plyšį prieš 40 metų, kad jį užvertų, ir pati tapo jo vartų sarge.'],
+  vortraksas: ['Vortraksas, Dangaus Ryjikas', 'Plyšio valia, įgavusi slibino pavidalą. Senosiose knygose jis minimas kaip tas, kuris „ryja dangų po gabalėlį“.'],
+  choras: ['Tuštumos choras', 'Slapta sekta, tikinti, kad Plyšys – durys į rojų. Jie renka Plyšio stiklą ir gieda naktimis. Brolis Aldas buvo vienas iš jų.'],
+  orla: ['Pilkaplunksnių kaimas', 'Medžiotojų kaimas už rytinės kalvos, sudegęs per pirmąją Plyšio žiemą. Išgyveno tik Orla.'],
+  izolda_end: ['Paskutinis Izoldos žodis', 'Krisdama Izolda ištarė tik vieną žodį – sesers vardą. Heda niekam neparodė, kiek tai jai reiškė.'],
+  penki_sargai: ['Penki sargai', 'Plyšį saugo penki sargai: Kharnas, Izolda, Pelkių motina, Nuskendęs karalius ir Žarijų karūnos valdovas. Šeštasis – Tuštumos sargas – laiko Vortrakso grandines.'],
+  vex: ['Vekso sandoris', 'Veksas metų metus perpardavinėjo Plyšio stiklą Tuštumos chorui. Kai Choras pareikalavo Ilsos, jis pirmą kartą gyvenime atsisakė sandorio.'],
+  bastionas: ['Nuskendęs bastionas', 'Pajūrio tvirtovė, užlieta per vieną naktį. Jos kapitonas Gedas atsisakė palikti savo įgulą – ir liko su ja amžinai.'],
+  raktas: ['Plyšio raktas', 'Raktas, nukaltas iš sargų esmių. Tik su juo nugalėjus Vortraksą Plyšys gali užsiverti.'],
+  ilsa: ['Šukė Ilsos kaktoje', 'Tyrinėdama Kharno šerdį, Ilsa nepastebėjo, kaip į ją įaugo maža Plyšio šukė. Per ją Choras ir Vortraksas girdėjo kiekvieną jos mintį.'],
+  burna: ['Plyšys – burna', 'Astronomė Eglė įrodė, kad Plyšys nėra žaizda, o burna, pro kurią Vortraksas ryja dangų. Ji atsiveria plačiau kiekvieną kartą, kai sargai silpsta.'],
+  pabaiga: ['Užvertas dangus', 'Tą naktį, kai krito Vortraksas, virš Žaržiūros pirmą kartą per 40 metų nekrito pelenai. Žmonės vadina ją Tylos naktimi.'],
+};
+function unlockLore(id) {
+  const p = G.p; p.lore = p.lore || {};
+  if (p.lore[id] || !LORE[id]) return;
+  p.lore[id] = 1; emit(`Metraštis: ${LORE[id][0]}`, 'quest'); toast(`Naujas metraščio įrašas: ${LORE[id][0]}`, 'var(--brass)');
+}
+const ACH = [
+  ['first', 'Pirmas kraujas', 'Laimėk pirmą kovą', p => (p.stats.kills || 0) >= 1, 20],
+  ['wolves', 'Vilkų baubas', 'Nugalėk 100 pelenų vilkų', p => (p.killsBy.ash_wolf || 0) >= 100, 300],
+  ['k100', 'Šimtas pergalių', 'Laimėk 100 kovų', p => (p.stats.kills || 0) >= 100, 200],
+  ['k1000', 'Tūkstantis pergalių', 'Laimėk 1000 kovų', p => (p.stats.kills || 0) >= 1000, 2500],
+  ['hunter', 'Medžiotojas', 'Sumedžiok 50 gyvūnų', p => (p.stats.animals || 0) >= 50, 400],
+  ['trophy', 'Trofėjų rinkėjas', 'Gauk 3 retus trofėjus', p => (p.stats.trophies || 0) >= 3, 800],
+  ['smith', 'Kalvio draugas', 'Sustiprink daiktą iki +5', p => Object.values(p.eq).some(i => i.enh >= 5 || i.tier > 1), 500],
+  ['legend', 'Legenda', 'Turėk legendinį daiktą', p => Object.values(p.eq).concat(p.inv).some(i => i.tier === 4), 2000],
+  ['storm1', 'Audros šauklys', 'Nugalėk Plyšio audrą', p => (p.stormWins || 0) >= 1, 500],
+  ['storm5', 'Audrų valdovas', 'Nugalėk 5 Plyšio audras', p => (p.stormWins || 0) >= 5, 3000],
+  ['perfect', 'Tobulas šokis', '5 tobuli išvengimai vienoje audroje', p => (p.stats.perfectBest || 0) >= 5, 1000],
+  ['bosses', 'Sargų griovėjas', 'Nugalėk visus 6 bosus', p => [1, 2, 3, 4, 5, 6].every(z => (p.bossDone || {})[z]), 5000],
+  ['rich', 'Turtuolis', 'Sukaupk 10 000 aukso', p => p.gold >= 10000, 1000],
+  ['lore', 'Metraštininkas', 'Atrask visus metraščio įrašus', p => Object.keys(LORE).every(k => (p.lore || {})[k]), 2000],
+];
+function checkAch() {
+  const p = G.p; p.ach = p.ach || {}; p.stats = p.stats || {};
+  for (const [id, t, , ok, gold] of ACH) if (!p.ach[id] && ok(p)) { p.ach[id] = 1; p.gold += gold; emit(`Pasiekimas „${t}“: +${gold} aukso`, 'up'); toast(`★ Pasiekimas: ${t} (+${gold} aukso)`, 'var(--xp)'); }
+}
+let toastQ = [], toastBusy = false;
+function toast(text, color) { toastQ.push({ text, color }); if (!toastBusy) nextToast(); }
+function nextToast() {
+  const el = $('toast'), t = toastQ.shift(); if (!t) { toastBusy = false; return; }
+  toastBusy = true; el.textContent = t.text; el.style.setProperty('--tc', t.color || 'var(--brass)'); el.hidden = false; el.classList.remove('show'); void el.offsetWidth; el.classList.add('show');
+  setTimeout(() => { el.hidden = true; nextToast(); }, 2600);
+}
+
+// Dialogue player: one line at a time, typed out; tap to finish/advance; choices at the end.
+let DLG = null;
+function playScene(id) {
+  const sc = SCENES[id]; if (!sc) return;
+  const lines = id === 'ending' ? endingLines() : sc.lines.slice();
+  DLG = { id, sc, lines, i: -1, typing: null, chosen: !sc.choice || !!choice(sc.choice.key), afterQueued: false };
+  $('dlg').hidden = false; dlgNext();
+}
+function playChat(nid) {
+  const ls = CHAT[nid] || [NPC[nid].trait];
+  DLG = { id: null, sc: { lines: [] }, lines: [[nid, ls[rand(ls.length)]]], i: -1, typing: null, chosen: true, afterQueued: true };
+  $('dlg').hidden = false; dlgNext();
+}
+function dlgShow(line) {
+  const [who, text] = line, narr = who === 'narr';
+  $('dlgBox').classList.toggle('narr', narr);
+  $('dlgName').textContent = narr ? '' : speakerName(who); $('dlgRole').textContent = narr ? '' : speakerRole(who);
+  const cv = $('dlgPor'); cv.hidden = narr; if (!narr) drawPortrait(cv, portraitOf(who), { talk: true });
+  const el = $('dlgText'); el.textContent = ''; $('dlgActs').innerHTML = `<button class="sm" id="dlgSkip">Praleisti</button><button class="sm go" id="dlgNextB">Toliau ▸</button>`;
+  let n = 0; clearInterval(DLG.typing);
+  if (RM) { el.textContent = text; return; }
+  DLG.typing = setInterval(() => { n += 2; el.textContent = text.slice(0, n); if (n >= text.length) { clearInterval(DLG.typing); DLG.typing = null; } }, 16);
+}
+function dlgNext() {
+  if (!DLG) return;
+  const cur = DLG.lines[DLG.i];
+  if (DLG.typing && cur) { clearInterval(DLG.typing); DLG.typing = null; $('dlgText').textContent = cur[1]; return; }
+  DLG.i++;
+  if (DLG.i < DLG.lines.length) { dlgShow(DLG.lines[DLG.i]); return; }
+  if (!DLG.chosen) { dlgChoice(); return; }
+  if (!DLG.afterQueued && DLG.sc.after) { DLG.afterQueued = true; DLG.lines.push(...DLG.sc.after); dlgShow(DLG.lines[DLG.i]); return; }
+  dlgEnd();
+}
+function dlgChoice() {
+  const c = DLG.sc.choice;
+  $('dlgBox').classList.remove('narr'); $('dlgPor').hidden = false; drawPortrait($('dlgPor'), portraitOf('hero'));
+  $('dlgName').textContent = speakerName('hero'); $('dlgRole').textContent = 'Tavo sprendimas'; $('dlgText').textContent = c.q;
+  $('dlgActs').innerHTML = c.opts.map((o, i) => `<button class="big choice" data-choice="${i}">${esc(o.t)}</button>`).join('');
+}
+function dlgPick(i) {
+  const o = DLG.sc.choice.opts[i];
+  G.p.choices = G.p.choices || {}; G.p.choices[DLG.sc.choice.key] = o.v; DLG.chosen = true;
+  if (o.fx) o.fx();
+  DLG.lines.push(...(o.lines || [])); dlgNext();
+}
+function dlgEnd() {
+  clearInterval(DLG.typing);
+  const d = DLG; DLG = null; $('dlg').hidden = true;
+  if (d.id) {
+    G.p.scenes = G.p.scenes || {};
+    const first = !G.p.scenes[d.id];
+    G.p.scenes[d.id] = 1;
+    if (first && d.sc.end) d.sc.end();
+    for (const l of d.sc.lore || []) unlockLore(l);
+  }
+  lastView = ''; render(); save();
+}
+$('dlgBox').addEventListener('click', e => {
+  const b = e.target.closest('button');
+  if (b && b.dataset.choice !== undefined) { dlgPick(+b.dataset.choice); return; }
+  if (b && b.id === 'dlgSkip') { if (!DLG.chosen) { DLG.i = DLG.lines.length; dlgChoice(); return; } DLG.i = DLG.lines.length; if (DLG.typing) { clearInterval(DLG.typing); DLG.typing = null; } if (!DLG.afterQueued && DLG.sc.after) { DLG.afterQueued = true; } dlgEnd(); return; }
+  if (DLG && $('dlgActs').querySelector('[data-choice]')) return;
+  dlgNext();
+});
+function drawPortraits() { document.querySelectorAll('canvas[data-por]').forEach(cv => drawPortrait(cv, portraitOf(cv.dataset.por))); }
+const npcCard = (nid, extra = '') => { const n = NPC[nid]; return `<div class="npc pcard"><canvas width="120" height="132" data-por="${nid}"></canvas><div><b>${esc(n.name)}</b><div class="meta">${esc(n.race)} · ${esc(n.profession || '')}</div><p>${esc(n.trait)}</p>
+  <details><summary>Biografija</summary><p>${esc(n.bio || '')}</p></details>
+  <div class="btnrow">${btn('Pasikalbėti', `data-act="chat" data-npc="${nid}"`)}${extra}</div></div></div>`; };
 
 // --- medžiagos: iš kur gauti ir kam reikia ---
 function matSources(id) {
@@ -1188,7 +1583,7 @@ function districtHtml(p, d) {
 }
 function buildingHtml(p, b) {
   let h = `<div class="kicker">${esc(DIST[b.districtId].name)}</div><h2>${esc(b.name)}</h2>`;
-  if (b.npcId) { const n = NPC[b.npcId]; h += `<div class="npc"><b>${esc(n.name)}</b> <span class="meta">${esc(n.race)} · ${esc(n.profession || '')}</span><p>${esc(n.trait)}</p></div>` + npcQuestsHtml(p, b.npcId); }
+  if (b.npcId) h += npcCard(b.npcId) + npcQuestsHtml(p, b.npcId);
   else if (b.description) h += `<p class="lead">${esc(b.description)}</p>`;
   if (b.type === 'lodge') h += crafterHtml(p, b.npcId);
   if (b.type === 'shop' || b.type === 'lodge') h += shopHtml(p, SHOPS.find(s => s.id === b.shopId));
@@ -1294,6 +1689,8 @@ function zoneHtml(p) {
     h += `<button class="card act ${G.activity === id ? 'sel' : ''}" data-act="activity" data-id="${id}" ${boss ? 'disabled' : ''}>${icon(MAT_ICON[n.mat] || 'Material')}<div><h3>${esc(NODE_INFO[id]?.verb || id)}</h3><div class="meta">${esc(matName(n.mat))} kas ${n.seconds} s · turi ${p.mats[n.mat] || 0}</div></div></button>`;
   }
   h += `</div>`;
+  const field = (R.npcs || []).find(n => n.zoneId === z.id);
+  if (field && Object.keys(SCENES).some(id => seen(id) && sceneWho(id) === field.id)) h += `<div class="section">Stovykloje</div>` + npcCard(field.id);
   const k = Math.min(G.kills, z.kills);
   h += `<div class="row t3"><div><div class="name">Bosas: ${esc(bossName(z.id))}</div><div class="meta">${boss ? 'Kova vyksta!' : `${bossBeaten(z.id) ? 'Jau nugalėtas, galima kartoti · ' : ''}${k}/${z.kills} pergalių${p.level < z.req ? ` · reikia ${z.req} lygio` : ''}`}</div></div>
     <div class="acts">${btn('Iššaukti', 'data-act="boss"', bossAvail() && p.level >= z.req, 'sm go')}</div></div>`;
@@ -1339,7 +1736,7 @@ function drawDoll() {
   ctx.fillStyle = g; ctx.fillRect(0, 0, 110, 160);
   const best = Math.max(-1, ...Object.values(G.p.eq).map(i => i.tier));
   if (best >= 2) { ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--t' + best).trim(); ctx.globalAlpha = .5; ctx.lineWidth = 2; ctx.beginPath(); ctx.ellipse(52, 148, 34, 8, 0, 0, 7); ctx.stroke(); ctx.globalAlpha = 1; }
-  drawHero(ctx, 52, 148, c, 0, { scale: 1.75, swing: .25 });
+  drawHero(ctx, 52, 148, c, S.t, { scale: 1.75, swing: .25, gear: heroGear(G.p) });
 }
 
 // --- daikto kortelė ---
@@ -1405,6 +1802,8 @@ function heroHtml(p) {
       <div class="meta">${locked ? 'Užrakinta' : cd > 0 ? cd + ' s' : 'Paruošta'}</div></div>`;
   }).join('');
   h += `<p class="meta">Kovoje herojus gydosi, kai HP < 30%, dedasi skydą, kai HP < 50%, kitaip naudoja stipriausią paruoštą įgūdį.</p>`;
+  const got = ACH.filter(a => (p.ach || {})[a[0]]).length;
+  h += `<div class="section">Pasiekimai ${got}/${ACH.length}</div><div class="achs">` + ACH.map(([id, t, d, , gold]) => { const ok = (p.ach || {})[id]; return `<div class="ach ${ok ? 'ok' : ''}"><b>${ok ? '★' : '☆'} ${esc(t)}</b><span>${esc(d)} · ${gold} a.</span></div>`; }).join('') + `</div>`;
   return h + `<div class="section">Žaidimas</div><div class="row"><div><div class="name">Naujas herojus</div><div class="meta">Ištrina šį herojų ir grąžina į klasės pasirinkimą.</div></div><div class="acts">${resetPending ? btn('Ištrinti', 'data-act="reset-yes"', true, 'sm danger') + btn('Palikti', 'data-act="reset-no"') : btn('Naujas', 'data-act="reset"')}</div></div>`;
 }
 function journalHtml(p) {
@@ -1416,13 +1815,15 @@ function journalHtml(p) {
     if (cur || past) h += `${cur ? `<p class="meta">${esc(ch.text)}</p>` : ''}<div class="obj">${ch.steps.map((s, i) => `<div class="${stepDone(ci, i) ? 'ok' : cur && i === n.i ? 'now' : ''}">${stepDone(ci, i) ? '✓' : cur && i === n.i ? '▸' : '○'} ${esc(s.t)}</div>`).join('')}</div>`;
     h += `</div>`;
   });
+  const lore = Object.keys(LORE).filter(k => (p.lore || {})[k]);
+  const loreHtml = `<div class="section">Metraštis ${lore.length}/${Object.keys(LORE).length}</div>` + (lore.length ? lore.map(k => `<details class="lore"><summary>${esc(LORE[k][0])}</summary><p>${esc(LORE[k][1])}</p></details>`).join('') : '<div class="meta">Įrašai atsiras, kai sužinosi daugiau apie šį kraštą.</div>');
   const side = Object.values(QST).filter(q => qActive(q.id) || qAvailable(q));
   if (side.length) h += `<div class="section">Kitos užduotys</div>` + side.map(q => {
     const b = npcBuilding(q.giverNpcId), st = qState(q.id);
     const body = qActive(q.id) ? objHtml(q, st, null) + `<div class="meta">${qComplete(q, st) ? '<b class="buff">Atlikta – atiduok:</b> ' : 'Atiduoti: '}${esc(NPC[q.giverNpcId].name)}, ${esc(b.name)}</div>` : `<div class="meta">Duoda ${esc(NPC[q.giverNpcId].name)}, ${esc(b.name)} · ${rewardText(q)}</div>`;
     return questCard(q, body, btn('Eiti', `data-act="goto" data-id="${b.id}"`));
   }).join('');
-  return h;
+  return h + loreHtml;
 }
 const logHtml = () => `<div class="log">${G.log.slice().reverse().map(l => `<div class="${l.cls}">${esc(l.msg)}</div>`).join('') || '<div>Čia matysi įvykius.</div>'}</div>`;
 
@@ -1472,7 +1873,7 @@ function renderTop() {
     b.setAttribute('aria-current', b.dataset.tab === tab ? 'page' : 'false');
     b.classList.toggle('dot', (b.dataset.tab === 'quests' && qReady) || (b.dataset.tab === 'bag' && p.inv.some(i => better(p, i))));
   });
-  checkChapter();
+  checkChapter(); checkAch();
 }
 // Chapter transitions get a log line and a short notice, so progress feels like progress.
 function checkChapter() {
@@ -1489,7 +1890,7 @@ function checkChapter() {
 function render() {
   renderTop();
   const html = viewHtml();
-  if (html !== lastView) { $('view').innerHTML = html; lastView = html; drawDoll(); }
+  if (html !== lastView) { $('view').innerHTML = html; lastView = html; drawDoll(); drawPortraits(); }
   let sh = sheet ? sheetHtml() : '';
   if (sheet && !sh) sheet = null;
   $('sheet').hidden = !sheet;
@@ -1538,6 +1939,7 @@ function onAct(e) {
   else if (a === 'qact') questAction(ds.q, +ds.i);
   else if (a === 'turnin') turnIn(ds.q);
   else if (a === 'storm') { if (stormReady()) { openStorm(); return; } }
+  else if (a === 'chat') { playChat(ds.npc); return; }
   else if (a === 'reset') resetPending = true;
   else if (a === 'reset-no') resetPending = false;
   else if (a === 'reset-yes') { resetPending = false; save(); openStart(true); return; }
@@ -1725,48 +2127,223 @@ function floatText(x, y, text, color, big) {
   if (S.floats.length > 14) S.floats.shift();
 }
 
+// Hero: layered figure; worn gear shows (helmet, armor trim, boots, belt buckle, weapon glow, ring glint) in tier colours.
+const TCOL = ['#a8a8b0', '#6cc06a', '#4f9bf0', '#b67cf0', '#f0b84a'];
+const HERO_LOOK = {
+  gladiator: { body: ['#a07a42', '#5e4424'], bulk: 11, hair: '#5a3a20', head: 'hair', pauld: 1 },
+  duelist: { body: ['#3e5452', '#1f2a2a'], bulk: 8.5, hair: '#202428', head: 'mask' },
+  ashmage: { body: ['#6a3a2a', '#2e1a14'], bulk: 9, hair: '#d8d0c8', head: 'hood', robe: 1 },
+  warden: { body: ['#9aa2b8', '#4a5068'], bulk: 11.5, hair: '#6a5a40', head: 'helm', pauld: 1 },
+  reaver: { body: ['#4a2a36', '#1e1218'], bulk: 10, hair: '#101010', head: 'cowl', pauld: 2 },
+};
+const heroGear = p => Object.fromEntries(SLOTS.map(s => [s, p && p.eq[s] ? p.eq[s].tier : -1]));
 function drawHero(ctx, x, y, c, t, opts = {}) {
-  const bob = RM ? 0 : Math.sin(t * 2.2) * 1.5, k = opts.scale || 1;
-  ctx.save(); ctx.translate(x, y); ctx.scale(k, k);
-  ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-  // shadow
+  const L = HERO_LOOK[c.id] || HERO_LOOK.gladiator, g = opts.gear || {}, k = opts.scale || 1;
+  const bob = RM ? 0 : Math.sin(t * 2.2) * 1.2, br = RM ? 0 : Math.sin(t * 1.7) * 2;
+  const tc = s => (g[s] >= 0 ? TCOL[g[s]] : null), B = L.bulk;
+  ctx.save(); ctx.translate(x, y); ctx.scale(k, k); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
   ctx.fillStyle = 'rgba(0,0,0,.35)'; ctx.beginPath(); ctx.ellipse(0, 2, 18, 4, 0, 0, 7); ctx.fill();
   // cape
-  ctx.fillStyle = c.color; ctx.globalAlpha = .55;
-  ctx.beginPath(); ctx.moveTo(-4, -40 + bob); ctx.quadraticCurveTo(-20, -20, -16, -4); ctx.lineTo(-4, -8); ctx.closePath(); ctx.fill();
+  const cg = ctx.createLinearGradient(0, -44, 0, -2); cg.addColorStop(0, c.color); cg.addColorStop(1, 'rgba(0,0,0,.25)');
+  ctx.fillStyle = cg; ctx.globalAlpha = .85;
+  ctx.beginPath(); ctx.moveTo(-B + 2, -44 + bob); ctx.quadraticCurveTo(-B - 12, -24, -B - 8 + br, -3); ctx.lineTo(-B + 4, -6); ctx.lineTo(-2, -40 + bob); ctx.closePath(); ctx.fill();
   ctx.globalAlpha = 1;
-  // legs
-  ctx.strokeStyle = '#2b2a38'; ctx.lineWidth = 5;
-  ctx.beginPath(); ctx.moveTo(-4, -16 + bob); ctx.lineTo(-7, 0); ctx.moveTo(4, -16 + bob); ctx.lineTo(7, 0); ctx.stroke();
-  // torso
-  ctx.fillStyle = '#3a3a4e'; ctx.strokeStyle = c.color; ctx.lineWidth = 1.5;
-  ctx.beginPath(); ctx.roundRect(-9, -42 + bob, 18, 28, 5); ctx.fill(); ctx.stroke();
-  // head
-  ctx.fillStyle = '#e2c9a8'; ctx.beginPath(); ctx.arc(0, -50 + bob, 7, 0, 7); ctx.fill();
-  ctx.fillStyle = c.color; ctx.beginPath(); ctx.arc(0, -52 + bob, 7.5, Math.PI, 0); ctx.fill();
-  // weapon arm
-  const sw = opts.swing || 0, hx = 10, hy = -32 + bob;
-  ctx.strokeStyle = '#d8d4e4'; ctx.lineWidth = 2.5;
-  ctx.save(); ctx.translate(hx, hy); ctx.rotate(-0.6 + sw * 1.6);
-  if (c.weapon === 'sword') { ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(0, -30); ctx.stroke(); ctx.strokeStyle = c.color; ctx.beginPath(); ctx.moveTo(-5, -2); ctx.lineTo(5, -2); ctx.stroke(); }
-  else if (c.weapon === 'daggers') { ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(0, -16); ctx.moveTo(-8, 6); ctx.lineTo(-10, -9); ctx.stroke(); }
-  else if (c.weapon === 'staff') {
-    ctx.strokeStyle = '#8a6a4a'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(0, 14); ctx.lineTo(0, -30); ctx.stroke();
-    const g = ctx.createRadialGradient(0, -33, 0, 0, -33, 10); g.addColorStop(0, '#fff3c0'); g.addColorStop(.4, c.color); g.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, -33, 10 + (RM ? 0 : Math.sin(t * 5) * 1.5), 0, 7); ctx.fill();
-  } else if (c.weapon === 'mace') {
-    ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(0, -20); ctx.stroke(); ctx.fillStyle = '#b8b4c8'; ctx.beginPath(); ctx.arc(0, -22, 5, 0, 7); ctx.fill();
-  } else if (c.weapon === 'scythe') {
-    ctx.strokeStyle = '#6a5a5a'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(0, 16); ctx.lineTo(0, -32); ctx.stroke();
-    ctx.strokeStyle = c.color; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(0, -32); ctx.quadraticCurveTo(18, -34, 22, -18); ctx.stroke();
+  // legs or robe
+  const boot = tc('Boots'), bootC = boot ? '#5a5a66' : '#3e2c20';
+  if (L.robe) {
+    const rg = ctx.createLinearGradient(-12, 0, 12, 0); rg.addColorStop(0, L.body[1]); rg.addColorStop(.5, L.body[0]); rg.addColorStop(1, L.body[1]);
+    ctx.fillStyle = rg; ctx.beginPath(); ctx.moveTo(-B + 1, -24 + bob); ctx.lineTo(B - 1, -24 + bob); ctx.lineTo(B + 4, -1); ctx.quadraticCurveTo(0, 2, -B - 4, -1); ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = c.color; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.moveTo(-B - 3, -2); ctx.quadraticCurveTo(0, 1, B + 3, -2); ctx.stroke();
+    ctx.fillStyle = bootC; ctx.fillRect(-6, -2, 5, 3); ctx.fillRect(2, -2, 5, 3);
+  } else {
+    for (const lx of [-4.5, 4.5]) {
+      ctx.strokeStyle = '#2b2a38'; ctx.lineWidth = 5; ctx.beginPath(); ctx.moveTo(lx * .8, -21 + bob); ctx.lineTo(lx * 1.3, -8); ctx.stroke();
+      ctx.fillStyle = bootC; ctx.beginPath(); ctx.roundRect(lx * 1.3 - 3, -10, 6.5, 10, 2); ctx.fill();
+      ctx.fillRect(lx * 1.3 - 3, -2, 8.5, 2.5);
+      if (boot) { ctx.strokeStyle = boot; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(lx * 1.3 - 3, -9); ctx.lineTo(lx * 1.3 + 3.5, -9); ctx.stroke(); }
+    }
   }
+  // back arm (+ warden shield drawn later on top)
+  ctx.strokeStyle = L.body[1]; ctx.lineWidth = 4.5; ctx.beginPath(); ctx.moveTo(-B + 2, -40 + bob); ctx.lineTo(-B - 1, -26 + bob); ctx.stroke();
+  // torso
+  const arm = tc('Armor'), tg = ctx.createLinearGradient(-B, -44, B, -20); tg.addColorStop(0, L.body[0]); tg.addColorStop(1, L.body[1]);
+  ctx.fillStyle = tg; ctx.beginPath(); ctx.moveTo(-B, -43 + bob); ctx.lineTo(B, -43 + bob); ctx.lineTo(B - 2, -21 + bob); ctx.lineTo(-B + 2, -21 + bob); ctx.closePath(); ctx.fill();
+  ctx.strokeStyle = arm || 'rgba(0,0,0,.35)'; ctx.lineWidth = arm ? 1.6 : 1; ctx.stroke();
+  ctx.strokeStyle = 'rgba(255,255,255,.12)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(-B + 3, -40 + bob); ctx.lineTo(-B + 4, -24 + bob); ctx.stroke();
+  if (arm) {
+    if (g.Armor >= 3) { ctx.shadowColor = arm; ctx.shadowBlur = RM ? 0 : 8; }
+    ctx.fillStyle = arm; ctx.beginPath(); ctx.moveTo(0, -38 + bob); ctx.lineTo(3.5, -33 + bob); ctx.lineTo(0, -28 + bob); ctx.lineTo(-3.5, -33 + bob); ctx.closePath(); ctx.fill(); ctx.shadowBlur = 0;
+  } else { ctx.strokeStyle = c.color; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(0, -40 + bob); ctx.lineTo(0, -23 + bob); ctx.stroke(); }
+  // belt
+  ctx.fillStyle = '#3a2618'; ctx.fillRect(-B + 2, -23.5 + bob, (B - 2) * 2, 3.2);
+  const belt = tc('Belt'); ctx.fillStyle = belt || '#b8a070'; ctx.fillRect(-2, -24 + bob, 4, 4);
+  // shoulders
+  if (L.pauld) for (const sx of [-1, 1]) {
+    ctx.fillStyle = L.body[0]; ctx.strokeStyle = arm || 'rgba(0,0,0,.4)'; ctx.lineWidth = 1.2;
+    ctx.beginPath(); ctx.ellipse(sx * (B - 1), -41 + bob, 5.5, 4, 0, Math.PI, 0); ctx.fill(); ctx.stroke();
+    if (L.pauld === 2) { ctx.fillStyle = '#d8d0c0'; ctx.beginPath(); ctx.moveTo(sx * (B - 3), -44 + bob); ctx.lineTo(sx * (B + 1), -50 + bob); ctx.lineTo(sx * (B + 1), -43 + bob); ctx.fill(); }
+  }
+  // head
+  const hy = -51 + bob, helm = tc('Helmet');
+  ctx.fillStyle = '#c9a888'; ctx.fillRect(-2.5, -46 + bob, 5, 4);
+  ctx.fillStyle = '#e2c9a8'; ctx.beginPath(); ctx.ellipse(.5, hy, 6.5, 7, 0, 0, 7); ctx.fill();
+  ctx.fillStyle = '#2a1c18'; ctx.beginPath(); ctx.arc(3.2, hy - .5, .9, 0, 7); ctx.fill();
+  ctx.strokeStyle = 'rgba(80,50,40,.6)'; ctx.lineWidth = .8; ctx.beginPath(); ctx.moveTo(1.8, hy - 2.6); ctx.lineTo(4.6, hy - 2.2); ctx.stroke();
+  const headKind = helm && (L.head === 'hair' || L.head === 'mask') ? 'helm' : L.head;
+  if (headKind === 'hair') {
+    ctx.fillStyle = L.hair; ctx.beginPath(); ctx.ellipse(-.5, hy - 3.5, 7, 4.5, -.15, Math.PI * .9, Math.PI * 2.05); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(-6.5, hy - 2); ctx.lineTo(-5, hy + 4); ctx.lineTo(-3, hy - 1); ctx.fill();
+  } else if (headKind === 'mask') {
+    ctx.fillStyle = '#1e2626'; ctx.beginPath(); ctx.arc(.5, hy - 1, 7.4, Math.PI * .95, Math.PI * 2.05); ctx.fill();
+    ctx.fillStyle = c.color; ctx.fillRect(-6, hy + 1, 13, 4);
+  } else if (headKind === 'hood' || headKind === 'cowl') {
+    ctx.fillStyle = headKind === 'hood' ? c.color : '#1a1016';
+    ctx.beginPath(); ctx.moveTo(-8, hy + 6); ctx.quadraticCurveTo(-10, hy - 10, headKind === 'hood' ? -2 : 1, hy - (headKind === 'hood' ? 15 : 11)); ctx.quadraticCurveTo(8, hy - 9, 8, hy - 2); ctx.lineTo(5, hy - 2); ctx.quadraticCurveTo(2, hy - 7, -3, hy - 5); ctx.lineTo(-4, hy + 6); ctx.closePath(); ctx.fill();
+    if (headKind === 'cowl') { ctx.fillStyle = '#1a1016'; ctx.fillRect(-4, hy - 3, 10, 9); ctx.fillStyle = c.color; ctx.shadowColor = c.color; ctx.shadowBlur = RM ? 0 : 6; ctx.fillRect(1.5, hy - 1.5, 3.5, 1.4); ctx.shadowBlur = 0; }
+    if (helm) { ctx.strokeStyle = helm; ctx.lineWidth = 1.3; ctx.beginPath(); ctx.moveTo(-8, hy + 5); ctx.quadraticCurveTo(-9, hy - 9, -1, hy - 13); ctx.stroke(); }
+  } else { // helm (warden always, others when a helmet is worn)
+    const hc = helm || '#8a92a8', mg = ctx.createLinearGradient(-7, hy - 9, 7, hy + 6); mg.addColorStop(0, '#c8ccd8'); mg.addColorStop(1, '#565c70');
+    ctx.fillStyle = mg; ctx.beginPath(); ctx.arc(.5, hy - .5, 7.6, Math.PI, 0); ctx.lineTo(8, hy + 5); ctx.lineTo(-7, hy + 5); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = '#14141c'; ctx.fillRect(1, hy - 1.2, 6.5, 1.6);
+    ctx.strokeStyle = hc; ctx.lineWidth = 1.3; ctx.beginPath(); ctx.arc(.5, hy - .5, 7.6, Math.PI, 0); ctx.stroke();
+    ctx.fillStyle = hc; ctx.beginPath(); ctx.moveTo(-1, hy - 8); ctx.quadraticCurveTo(-9, hy - 15 + (RM ? 0 : Math.sin(t * 3) * 1), -12, hy - 6); ctx.quadraticCurveTo(-6, hy - 10, -1, hy - 6); ctx.fill();
+  }
+  // weapon arm
+  const wt = g.Weapon, wc = wt >= 0 ? TCOL[wt] : '#d8d4e4', sw = opts.swing || 0;
+  ctx.save(); ctx.translate(B - 1, -40 + bob);
+  ctx.strokeStyle = L.body[0]; ctx.lineWidth = 4.5; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(1.5, 8); ctx.stroke();
+  ctx.translate(1.5, 8); ctx.rotate(-0.6 + sw * 1.6);
+  ctx.fillStyle = '#e2c9a8'; ctx.beginPath(); ctx.arc(0, 0, 2.3, 0, 7); ctx.fill();
+  if (wt >= 2) { ctx.shadowColor = wc; ctx.shadowBlur = RM ? 0 : 6 + wt * 2; }
+  const blade = (len, w) => { const bg = ctx.createLinearGradient(-w, 0, w, 0); bg.addColorStop(0, '#f4f4fa'); bg.addColorStop(1, '#8a8ea0'); ctx.fillStyle = bg; ctx.beginPath(); ctx.moveTo(-w, -3); ctx.lineTo(w, -3); ctx.lineTo(w * .6, -len); ctx.lineTo(0, -len - 4); ctx.lineTo(-w * .6, -len); ctx.closePath(); ctx.fill(); };
+  if (c.weapon === 'sword') { blade(30, 2.2); ctx.fillStyle = wc; ctx.fillRect(-5, -4, 10, 2.2); ctx.fillStyle = '#4a3020'; ctx.fillRect(-1, -3, 2, 5); }
+  else if (c.weapon === 'daggers') { blade(15, 1.6); ctx.fillStyle = wc; ctx.fillRect(-3.5, -4, 7, 1.8); ctx.save(); ctx.translate(-9, 6); ctx.rotate(-.5); blade(13, 1.4); ctx.restore(); }
+  else if (c.weapon === 'staff') {
+    ctx.strokeStyle = '#7a5a3a'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(0, 14); ctx.lineTo(0, -30); ctx.stroke();
+    ctx.strokeStyle = wc; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(0, -33, 5, 0, 7); ctx.stroke();
+    const og = ctx.createRadialGradient(0, -33, 0, 0, -33, 11); og.addColorStop(0, '#fff3c0'); og.addColorStop(.4, c.color); og.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = og; ctx.beginPath(); ctx.arc(0, -33, 10 + (RM ? 0 : Math.sin(t * 5) * 1.5), 0, 7); ctx.fill();
+  } else if (c.weapon === 'mace') {
+    ctx.strokeStyle = '#5a4030'; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.moveTo(0, 2); ctx.lineTo(0, -18); ctx.stroke();
+    ctx.fillStyle = '#b8b4c8'; ctx.beginPath(); ctx.arc(0, -22, 5.5, 0, 7); ctx.fill();
+    ctx.fillStyle = wc; for (let a = 0; a < 6; a++) { ctx.beginPath(); ctx.arc(Math.cos(a) * 5.5, -22 + Math.sin(a) * 5.5, 1.6, 0, 7); ctx.fill(); }
+  } else if (c.weapon === 'scythe') {
+    ctx.strokeStyle = '#4a3a3a'; ctx.lineWidth = 2.8; ctx.beginPath(); ctx.moveTo(0, 16); ctx.lineTo(0, -32); ctx.stroke();
+    const sg = ctx.createLinearGradient(0, -34, 22, -16); sg.addColorStop(0, '#f0eef8'); sg.addColorStop(1, wt >= 0 ? wc : c.color);
+    ctx.fillStyle = sg; ctx.beginPath(); ctx.moveTo(0, -32); ctx.quadraticCurveTo(20, -38, 25, -16); ctx.quadraticCurveTo(16, -28, 0, -27); ctx.closePath(); ctx.fill();
+  }
+  ctx.shadowBlur = 0;
+  if (g.Ring >= 2 && !RM && Math.sin(t * 3) > .6) { ctx.fillStyle = TCOL[g.Ring]; ctx.beginPath(); ctx.arc(2, 1, 1.6, 0, 7); ctx.fill(); }
   ctx.restore();
-  if (c.weapon === 'mace') { // shield
-    ctx.fillStyle = c.color; ctx.strokeStyle = '#e6e2f0'; ctx.lineWidth = 1.5;
-    ctx.beginPath(); ctx.moveTo(-6, -38 + bob); ctx.lineTo(8, -38 + bob); ctx.lineTo(8, -24 + bob); ctx.quadraticCurveTo(1, -14 + bob, -6, -24 + bob); ctx.closePath(); ctx.fill(); ctx.stroke();
+  if (c.weapon === 'mace') { // kite shield on the off arm
+    const sc = tc('Armor') || '#e6e2f0';
+    const sh = ctx.createLinearGradient(-B - 6, -40, -B + 8, -16); sh.addColorStop(0, c.color); sh.addColorStop(1, '#2a3450');
+    ctx.fillStyle = sh; ctx.strokeStyle = sc; ctx.lineWidth = 1.6;
+    ctx.beginPath(); ctx.moveTo(-B - 6, -40 + bob); ctx.lineTo(-B + 8, -40 + bob); ctx.lineTo(-B + 8, -27 + bob); ctx.quadraticCurveTo(-B + 1, -15 + bob, -B - 6, -27 + bob); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.strokeStyle = 'rgba(255,255,255,.6)'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(-B + 1, -38 + bob); ctx.lineTo(-B + 1, -22 + bob); ctx.moveTo(-B - 3, -32 + bob); ctx.lineTo(-B + 5, -32 + bob); ctx.stroke();
   }
   ctx.restore();
 }
+
+// NPC portraits: bust drawn from a small spec (skin, hair style, beard, ears, tusks, scars, accessories, ghost glow).
+function drawPortrait(cv, spec, opts = {}) {
+  if (!cv || !spec) return;
+  const ctx = cv.getContext('2d'), W = cv.width, H = cv.height, s = W / 100, P = spec;
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, W, H); ctx.scale(s, s);
+  const h = H / s, cx = 50, cy = h * .46;
+  const bg = ctx.createRadialGradient(50, cy, 4, 50, cy, 80); bg.addColorStop(0, P.bg ? shade(P.bg, 30) : '#33304a'); bg.addColorStop(1, P.bg || '#15131f');
+  ctx.fillStyle = bg; ctx.fillRect(0, 0, 100, h);
+  if (P.ghost) { ctx.globalAlpha = .82; }
+  const hair = P.hair || '#333', skin = P.skin || '#e0c0a0', wide = P.wide ? 1.12 : 1;
+  ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  // back hair
+  ctx.fillStyle = hair;
+  if (P.style === 'long' || P.style === 'braid') { ctx.beginPath(); ctx.ellipse(cx, cy + 6, 24 * wide, 34, 0, 0, 7); ctx.fill(); }
+  // shoulders / clothes
+  const cl = ctx.createLinearGradient(0, cy + 25, 0, h); cl.addColorStop(0, P.cloth || '#444'); cl.addColorStop(1, shade(P.cloth || '#444', -40));
+  ctx.fillStyle = cl; ctx.beginPath(); ctx.moveTo(8, h); ctx.quadraticCurveTo(12, cy + 30, cx - 14, cy + 26); ctx.lineTo(cx + 14, cy + 26); ctx.quadraticCurveTo(88, cy + 30, 92, h); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = P.cloth2 || '#888'; ctx.beginPath(); ctx.moveTo(cx - 13, cy + 26); ctx.lineTo(cx, cy + 40); ctx.lineTo(cx + 13, cy + 26); ctx.lineTo(cx + 9, cy + 24); ctx.lineTo(cx, cy + 33); ctx.lineTo(cx - 9, cy + 24); ctx.closePath(); ctx.fill();
+  if (P.pauldrons) for (const sx of [-1, 1]) { const pg = ctx.createLinearGradient(cx + sx * 34, cy + 24, cx + sx * 34, cy + 40); pg.addColorStop(0, P.cloth2 || '#999'); pg.addColorStop(1, shade(P.cloth2 || '#999', -50)); ctx.fillStyle = pg; ctx.beginPath(); ctx.ellipse(cx + sx * 31, cy + 33, 15, 9, sx * .25, Math.PI, 0); ctx.fill(); }
+  // neck
+  ctx.fillStyle = shade(skin, -25); ctx.fillRect(cx - 7, cy + 12, 14, 16);
+  // ears
+  ctx.fillStyle = shade(skin, -10);
+  for (const sx of [-1, 1]) {
+    ctx.beginPath();
+    if (P.ears === 'elf' || P.ears === 'halfelf') { const l = P.ears === 'elf' ? 16 : 9; ctx.moveTo(cx + sx * 16, cy - 2); ctx.lineTo(cx + sx * (18 + l), cy - 10 - l * .4); ctx.lineTo(cx + sx * 17, cy + 6); }
+    else ctx.ellipse(cx + sx * 18 * wide, cy + 1, 4, 6, 0, 0, 7);
+    ctx.fill();
+  }
+  // head
+  const hg = ctx.createRadialGradient(cx - 6, cy - 8, 3, cx, cy, 26); hg.addColorStop(0, shade(skin, 18)); hg.addColorStop(1, shade(skin, -18));
+  ctx.fillStyle = hg; ctx.beginPath(); ctx.moveTo(cx - 17 * wide, cy - 6); ctx.quadraticCurveTo(cx - 18 * wide, cy - 26, cx, cy - 27); ctx.quadraticCurveTo(cx + 18 * wide, cy - 26, cx + 17 * wide, cy - 6);
+  ctx.quadraticCurveTo(cx + 16 * wide, cy + 14, cx, cy + 20); ctx.quadraticCurveTo(cx - 16 * wide, cy + 14, cx - 17 * wide, cy - 6); ctx.fill();
+  if (P.old) { ctx.strokeStyle = shade(skin, -35); ctx.lineWidth = .7; ctx.beginPath(); ctx.moveTo(cx - 9, cy - 15); ctx.lineTo(cx + 9, cy - 15); ctx.moveTo(cx - 13, cy + 5); ctx.quadraticCurveTo(cx - 11, cy + 9, cx - 8, cy + 9); ctx.moveTo(cx + 13, cy + 5); ctx.quadraticCurveTo(cx + 11, cy + 9, cx + 8, cy + 9); ctx.stroke(); }
+  // eyes + brows
+  const ey = cy - 4;
+  for (const sx of [-1, 1]) {
+    if (P.eyepatch && sx === 1) continue;
+    ctx.fillStyle = P.glow ? P.eyes : '#f4f0e8'; if (P.glow) { ctx.shadowColor = P.eyes; ctx.shadowBlur = 8; }
+    ctx.beginPath(); ctx.ellipse(cx + sx * 7.5, ey, 4.2, 2.6, 0, 0, 7); ctx.fill(); ctx.shadowBlur = 0;
+    if (!P.glow) { ctx.fillStyle = P.eyes || '#4a3a2a'; ctx.beginPath(); ctx.arc(cx + sx * 7.5 + .6, ey, 2, 0, 7); ctx.fill(); ctx.fillStyle = '#111'; ctx.beginPath(); ctx.arc(cx + sx * 7.5 + .6, ey, .9, 0, 7); ctx.fill(); ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(cx + sx * 7.5 + 1.3, ey - .8, .6, 0, 7); ctx.fill(); }
+    ctx.strokeStyle = P.style === 'bald' && !P.beard ? shade(skin, -45) : (P.old && P.hair ? P.hair : shade(hair, -10)); ctx.lineWidth = 1.6;
+    ctx.beginPath(); ctx.moveTo(cx + sx * 3.5, ey - 5 + (P.glow ? 1 : 0)); ctx.lineTo(cx + sx * 11.5, ey - 6 + (sx * (P.glow ? 1.5 : 0))); ctx.stroke();
+  }
+  // nose & mouth
+  ctx.strokeStyle = shade(skin, -40); ctx.lineWidth = 1.1; ctx.beginPath(); ctx.moveTo(cx, cy - 1); ctx.quadraticCurveTo(cx + 2.5, cy + 5, cx - .5, cy + 6); ctx.stroke();
+  ctx.strokeStyle = shade(skin, -55); ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(cx - 5, cy + 11); ctx.quadraticCurveTo(cx, cy + (opts.talk ? 14 : 12.5), cx + 5, cy + 11); ctx.stroke();
+  // beard
+  if (P.beard) {
+    ctx.fillStyle = hair;
+    if (P.beard === 'full' || P.beard === 'braided') { ctx.beginPath(); ctx.moveTo(cx - 16 * wide, cy + 1); ctx.quadraticCurveTo(cx - 15, cy + 24, cx, cy + (P.beard === 'braided' ? 30 : 26)); ctx.quadraticCurveTo(cx + 15, cy + 24, cx + 16 * wide, cy + 1); ctx.quadraticCurveTo(cx + 9, cy + 10, cx, cy + 9); ctx.quadraticCurveTo(cx - 9, cy + 10, cx - 16 * wide, cy + 1); ctx.fill();
+      ctx.fillStyle = shade(skin, -55); ctx.fillRect(cx - 4, cy + 11, 8, 1.6);
+      if (P.beard === 'braided') { ctx.fillStyle = hair; for (const bx of [-6, 6]) { ctx.beginPath(); ctx.ellipse(cx + bx, cy + 34, 2.6, 6, 0, 0, 7); ctx.fill(); ctx.fillStyle = '#c8a050'; ctx.fillRect(cx + bx - 2.5, cy + 31, 5, 2); ctx.fillStyle = hair; } } }
+    else if (P.beard === 'goatee') { ctx.beginPath(); ctx.moveTo(cx - 4, cy + 13); ctx.lineTo(cx, cy + 22); ctx.lineTo(cx + 4, cy + 13); ctx.fill(); }
+    else { ctx.globalAlpha *= .35; ctx.beginPath(); ctx.ellipse(cx, cy + 12, 13, 8, 0, 0, Math.PI); ctx.fill(); ctx.globalAlpha = P.ghost ? .82 : 1; }
+  }
+  if (P.tusks) { ctx.fillStyle = '#f0ead8'; for (const sx of [-1, 1]) { ctx.beginPath(); ctx.moveTo(cx + sx * 5, cy + 12); ctx.lineTo(cx + sx * 6.5, cy + 6); ctx.lineTo(cx + sx * 8, cy + 12); ctx.fill(); } }
+  if (P.scar) { ctx.strokeStyle = 'rgba(150,60,60,.7)'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(cx + 9, cy - 11); ctx.lineTo(cx + 13, cy + 3); ctx.stroke(); }
+  if (P.burn) { ctx.fillStyle = 'rgba(170,70,50,.35)'; ctx.beginPath(); ctx.ellipse(cx - 11, cy + 5, 5, 7, .3, 0, 7); ctx.fill(); }
+  // front hair / headwear
+  ctx.fillStyle = hair;
+  const cap = (depth) => { ctx.beginPath(); ctx.moveTo(cx - 18 * wide, cy - 4); ctx.quadraticCurveTo(cx - 20 * wide, cy - 30, cx, cy - 31); ctx.quadraticCurveTo(cx + 20 * wide, cy - 30, cx + 18 * wide, cy - 4); ctx.quadraticCurveTo(cx + 14, cy - depth, cx, cy - depth - 3); ctx.quadraticCurveTo(cx - 14, cy - depth, cx - 18 * wide, cy - 4); ctx.fill(); };
+  if (P.style === 'short' || P.style === 'slick') cap(P.style === 'slick' ? 19 : 17);
+  else if (P.style === 'long' || P.style === 'braid') { cap(18); if (P.style === 'braid') { ctx.beginPath(); ctx.ellipse(cx - 20, cy + 22, 4, 12, .2, 0, 7); ctx.fill(); } }
+  else if (P.style === 'bun') { cap(18); ctx.beginPath(); ctx.arc(cx + 4, cy - 31, 8, 0, 7); ctx.fill(); }
+  else if (P.style === 'wild') { cap(16); for (let i = -3; i <= 3; i++) { ctx.beginPath(); ctx.moveTo(cx + i * 6 - 3, cy - 26); ctx.lineTo(cx + i * 7, cy - 36 - Math.abs(i)); ctx.lineTo(cx + i * 6 + 3, cy - 26); ctx.fill(); } }
+  else if (P.style === 'mohawk') { ctx.beginPath(); ctx.moveTo(cx - 5, cy - 22); ctx.quadraticCurveTo(cx, cy - 44, cx + 6, cy - 22); ctx.fill(); }
+  else if (P.style === 'helm') {
+    const mg = ctx.createLinearGradient(cx - 20, cy - 30, cx + 20, cy); mg.addColorStop(0, '#6a4a3a'); mg.addColorStop(1, '#2a1a14');
+    ctx.fillStyle = mg; ctx.beginPath(); ctx.arc(cx, cy - 6, 21, Math.PI, 0); ctx.lineTo(cx + 21, cy + 8); ctx.lineTo(cx + 12, cy + 8); ctx.lineTo(cx + 12, cy - 1); ctx.lineTo(cx - 12, cy - 1); ctx.lineTo(cx - 12, cy + 8); ctx.lineTo(cx - 21, cy + 8); ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = P.cloth2 || '#ff7a30'; ctx.lineWidth = 1.5; ctx.shadowColor = P.cloth2 || '#ff7a30'; ctx.shadowBlur = 6; ctx.beginPath(); ctx.moveTo(cx, cy - 27); ctx.lineTo(cx, cy - 4); ctx.stroke(); ctx.shadowBlur = 0;
+  }
+  // accessories
+  const A = P.acc;
+  if (A === 'earring') { ctx.strokeStyle = '#e8c050'; ctx.lineWidth = 1.3; ctx.beginPath(); ctx.arc(cx - 18 * wide, cy + 9, 2.2, 0, 7); ctx.stroke(); }
+  if (A === 'quill') { ctx.strokeStyle = '#f4f0e8'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(cx + 15, cy - 6); ctx.quadraticCurveTo(cx + 24, cy - 20, cx + 30, cy - 30); ctx.stroke(); }
+  if (A === 'lens') { ctx.strokeStyle = '#d8b860'; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.arc(cx + 7.5, ey, 5.5, 0, 7); ctx.stroke(); ctx.fillStyle = 'rgba(160,210,255,.25)'; ctx.fill(); ctx.beginPath(); ctx.moveTo(cx + 13, ey + 1); ctx.lineTo(cx + 18, cy + 18); ctx.stroke(); }
+  if (A === 'feather') { ctx.fillStyle = '#d8d0c0'; ctx.beginPath(); ctx.ellipse(cx + 14, cy - 30, 3, 10, .5, 0, 7); ctx.fill(); ctx.fillStyle = '#7a3a2a'; ctx.beginPath(); ctx.ellipse(cx + 18, cy - 27, 2.5, 8, .8, 0, 7); ctx.fill(); }
+  if (A === 'glyph') { ctx.strokeStyle = '#b89aff'; ctx.shadowColor = '#b89aff'; ctx.shadowBlur = 8; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.moveTo(cx, cy - 22); ctx.lineTo(cx - 3, cy - 16); ctx.lineTo(cx + 3, cy - 16); ctx.closePath(); ctx.moveTo(cx, cy - 16); ctx.lineTo(cx, cy - 12); ctx.stroke(); ctx.shadowBlur = 0; }
+  if (A === 'wreath') for (let i = 0; i < 9; i++) { const a = Math.PI * (1.05 + i * .11); ctx.fillStyle = i % 2 ? '#d8c060' : '#e8a0b0'; ctx.beginPath(); ctx.arc(cx + Math.cos(a) * 20, cy - 10 + Math.sin(a) * 20, 3, 0, 7); ctx.fill(); ctx.fillStyle = '#4a7a3a'; ctx.beginPath(); ctx.ellipse(cx + Math.cos(a + .05) * 22, cy - 9 + Math.sin(a + .05) * 22, 1.6, 3, a, 0, 7); ctx.fill(); }
+  if (A === 'hat') { ctx.fillStyle = '#1c2a3a'; ctx.beginPath(); ctx.moveTo(cx - 30, cy - 22); ctx.quadraticCurveTo(cx, cy - 34, cx + 30, cy - 22); ctx.quadraticCurveTo(cx + 16, cy - 46, cx, cy - 44); ctx.quadraticCurveTo(cx - 16, cy - 46, cx - 30, cy - 22); ctx.fill(); ctx.strokeStyle = '#c8a050'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(cx - 28, cy - 23); ctx.quadraticCurveTo(cx, cy - 33, cx + 28, cy - 23); ctx.stroke(); }
+  if (A === 'circlet' || A === 'star') { ctx.strokeStyle = '#d8c070'; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.moveTo(cx - 17, cy - 14); ctx.quadraticCurveTo(cx, cy - 20, cx + 17, cy - 14); ctx.stroke(); ctx.fillStyle = A === 'star' ? '#fff8c0' : '#a0c8ff'; ctx.shadowColor = ctx.fillStyle; ctx.shadowBlur = 8; ctx.beginPath(); ctx.arc(cx, cy - 18, 2.4, 0, 7); ctx.fill(); ctx.shadowBlur = 0; }
+  if (P.ghost) {
+    ctx.globalAlpha = 1; const gg = ctx.createLinearGradient(0, 0, 0, h); gg.addColorStop(0, 'rgba(140,220,255,.12)'); gg.addColorStop(1, 'rgba(60,120,200,.35)');
+    ctx.fillStyle = gg; ctx.fillRect(0, 0, 100, h);
+  }
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+}
+function shade(hex, amt) {
+  const n = parseInt(hex.slice(1), 16), c = v => Math.max(0, Math.min(255, v + amt));
+  return '#' + [c(n >> 16), c((n >> 8) & 255), c(n & 255)].map(v => v.toString(16).padStart(2, '0')).join('');
+}
+// The hero's own bust for dialogues: class colours, hair/helmet by class.
+const heroPortraitSpec = p => {
+  const c = cls(p), L = HERO_LOOK[c.id] || HERO_LOOK.gladiator, helm = p.eq.Helmet;
+  const style = { hair: 'short', mask: 'short', hood: 'bald', helm: 'helm', cowl: 'bald' }[L.head];
+  return { skin: '#e2c9a8', hair: L.hair, style: helm && style !== 'helm' ? 'helm' : style, eyes: '#4a5a6a', cloth: c.color, cloth2: helm ? TCOL[helm.tier] : shade(c.color, -40), pauldrons: L.pauld ? 1 : 0, bg: shade(c.color, -90),
+    acc: c.id === 'ashmage' ? 'glyph' : '', glow: c.id === 'reaver' ? 1 : 0, scar: c.id === 'gladiator' ? 1 : 0, beard: c.id === 'gladiator' ? 'stubble' : '' };
+};
 
 // Animals: a few parametric silhouettes (quadruped with horns/tail/legs options, hopper, crab, shell, bird).
 function drawAnimal(ctx, m, x, y, t) {
@@ -1824,10 +2401,10 @@ function drawAnimal(ctx, m, x, y, t) {
 }
 function drawMonster(ctx, m, x, y, t, zi) {
   if (m.animal) return drawAnimal(ctx, m, x, y, t);
-  const shape = m.boss ? 'boss' : (MON_SHAPE[m.mid] || 'beast');
+  const art = (MON[m.mid] || {}).art, shape = art ? art.shape : m.boss ? 'boss' : (MON_SHAPE[m.mid] || 'beast');
   const k = m.boss ? 1.55 : m.elite ? 1.15 : 1, bob = RM ? 0 : Math.sin(t * 2.6 + 1) * 1.5;
-  const body = { wolf: '#6b6460', ghoul: '#5f7a52', rogue: '#4a4050', stalker: '#5a3c86', crawler: '#3c4c78', boss: '#5a2224', beast: ZONE_ART[zi].far }[shape];
-  const eye = { wolf: '#ffb040', ghoul: '#c8ff70', rogue: '#ff5060', stalker: '#e0a0ff', crawler: '#80e0ff', boss: '#ffd040', beast: '#ffffff' }[shape];
+  const body = (art && art.color) || { wolf: '#6b6460', ghoul: '#5f7a52', rogue: '#4a4050', stalker: '#5a3c86', crawler: '#3c4c78', boss: '#5a2224', beast: ZONE_ART[zi].far }[shape];
+  const eye = (art && art.eye) || { wolf: '#ffb040', ghoul: '#c8ff70', rogue: '#ff5060', stalker: '#e0a0ff', crawler: '#80e0ff', boss: '#ffd040', beast: '#ffffff' }[shape];
   ctx.save(); ctx.translate(x, y); ctx.scale(-k, k); // face left
   ctx.fillStyle = 'rgba(0,0,0,.35)'; ctx.beginPath(); ctx.ellipse(0, 2, 22, 4, 0, 0, 7); ctx.fill();
   if (m.boss) {
@@ -1959,7 +2536,7 @@ function frame(ts) {
   const ease = v => v * v;
   const hl = ease(S.heroLunge) * 22, hs = S.heroShake * (Math.random() - .5) * 6;
   if (S.ring > 0) { ctx.strokeStyle = `rgba(143,224,122,${S.ring})`; ctx.lineWidth = 3; ctx.beginPath(); ctx.ellipse(hx, gy, 30 * (2 - S.ring), 8 * (2 - S.ring), 0, 0, 7); ctx.stroke(); }
-  drawHero(ctx, (town ? w * .2 : hx) + hl + hs, gy, cls(G.p), S.t, { swing: S.heroLunge });
+  drawHero(ctx, (town ? w * .2 : hx) + hl + hs, gy, cls(G.p), S.t, { swing: S.heroLunge, gear: heroGear(G.p) });
   if (G.p.shield > 0 || S.shieldT > 0) {
     ctx.strokeStyle = 'rgba(180,200,255,.7)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(hx + hl, gy - 28, 32, -1.2, 1.2); ctx.stroke();
   }
@@ -2063,7 +2640,7 @@ function openStorm(final = false) {
     shake: 0, flash: 0, flashC: '#fff', hurtV: 0, bossFlash: 0, parts: [], floats: [], bolts: [], boltCd: .3, slashes: [], meteors: [],
     heroDash: 0, deadN: 0, headDead: false, banner: null, chest: null, reward: null, enraged: false, last: performance.now(), raf: 0, hintT: 0, cardShown: false,
   };
-  SM.bhp = SM.bmax;
+  SM.bhp = SM.bmax; SM.ilsa = final && choice('ilsa') === 'keep';
   SM.clouds = Array.from({ length: 9 }, () => ({ x: Math.random(), y: Math.random() * .5, r: .25 + Math.random() * .3, s: .004 + Math.random() * .01, a: .25 + Math.random() * .3 }));
   SM.rain = Array.from({ length: 150 }, () => ({ x: Math.random(), y: Math.random(), l: .02 + Math.random() * .03, s: .9 + Math.random() * .8 }));
   const el = $('storm'); el.hidden = false; el.className = 'intro';
@@ -2153,7 +2730,7 @@ function stormTap(e) {
     if (Math.hypot(x - wx, y - wy) < 44 * SM.K) {
       SM.weakHits++; SM.wp = null; SM.wpCd = 5 + Math.random() * 3;
       SFX.play('weak'); buzz(35); SM.shake = .6;
-      const mult = 8 * (1 + SM.combo * .2), d = Math.round(SM.st.dmg * mult * (SM.P.dmgMult || 1));
+      const mult = 8 * (SM.ilsa ? 1.3 : 1) * (1 + SM.combo * .2), d = Math.round(SM.st.dmg * mult * (SM.P.dmgMult || 1));
       sPart(wx, wy, '#fff3b0', 40, 260); bossDamage(d, wx, wy, true, '#fff3b0'); sBanner('SILPNA VIETA', `${fmt(d)} žalos`, '#fff3b0', .9);
       return;
     }
@@ -2176,6 +2753,7 @@ function stormDefeat() {
   setTimeout(() => SM && showStormCard(`<h3 class="bad">Pralaimėjai</h3><p>Vortraksui liko <b>${Math.round(SM.bhp / SM.bmax * 100)}%</b> gyvybės. ${SM.final ? 'Sustiprėk ir bandyk dar kartą.' : 'Audra vėl susikaups greičiau (50%).'}</p><p class="meta">Surinkta ${fmt(g)} aukso · tobulų išvengimų: ${SM.perfects} · silpnų vietų: ${SM.weakHits}</p>`), 1800);
 }
 function stormReward() {
+  G.p.stats = G.p.stats || {}; G.p.stats.perfectBest = Math.max(G.p.stats.perfectBest || 0, SM.perfects);
   const p = G.p, z = Z(), c = cls(p), legendary = Math.random() < Math.min(.85, .25 + .1 * SM.perfects + .05 * SM.weakHits);
   const first = !(p.stormWins > 0), slot = first ? 'Weapon' : SLOTS[rand(6)];
   const ilvl = Math.max(z.req, p.level) + 4, b = Math.round((4 + ilvl * 2) * 1.3), q = d => Math.trunc(b / d);
@@ -2210,8 +2788,10 @@ function rewardCard() {
 }
 function closeStorm() {
   if (!SM) return;
+  const ending = SM.final && G.p.won && !seen('ending');
   cancelAnimationFrame(SM.raf); SM = null; $('storm').hidden = true;
   restore(G.p); last = Date.now(); acc = 0; lastView = ''; render(); save();
+  if (ending) playScene('ending');
 }
 
 function stormUpdate(dt) {
@@ -2295,7 +2875,7 @@ function stormUpdate(dt) {
     const i = rand(4), [x, y] = wpos(s.bt - i * LAG), [hx] = heroPos();
     s.slashes.push({ x0: hx + 20 * K, y0: s.gy - 70 * K, x1: x, y1: y, t: 0, dur: .24, mult: 1 });
   }
-  if (!s.wp) { s.wpCd -= dt; if (s.wpCd <= 0) s.wp = { seg: 3 + rand(10), t: 0, dur: 2.4 }; }
+  if (!s.wp) { s.wpCd -= dt; if (s.wpCd <= 0) s.wp = { seg: 3 + rand(10), t: 0, dur: s.ilsa ? 3.4 : 2.4 }; }
   else { s.wp.t += dt; if (s.wp.t >= s.wp.dur) { s.wp = null; s.wpCd = 4 + Math.random() * 3; } }
   if (!s.atk) {
     s.atkCd -= dt;
@@ -2449,9 +3029,9 @@ function stormFrame(ts) {
   // hero (+ afterimages while dashing)
   const [hx] = heroPos(), c0 = cls(G.p), hk = 2.3 * K;
   if (s.phase !== 'defeat' || s.t < .8) {
-    if (s.heroDash > 0) for (let k = 1; k <= 3; k++) { ctx.globalAlpha = .18 * (4 - k) / 3; drawHero(ctx, hx + k * 16 * K, gy, c0, s.t, { scale: hk }); }
+    if (s.heroDash > 0) for (let k = 1; k <= 3; k++) { ctx.globalAlpha = .18 * (4 - k) / 3; drawHero(ctx, hx + k * 16 * K, gy, c0, s.t, { scale: hk, gear: heroGear(G.p) }); }
     ctx.globalAlpha = s.phase === 'defeat' ? Math.max(0, 1 - s.t / .8) : 1;
-    drawHero(ctx, hx, gy, c0, s.t, { scale: hk, swing: s.heroCd < .12 ? 1 : 0 });
+    drawHero(ctx, hx, gy, c0, s.t, { scale: hk, swing: s.heroCd < .12 ? 1 : 0, gear: heroGear(G.p) });
     ctx.globalAlpha = 1;
   }
   // slashes

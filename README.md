@@ -9,6 +9,8 @@ Web versija – **„Plyšio sargas“** (visas tekstas lietuviškai):
 - **Pradžia:** titulinis ekranas (Tęsti / Naujas herojus) → 5 klasės.
 - **Miestas Žaržiūra:** nieko nevyksta savaime. Kairėje – rajonų ir pastatų navigacija (kalvė su lydymu ir stiprinimu, juvelyrė, ginklinė, vaistinė, medžiotojų namelis, kapitonės salė, skelbimų lenta, vartai).
 - **Vietovė:** stovykloje renkiesi – kovoti, medžioti gyvūnus ar rinkti. Bosą iššauki pats, kai surenki 25 pergales. Offline progresas skaičiuojamas tik vietovėje.
+- **Istorija:** 22 scenos su dialogais ir portretais (`SCENES`), 3 pasirinkimai (Izolda, Veksas, Ilsa), kurie keičia atlygius ir pabaigą. Veikėjai turi biografijas ir pokalbių frazes; vietovėse sutinkami brolis Aldas, vaidilutė Rūta, kapitonas Gedas, astronomė Eglė. Metraštis (16 įrašų) ir pasiekimai (14).
+- **Pabaisos:** kiekviena vietovė turi savo pabaisas ir bosą (JSON `monsters`, išvaizda – `art`). Herojaus figūroje matoma dėvima apranga (šalmas, šarvų apvadai, batai, diržo sagtis, ginklo švytėjimas pagal retumą).
 - **Plyšio audra:** interaktyvus slibino Vortrakso įvykis (vengimas, silpnos vietos, skrynia); finale – paskutinė audra užveria Plyšį.
 - **Kuprinė:** 6 aprangos vietos aplink herojų, daiktai / medžiagos / gėrimai, daikto kortelė su palyginimu.
 

@@ -421,7 +421,8 @@
       "damage": 42,
       "defense": 10,
       "exp": 300,
-      "gold": 120
+      "gold": 120,
+      "art": {"shape": "boss", "color": "#5a2224", "eye": "#ffd040"}
     },
     {
       "id": "rift_stalker",
@@ -455,7 +456,144 @@
       "damage": 75,
       "defense": 40,
       "exp": 630,
-      "gold": 240
+      "gold": 240,
+      "art": {"shape": "boss", "color": "#4a3a8a", "eye": "#e0c0ff"}
+    },
+    {
+      "id": "marsh_slug",
+      "name": "Pelkių šliužas",
+      "zoneId": 3,
+      "hp": 432,
+      "damage": 42,
+      "defense": 35,
+      "exp": 79,
+      "gold": 28,
+      "art": {"shape": "ghoul", "color": "#4f6a3a", "eye": "#d0ff70"}
+    },
+    {
+      "id": "root_strangler",
+      "name": "Šaknų smaugikas",
+      "zoneId": 3,
+      "hp": 528,
+      "damage": 47,
+      "defense": 35,
+      "exp": 96,
+      "gold": 35,
+      "art": {"shape": "crawler", "color": "#5a4630", "eye": "#ffcf60"}
+    },
+    {
+      "id": "marsh_mother",
+      "name": "Pelkių motina",
+      "zoneId": 3,
+      "boss": true,
+      "hp": 9600,
+      "damage": 141,
+      "defense": 70,
+      "exp": 1320,
+      "gold": 480,
+      "art": {"shape": "boss", "color": "#3e5a2e", "eye": "#c8ff60"}
+    },
+    {
+      "id": "bastion_ghost",
+      "name": "Bastiono vaiduoklis",
+      "zoneId": 4,
+      "hp": 864,
+      "damage": 79,
+      "defense": 50,
+      "exp": 166,
+      "gold": 57,
+      "art": {"shape": "ghoul", "color": "#7fa6c0", "eye": "#e0ffff"}
+    },
+    {
+      "id": "drowned_sailor",
+      "name": "Nuskendęs jūreivis",
+      "zoneId": 4,
+      "hp": 1056,
+      "damage": 88,
+      "defense": 50,
+      "exp": 203,
+      "gold": 70,
+      "art": {"shape": "rogue", "color": "#2f5a64", "eye": "#80f0ff"}
+    },
+    {
+      "id": "drowned_king",
+      "name": "Nuskendęs karalius",
+      "zoneId": 4,
+      "boss": true,
+      "hp": 19200,
+      "damage": 264,
+      "defense": 100,
+      "exp": 2775,
+      "gold": 960,
+      "art": {"shape": "boss", "color": "#2a4a5a", "eye": "#80f0ff"}
+    },
+    {
+      "id": "tower_spitfire",
+      "name": "Bokšto ugniaspiris",
+      "zoneId": 5,
+      "hp": 1728,
+      "damage": 163,
+      "defense": 65,
+      "exp": 349,
+      "gold": 115,
+      "art": {"shape": "stalker", "color": "#a8482a", "eye": "#ffd060"}
+    },
+    {
+      "id": "ember_golem",
+      "name": "Žarijų golemas",
+      "zoneId": 5,
+      "hp": 2304,
+      "damage": 146,
+      "defense": 65,
+      "exp": 465,
+      "gold": 153,
+      "art": {"shape": "ghoul", "color": "#5a2a20", "eye": "#ff9040"}
+    },
+    {
+      "id": "ember_crown_lord",
+      "name": "Žarijų karūnos valdovas",
+      "zoneId": 5,
+      "boss": true,
+      "hp": 38400,
+      "damage": 489,
+      "defense": 130,
+      "exp": 5820,
+      "gold": 1920,
+      "art": {"shape": "boss", "color": "#6a2018", "eye": "#ffcf40"}
+    },
+    {
+      "id": "vault_shade",
+      "name": "Skliauto šešėlis",
+      "zoneId": 6,
+      "hp": 3456,
+      "damage": 303,
+      "defense": 80,
+      "exp": 734,
+      "gold": 230,
+      "art": {"shape": "rogue", "color": "#2a2448", "eye": "#c0a0ff"}
+    },
+    {
+      "id": "star_devourer",
+      "name": "Žvaigždžių ryjikas",
+      "zoneId": 6,
+      "hp": 4224,
+      "damage": 303,
+      "defense": 80,
+      "exp": 897,
+      "gold": 281,
+      "art": {"shape": "stalker", "color": "#3a3a7a", "eye": "#ffffff"}
+    },
+    {
+      "id": "void_warden",
+      "name": "Tuštumos sargas",
+      "zoneId": 6,
+      "boss": true,
+      "hp": 76800,
+      "damage": 909,
+      "defense": 160,
+      "exp": 12240,
+      "gold": 3840,
+      "art": {"shape": "boss", "color": "#1c1838", "eye": "#e0d0ff"}
     }
   ],
   "npcs": [
@@ -466,7 +604,22 @@
       "role": "merchant",
       "districtId": "anvil_row",
       "trait": "Niurzgus ir tiesmukas. Niekada nesiderėja, bet už kiekvieną savo kalavijo dūžį garantuoja galva.",
-      "profession": "Ginklininkas"
+      "profession": "Ginklininkas",
+      "portrait": {
+        "skin": "#d9a27a",
+        "hair": "#9a3e1c",
+        "style": "bald",
+        "beard": "braided",
+        "eyes": "#3a5a8a",
+        "cloth": "#5a4634",
+        "cloth2": "#8a8a96",
+        "acc": "earring",
+        "scar": 1,
+        "old": 1,
+        "bg": "#3a2a22",
+        "wide": 1
+      },
+      "bio": "Braka užaugo kalnų kasyklose ir atvyko į Žaržiūrą, kai Plyšys užvertė jo giminės šachtas. Kiekvieną ginklą jis bando ant savo paties šalmo – todėl šalmas kiaurai įlenktas. Svajoja vieną dieną grįžti į kalnus su kirviu, kurio nesulaužytų net Plyšys."
     },
     {
       "id": "sela_quickmarrow",
@@ -475,7 +628,19 @@
       "role": "merchant",
       "districtId": "gatehold_square",
       "trait": "Nervinga plepė. Kalba greičiau, nei verda jos katilai, ir viską užsirašo į sudegusį sąsiuvinį.",
-      "profession": "Vaistininkė"
+      "profession": "Vaistininkė",
+      "portrait": {
+        "skin": "#f0cdb0",
+        "hair": "#d0a850",
+        "style": "bun",
+        "ears": "halfelf",
+        "eyes": "#5aa060",
+        "cloth": "#3a6a5a",
+        "cloth2": "#d8c8a8",
+        "acc": "quill",
+        "bg": "#24332c"
+      },
+      "bio": "Sela – pusiau elfė, išmesta iš elfų akademijos už sprogusį katilą. Žaržiūroje ji vienintelė, kuri moka gydyti Plyšio nudegimus. Bijo tamsos ir Pelenynų, bet niekad neatsisako padėti sužeistam."
     },
     {
       "id": "vex_ninefingers",
@@ -484,7 +649,20 @@
       "role": "merchant",
       "districtId": "the_cinders",
       "trait": "Mandagus, šaltas kontrabandininkas. Dešimto piršto neteko per derybas ir nuo tada nemėgsta skolininkų.",
-      "profession": "Kontrabandininkas"
+      "profession": "Kontrabandininkas",
+      "portrait": {
+        "skin": "#8c8c96",
+        "hair": "#16161c",
+        "style": "slick",
+        "eyes": "#ff7a40",
+        "glow": 1,
+        "cloth": "#26262e",
+        "cloth2": "#8a2a2a",
+        "acc": "earring",
+        "beard": "goatee",
+        "bg": "#1c1a22"
+      },
+      "bio": "Pelenagimis – gimęs tą naktį, kai Plyšys atsivėrė, todėl jo oda pilka, o akys rusena. Miestas jo nekenčia, bet visi pas jį perka. Dešimto piršto neteko, kai bandė apgauti Tuštumos chorą."
     },
     {
       "id": "torvald_ashmane",
@@ -493,7 +671,21 @@
       "role": "crafter",
       "profession": "Kalvis",
       "districtId": "anvil_row",
-      "trait": "Buvęs garnizono veteranas su perdega ranka. Kantrus mokytojas, bet nepakenčia prastos rūdos."
+      "trait": "Buvęs garnizono veteranas su perdega ranka. Kantrus mokytojas, bet nepakenčia prastos rūdos.",
+      "portrait": {
+        "skin": "#e0b896",
+        "hair": "#bcb6ae",
+        "style": "short",
+        "beard": "full",
+        "eyes": "#6a5a4a",
+        "cloth": "#4a3a30",
+        "cloth2": "#2e2622",
+        "scar": 1,
+        "old": 1,
+        "burn": 1,
+        "bg": "#33231c"
+      },
+      "bio": "Buvęs garnizono šarvininkas. Jis nukalė šarvus Kharnui – geriausiam Žaržiūros sargui. Kai Plyšys Kharną pasiėmė, Torvaldas laikė jį už įkaitusių šarvų, kol nudegė ranka. Nuo tada kala tik tiems, kurie grįžta."
     },
     {
       "id": "ilsa_moonvane",
@@ -502,7 +694,19 @@
       "role": "crafter",
       "profession": "Juvelyrė",
       "districtId": "anvil_row",
-      "trait": "Tyli perfekcionistė. Plyšio stiklo skeveldras tyrinėja su lupa ir šnabžda joms kaip gyvoms."
+      "trait": "Tyli perfekcionistė. Plyšio stiklo skeveldras tyrinėja su lupa ir šnabžda joms kaip gyvoms.",
+      "portrait": {
+        "skin": "#f4e2d4",
+        "hair": "#e6e8f6",
+        "style": "long",
+        "ears": "elf",
+        "eyes": "#7ab8ff",
+        "cloth": "#34467a",
+        "cloth2": "#c8c8e8",
+        "acc": "lens",
+        "bg": "#1e2440"
+      },
+      "bio": "Elfė juvelyrė, girdinti, kaip skamba kristalai. Atvyko tyrinėti Plyšio stiklo ir pasiliko – stiklas jai šnabžda daugiau nei bet kuri knyga. Pastaruoju metu ji vis rečiau miega."
     },
     {
       "id": "captain_hedda_varr",
@@ -511,7 +715,19 @@
       "role": "quest_giver",
       "districtId": "wardtower_keep",
       "trait": "Griežta garnizono kapitonė. Vertina rezultatus, ne žodžius.",
-      "profession": "Garnizono kapitonė"
+      "profession": "Garnizono kapitonė",
+      "portrait": {
+        "skin": "#e8c0a0",
+        "hair": "#3a2a20",
+        "style": "braid",
+        "eyes": "#4a6a5a",
+        "cloth": "#7a2a2a",
+        "cloth2": "#9a9aa6",
+        "scar": 1,
+        "pauldrons": 1,
+        "bg": "#2c1e1e"
+      },
+      "bio": "Garnizono kapitonė jau dvidešimt metų. Jos vyresnioji sesuo Izolda buvo pirmoji Plyšio sargė ir dingo jame, kai Hedai buvo dvylika. Heda niekam apie tai nekalba ir niekada nesiunčia kareivių ten, kur pati neitų."
     },
     {
       "id": "orla_greyfeather",
@@ -520,7 +736,105 @@
       "role": "crafter",
       "profession": "Medžiotoja, kailiadirbė",
       "districtId": "gatehold_square",
-      "trait": "Rami, bet griežta medžiotoja. Moka už kiekvieną odą ir niekada neišmeta nė kaulo."
+      "trait": "Rami, bet griežta medžiotoja. Moka už kiekvieną odą ir niekada neišmeta nė kaulo.",
+      "portrait": {
+        "skin": "#8aa070",
+        "hair": "#2a2a2a",
+        "style": "mohawk",
+        "tusks": 1,
+        "eyes": "#d0a040",
+        "cloth": "#5a4a2a",
+        "cloth2": "#a89070",
+        "acc": "feather",
+        "bg": "#2a2a1c"
+      },
+      "bio": "Pusiau orkė medžiotoja iš sudegusio Pilkaplunksnių kaimo. Ji neturi namų, tik lanką ir pareigą: kad žiemą niekas neliktų alkanas. Gyvūnus gerbia labiau nei žmones – gyvūnai bent jau nemeluoja."
+    },
+    {
+      "id": "brother_aldas",
+      "name": "Brolis Aldas",
+      "race": "Žmogus",
+      "role": "pilgrim",
+      "profession": "Pabėgęs Choro vienuolis",
+      "zoneId": 2,
+      "trait": "Ramus, kalba tyliai, bet kiekvienas žodis sunkus kaip akmuo.",
+      "bio": "Kadaise jis giedojo Tuštumos chore ir tikėjo, kad Plyšys – durys į rojų. Vieną naktį pažvelgė pro jas ir pamatė tik alkį. Dabar gyvena prie Plyšio krašto ir bando atitaisyti, ką padarė.",
+      "portrait": {
+        "skin": "#d8b090",
+        "hair": "#000000",
+        "style": "bald",
+        "beard": "stubble",
+        "eyes": "#9a7aff",
+        "glow": 1,
+        "cloth": "#4a3a6a",
+        "cloth2": "#2a2040",
+        "acc": "glyph",
+        "bg": "#1e1830"
+      }
+    },
+    {
+      "id": "ruta_vaidilute",
+      "name": "Vaidilutė Rūta",
+      "race": "Žmogus",
+      "role": "seer",
+      "profession": "Senojo tikėjimo saugotoja",
+      "zoneId": 3,
+      "trait": "Jauna, bet kalba kaip šimtametė. Dažnai nutyla vidury sakinio ir klausosi šaknų.",
+      "bio": "Paskutinė vaidilutė, sauganti šventą ugnį Niūriašaknių pelkės saloje. Šaknys jai pasakoja, kas vyksta po žeme. Ji žino seną giesmę, kuri gali užverti Plyšį – bet tik tada, kai krenta visi penki jo sargai.",
+      "portrait": {
+        "skin": "#f0d4bc",
+        "hair": "#a86a3a",
+        "style": "long",
+        "eyes": "#5a8a4a",
+        "cloth": "#e8e0d0",
+        "cloth2": "#9a3a3a",
+        "acc": "wreath",
+        "bg": "#1e2a1c"
+      }
+    },
+    {
+      "id": "captain_gedas",
+      "name": "Kapitonas Gedas",
+      "race": "Vaiduoklis",
+      "role": "ghost",
+      "profession": "Nuskendusio bastiono kapitonas",
+      "zoneId": 4,
+      "trait": "Juokiasi garsiai, nors jo balsas skamba lyg iš po vandens.",
+      "bio": "Prieš keturiasdešimt metų jis vadovavo bastiono įgulai. Kai Plyšys atsivėrė, jūra per vieną naktį užliejo tvirtovę. Gedas atsisakė palikti savo vyrus – ir liko su jais amžinai.",
+      "portrait": {
+        "skin": "#c0d8e8",
+        "hair": "#e0e8f0",
+        "style": "wild",
+        "beard": "full",
+        "eyes": "#80f0ff",
+        "glow": 1,
+        "cloth": "#2a4a6a",
+        "cloth2": "#c8a050",
+        "acc": "hat",
+        "ghost": 1,
+        "old": 1,
+        "bg": "#14283a"
+      }
+    },
+    {
+      "id": "egle_astronome",
+      "name": "Eglė Žvaigždėvarta",
+      "race": "Žmogė",
+      "role": "scholar",
+      "profession": "Astronomė",
+      "zoneId": 6,
+      "trait": "Visada skaičiuoja. Net kalbėdama – skaičiuoja.",
+      "bio": "Mokslininkė, nuo vaikystės sekanti Plyšį pro teleskopą. Ji pirmoji suprato, kad Plyšys – ne žaizda danguje, o burna. Į Tuščiųjų žvaigždžių skliautą atėjo viena, nes niekas jai netikėjo.",
+      "portrait": {
+        "skin": "#e8c8b0",
+        "hair": "#2a2a4a",
+        "style": "bun",
+        "eyes": "#c0c0ff",
+        "cloth": "#1a2a5a",
+        "cloth2": "#c8a050",
+        "acc": "star",
+        "bg": "#10142a"
+      }
     }
   ],
   "shops": [
@@ -1268,5 +1582,31 @@
       ],
       "trackSeconds": 9
     }
-  ]
+  ],
+  "storyPortraits": {
+    "kharn": {
+      "skin": "#5a3a30",
+      "hair": "#2a1a14",
+      "style": "helm",
+      "eyes": "#ffb040",
+      "glow": 1,
+      "cloth": "#4a2a22",
+      "cloth2": "#ff7a30",
+      "pauldrons": 1,
+      "scar": 1,
+      "bg": "#2a1410"
+    },
+    "izolda": {
+      "skin": "#d8d0f0",
+      "hair": "#c8b8ff",
+      "style": "braid",
+      "eyes": "#ffffff",
+      "glow": 1,
+      "cloth": "#4a3a8a",
+      "cloth2": "#c8b8ff",
+      "acc": "circlet",
+      "ghost": 1,
+      "bg": "#1a1430"
+    }
+  }
 }
