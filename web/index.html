@@ -199,7 +199,7 @@ button.danger { color: var(--hp); }
 .st-top { top: calc(14px + env(safe-area-inset-top, 0px)); right: 120px; }
 .st-name { font: 700 1rem var(--display); color: #d8c8ff; letter-spacing: .06em; text-shadow: 0 0 12px #7a5cff; }
 .st-bar { position: relative; height: 14px; margin-top: 4px; border-radius: 3px; background: rgba(0,0,0,.55); border: 1px solid rgba(180,160,255,.4); overflow: hidden; }
-.st-bar i { position: absolute; inset: 0 auto 0 0; background: linear-gradient(90deg, #6a3cff, #c070ff); transition: width .15s; }
+.st-bar i { position: absolute; inset: 0 auto 0 0; background: linear-gradient(90deg, color-mix(in srgb, var(--sc, #c070ff) 45%, #1a1030), var(--sc, #c070ff)); transition: width .15s; }
 .st-bar span { position: relative; display: block; text-align: right; padding: 0 6px; font-size: .68rem; line-height: 12px; color: #fff; }
 .st-bar.hero { border-color: rgba(255,120,120,.5); } .st-bar.hero i { background: linear-gradient(90deg, #8a1c26, #e0505a); }
 .st-corner { top: calc(12px + env(safe-area-inset-top, 0px)); left: auto; display: flex; gap: 6px; }
@@ -328,6 +328,9 @@ details.lore p { margin: 6px 0 0; font-size: .9rem; color: var(--fg); }
 .card.dg-treasure h3, .card.dg-boss h3 { color: var(--t4); }
 .card.dg-spring h3 { color: var(--xp); } .card.dg-trap h3, .card.dg-elite h3 { color: var(--hp); } .card.dg-shrine h3 { color: var(--t3); }
 #warp { position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 50; pointer-events: none; }
+.realm-ev { border-color: var(--pc); background: radial-gradient(120% 140% at 85% 0%, color-mix(in srgb, var(--pc) 40%, transparent), transparent 60%), linear-gradient(135deg, #1a1020, #0e0a14);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--pc) 40%, transparent), 0 0 26px color-mix(in srgb, var(--pc) 35%, transparent); }
+.realm-ev .sb-bolt { color: #fff; text-shadow: 0 0 14px var(--pc); } .realm-ev .sb-txt b { color: #fff; } .realm-ev .sb-go { background: var(--pc); }
 @media (prefers-reduced-motion: reduce) { .bar > i { transition: none; } .hit.crit { animation: none; } }
 </style>
 
@@ -852,7 +855,9 @@ const ambush = () => inTown() && G.queue.length > 0;
 const fighting = () => ambush() || (G.loc === 'dungeon' && !!G.mon) || (G.loc === 'zone' && (G.activity === 'fight' || G.activity === 'hunt' || G.mode === 'boss'));
 const hunting = () => G.loc === 'zone' && G.activity === 'hunt' && G.mode !== 'boss';
 const gathering = () => G.loc === 'zone' && G.mode !== 'boss' && !!NODES[G.activity];
-const bossAvail = () => G.loc === 'zone' && G.kills >= Z().kills && G.mode === 'farm';
+// Each defeated boss raises the number of wins needed to challenge it again (25 → 50 → 75 …).
+const bossNeed = z => z.kills * (1 + ((G.p.bossKills || {})[z.id] || 0));
+const bossAvail = () => G.loc === 'zone' && G.kills >= bossNeed(Z()) && G.mode === 'farm';
 function emit(msg, cls = '') { G.log.push({ msg, cls }); if (G.log.length > LOG_CAP) G.log.shift(); }
 const regionFoes = id => (R.monsters || []).filter(m => m.zoneId === id && !m.boss && !m.elite);
 const regionBoss = id => (R.monsters || []).find(m => m.zoneId === id && m.boss);
@@ -958,7 +963,8 @@ function killed(m) {
   fx('kill', { mon: m });
   if (gainExp(p, m.exp)) { emit(`Naujas lygis! Dabar ${p.level} lygis.`, 'up'); fx('level'); }
   p.stats = p.stats || {}; p.stats.kills = (p.stats.kills || 0) + 1;
-  p.gold += m.gold; if (!wasAmbush && !m.boss) p.stormCharge = Math.min(100, (p.stormCharge ?? 100) + 2);
+  p.gold += m.gold;
+  if (!wasAmbush && !m.boss) { if (z.realm) p.realmCharge = { ...(p.realmCharge || {}), [z.id]: Math.min(100, realmCharge(z.id) + 2) }; else p.stormCharge = Math.min(100, (p.stormCharge ?? 100) + 2); }
   if (m.mid) { p.killsBy[m.mid] = (p.killsBy[m.mid] || 0) + 1; questKill(m.mid); }
   dropMats(m);
   if (G.loot && !wasAmbush && (m.boss || Math.random() < z.loot)) {
@@ -972,6 +978,8 @@ function killed(m) {
   if (wasAmbush) { if (!G.queue.length) { emit('Užpuolikai nugalėti. Pelenynuose vėl ramu.', 'quest'); restore(p); } return; }
   if (m.boss) {
     G.mode = 'farm'; emit(`Bosas nugalėtas: ${m.name}!`, 'boss'); p.bossDone = p.bossDone || {}; p.bossDone[z.id] = true; fx('bosswin');
+    p.bossKills = { ...(p.bossKills || {}), [z.id]: ((p.bossKills || {})[z.id] || 0) + 1 };
+    emit(`Kitam iššūkiui reikės ${bossNeed(z)} pergalių.`);
     const next = z.id + 1;
     if (!z.realm && next <= MAIN_ZONES) {
       if (p.hz < next) emit(`Atsivėrė nauja vietovė: ${ZONES[next - 1].name}.`, 'quest');
@@ -988,7 +996,7 @@ function defeated() {
     emit('Galvažudžiai paliko tave pelenuose. Atsibundi Vartų aikštėje.', 'bad'); return;
   }
   emit(boss ? `${G.mon.name} tave nugalėjo. Sustiprėk ir bandyk vėl.` : 'Krito jėgos, bet atsigavai stovykloje ir tęsi.', 'bad');
-  if (G.mode === 'boss') { G.mode = 'farm'; G.kills = Math.trunc(Z().kills / 2); }
+  if (G.mode === 'boss') { G.mode = 'farm'; G.kills = Math.trunc(bossNeed(Z()) / 2); }
   restore(G.p); G.mon = null;
 }
 function questTimers() {
@@ -1245,8 +1253,8 @@ const seen = id => !!(G.p.scenes && G.p.scenes[id]);
 const mat = id => G.p.mats[id] || 0;
 const kb = id => G.p.killsBy[id] || 0;
 const choice = k => (G.p.choices || {})[k];
-const killsTxt = z => `${Math.min(G.zone === z ? G.kills : 0, ZONES[z - 1].kills)}/${ZONES[z - 1].kills} pergalių`;
-const bossStep = z => ({ t: `Laimėk ${ZONES[z - 1].kills} kovas ir nugalėk bosą: ${bossName(z)}`, done: () => bossBeaten(z), prog: () => killsTxt(z), go: { zone: z, act: 'fight', boss: true } });
+const killsTxt = z => `${Math.min(G.zone === z ? G.kills : 0, bossNeed(ZONES[z - 1]))}/${bossNeed(ZONES[z - 1])} pergalių`;
+const bossStep = z => ({ get t() { return `Laimėk ${G ? bossNeed(ZONES[z - 1]) : ZONES[z - 1].kills} kovas ir nugalėk bosą: ${bossName(z)}`; }, done: () => bossBeaten(z), prog: () => killsTxt(z), go: { zone: z, act: 'fight', boss: true } });
 const lvlStep = (lv, z) => ({ t: `Pasiek ${lv} lygį (kovok, kad gautum patirties)`, done: () => G.p.level >= lv, prog: () => `${G.p.level}/${lv} lygis`, go: { zone: z, act: 'fight' } });
 const sceneStep = (t, id, where) => ({ t, done: () => seen(id), go: { ...where, scene: id }, talk: id });
 const STORY = [
@@ -1343,7 +1351,7 @@ function goDo(g) {
 }
 function goalHtml() {
   const n = storyNow();
-  if (!n) return `<div class="goal done"><div class="g-kick">Istorija baigta</div><h3>Plyšys užvertas!</h3><p>Žaržiūra išgelbėta. Gali toliau stiprėti, rinkti pasiekimus ir kovoti su grįžtančiomis audromis.</p></div>`;
+  if (!n) return '';
   const g = typeof n.step.go === 'function' ? n.step.go() : n.step.go, lbl = goLabel(g), pr = n.step.prog ? n.step.prog() : '';
   const total = n.ch.steps.length, pct = n.i / total * 100, who = g.scene ? (g.bld ? BLD[g.bld].npcId : sceneWho(g.scene)) : null;
   return `<div class="goal"><div class="g-kick">Skyrius ${n.c + 1} iš ${STORY.length} · ${esc(n.ch.title)}</div>
@@ -1584,6 +1592,7 @@ const ACH = [
   ['rich', 'Turtuolis', 'Sukaupk 10 000 aukso', p => p.gold >= 10000, 1000],
   ['portal', 'Kitų pasaulių keliautojas', 'Įženk į portalo pasaulį', p => [7, 8, 9, 10, 11].some(z => (p.seen || {})[z]), 500],
   ['realms', 'Portalų užkariautojas', 'Nugalėk visų 5 portalų bosus', p => [7, 8, 9, 10, 11].every(z => (p.bossDone || {})[z]), 10000],
+  ['realmev', 'Pasaulių gelbėtojas', 'Įveik 3 portalų pasaulių įvykius', p => (p.realmEvents || 0) >= 3, 3000],
   ['deep5', 'Gelmių tyrinėtojas', 'Įveik 5 požemių gylį', p => (p.dgBest || 0) >= 5, 600],
   ['deep15', 'Bedugnės vaikas', 'Įveik 15 požemių gylį', p => (p.dgBest || 0) >= 15, 6000],
   ['lore', 'Metraštininkas', 'Atrask visus metraščio įrašus', p => Object.keys(LORE).every(k => (p.lore || {})[k]), 2000],
@@ -1852,7 +1861,7 @@ function crafterHtml(p, nid) {
 function garrisonHtml(p) {
   const rk = rankOf(p.rep), nx = nextRank(p.rep);
   let h = `<div class="section">Reputacija</div><div class="row t4"><div><div class="name">${esc(rk.rank)} · <span class="num">${p.rep}</span></div><div class="meta">Nuolaida parduotuvėse: ${Math.round(rk.shopDiscount * 100)}%${nx ? ` · kitas rangas „${esc(nx.rank)}“ nuo ${nx.minRep}` : ''}. Reputaciją duoda užduotys.</div></div></div>`;
-  h += `<div class="section">Bosai</div>` + ZONES.filter(z => z.id <= p.hz).map(z => `<div class="row t3"><div><div class="name">${esc(bossName(z.id))}</div><div class="meta">${z.name} · ${bossBeaten(z.id) ? 'nugalėtas' : `laimėk ten ${z.kills} kovas ir iššauk`}</div></div></div>`).join('');
+  h += `<div class="section">Bosai</div>` + ZONES.filter(z => z.id <= p.hz).map(z => `<div class="row t3"><div><div class="name">${esc(bossName(z.id))}</div><div class="meta">${z.name} · ${bossBeaten(z.id) ? 'nugalėtas' : `laimėk ten ${bossNeed(z)} kovas ir iššauk`}</div></div></div>`).join('');
   return h;
 }
 function gateHtml(p, only) {
@@ -1878,7 +1887,7 @@ const lockText = q => esc([G.p.level < q.minLevel ? `${q.minLevel} lygis` : '', 
 // --- vietovė ---
 function zoneHtml(p) {
   const z = Z(), foes = regionFoes(z.id), nodes = zoneNodes(z.id), anim = zoneAnimals(z.id), boss = G.mode === 'boss';
-  let h = z.realm ? `<div class="realm-card" style="--pc:${z.realm.color}"><div class="kicker">Portalo pasaulis</div><h3>${esc(z.name)}</h3><p>${esc(z.realm.text)}</p></div>` : '';
+  let h = z.realm ? realmEventBanner(z) + `<div class="realm-card" style="--pc:${z.realm.color}"><div class="kicker">Portalo pasaulis</div><h3>${esc(z.name)}</h3><p>${esc(z.realm.text)}</p></div>` : '';
   h += `<div class="section">${G.activity ? 'Ką darai (paliesk, kad pakeistum)' : 'Esi stovykloje. Ką darysi?'}</div><div class="cards">`;
   h += `<button class="card act ${G.activity === 'fight' || boss ? 'sel' : ''}" data-act="activity" data-id="fight" ${boss ? 'disabled' : ''}>${icon('Fight')}<div><h3>Kovoti su pabaisomis</h3><div class="meta">${foes.length ? esc(foes.map(f => f.name).join(', ')) : esc(ZONE_FOE[z.id - 1])} · patirtis, auksas, apranga · pergalės atveria bosą</div></div></button>`;
   if (anim.length) h += `<button class="card act ${G.activity === 'hunt' ? 'sel' : ''}" data-act="activity" data-id="hunt" ${boss ? 'disabled' : ''}>${icon('Paw')}<div><h3>Medžioti gyvūnus</h3><div class="meta">${esc(anim.map(a => a.name).join(', '))} · kailiai, žvėriena, reti trofėjai</div></div></button>`;
@@ -1889,8 +1898,8 @@ function zoneHtml(p) {
   h += `</div>`;
   const field = (R.npcs || []).find(n => n.zoneId === z.id);
   if (field && Object.keys(SCENES).some(id => seen(id) && sceneWho(id) === field.id)) h += `<div class="section">Stovykloje</div>` + npcCard(field.id);
-  const k = Math.min(G.kills, z.kills);
-  h += `<div class="row t3"><div><div class="name">Bosas: ${esc(bossName(z.id))}</div><div class="meta">${boss ? 'Kova vyksta!' : `${bossBeaten(z.id) ? 'Jau nugalėtas, galima kartoti · ' : ''}${k}/${z.kills} pergalių${p.level < z.req ? ` · reikia ${z.req} lygio` : ''}`}</div></div>
+  const need = bossNeed(z), k = Math.min(G.kills, need);
+  h += `<div class="row t3"><div><div class="name">Bosas: ${esc(bossName(z.id))}</div><div class="meta">${boss ? 'Kova vyksta!' : `${bossBeaten(z.id) ? 'Jau nugalėtas, galima kartoti · ' : ''}${k}/${need} pergalių${(p.bossKills || {})[z.id] ? ` (nugalėtas ${(p.bossKills || {})[z.id]} k.)` : ''}${p.level < z.req ? ` · reikia ${z.req} lygio` : ''}`}</div></div>
     <div class="acts">${btn('Iššaukti', 'data-act="boss"', bossAvail() && p.level >= z.req, 'sm go')}</div></div>`;
   if (anim.length) {
     h += `<details class="lootinfo" ${G.activity === 'hunt' ? 'open' : ''}><summary>Ką duoda gyvūnai?</summary>` + anim.map(a => `<div class="row t${TIER_IX[MAT[a.loot[a.loot.length - 1].id].tier]}"><div><div class="name">${esc(a.name)} <span class="meta">· sumedžiota ${p.killsBy[a.id] || 0}</span></div>
@@ -2062,9 +2071,9 @@ function renderTop() {
   if (G.hit && active) { hit.textContent = G.hit.text; hit.className = 'hit' + (G.hit.crit ? ' crit' : ''); } else if (!active) hit.textContent = '';
   $('gateRow').hidden = G.loc !== 'zone';
   if (G.loc === 'zone') {
-    const k = Math.min(G.kills, z.kills), gh = `${z.kills}:${k}`;
-    if ($('gate').dataset.h !== gh) { $('gate').innerHTML = Array.from({ length: z.kills }, (_, i) => `<i class="${i < k ? 'on' : ''}"></i>`).join(''); $('gate').dataset.h = gh; }
-    $('gateText').textContent = G.mode === 'boss' ? 'Kova su bosu!' : bossAvail() ? (p.level < z.req ? `Bosui reikia ${z.req} lygio` : 'Bosą jau galima iššaukti') : `Iki boso: ${k}/${z.kills} pergalių`;
+    const need = bossNeed(z), k = Math.min(G.kills, need), on = Math.floor(k / need * 25), gh = `${need}:${on}`;
+    if ($('gate').dataset.h !== gh) { $('gate').innerHTML = Array.from({ length: 25 }, (_, i) => `<i class="${i < on ? 'on' : ''}"></i>`).join(''); $('gate').dataset.h = gh; }
+    $('gateText').textContent = G.mode === 'boss' ? 'Kova su bosu!' : bossAvail() ? (p.level < z.req ? `Bosui reikia ${z.req} lygio` : 'Bosą jau galima iššaukti') : `Iki boso: ${k}/${need} pergalių`;
   }
   const qReady = Object.entries(p.q).some(([id, s]) => s.state === 'active' && qComplete(QST[id], s)) || Object.values(QST).some(q => qAvailable(q));
   document.querySelectorAll('#nav button').forEach(b => {
@@ -2138,15 +2147,16 @@ function onAct(e) {
   else if (a === 'qact') questAction(ds.q, +ds.i);
   else if (a === 'turnin') turnIn(ds.q);
   else if (a === 'storm') { if (stormReady()) { openStorm(); return; } }
+  else if (a === 'realmEvent') { if (Z().realm && realmCharge(G.zone) >= 100) { openStorm(false, Z().realm.key); return; } }
   else if (a === 'chat') { playChat(ds.npc); return; }
   else if (a === 'portalsel') portalSel = +ds.id;
   else if (a === 'attune') attune(+ds.id);
-  else if (a === 'enterRealm') { const id = +ds.id; warp(REALMS.find(r => r.id === id).color, () => { travel(id, 'fight'); tab = 'world'; lastView = ''; render(); window.scrollTo(0, 0); }); return; }
-  else if (a === 'realmBack') { warp(Z().realm.color, () => { goTown(); G.district = 'riftside_gate'; G.building = 'portal_ring'; lastView = ''; render(); window.scrollTo(0, 0); }); return; }
-  else if (a === 'dgEnter') { warp('#6a4a2a', () => { enterDungeon(); tab = 'world'; lastView = ''; render(); window.scrollTo(0, 0); }, true); return; }
+  else if (a === 'enterRealm') { const id = +ds.id; const rr = REALMS.find(r => r.id === id); warp(rr.color, () => { travel(id, 'fight'); tab = 'world'; lastView = ''; render(); window.scrollTo(0, 0); }, { title: rr.name.toUpperCase(), sub: 'Portalas atsiveria į kitą pasaulį' }); return; }
+  else if (a === 'realmBack') { warp(Z().realm.color, () => { goTown(); G.district = 'riftside_gate'; G.building = 'portal_ring'; lastView = ''; render(); window.scrollTo(0, 0); }, { title: 'ŽARŽIŪRA', sub: 'Grįžti namo per Portalų ratą', dur: 4000 }); return; }
+  else if (a === 'dgEnter') { warp('#6a4a2a', () => { enterDungeon(); tab = 'world'; lastView = ''; render(); window.scrollTo(0, 0); }, { dark: true, title: 'SENOJI ŠACHTA', sub: '1 gylis', dur: 2600 }); return; }
   else if (a === 'dgChoose') dgChoose(+ds.i);
-  else if (a === 'dgDown') { warp(dgBand(G.dg.floor + 1).crys, () => { dgDescend(); lastView = ''; render(); }, true); return; }
-  else if (a === 'dgUp') { warp('#d6a94a', () => { dgAscend(); lastView = ''; render(); window.scrollTo(0, 0); }); return; }
+  else if (a === 'dgDown') { warp(dgBand(G.dg.floor + 1).crys, () => { dgDescend(); lastView = ''; render(); }, { dark: true, title: `${G.dg.floor + 1} GYLIS`, sub: (G.dg.floor + 1) % 5 === 0 ? 'Čia laukia gelmių sargas' : 'Leidiesi vis giliau', dur: 1800 }); return; }
+  else if (a === 'dgUp') { warp('#d6a94a', () => { dgAscend(); lastView = ''; render(); window.scrollTo(0, 0); }, { title: 'PAVIRŠIUS', sub: 'Grobis išsaugotas', dur: 2400 }); return; }
   else if (a === 'reset') resetPending = true;
   else if (a === 'reset-no') resetPending = false;
   else if (a === 'reset-yes') { resetPending = false; save(); openStart(true); return; }
@@ -2721,7 +2731,7 @@ function frame(ts) {
     else if (e.type === 'aloot') { e.got.forEach((g, i) => { const t = TIER_IX[MAT[g.id].tier], col = getComputedStyle(document.documentElement).getPropertyValue('--t' + t).trim(); floatText(mx, gy - 70 - i * 16, `+${g.n} ${matName(g.id)}`, col, t >= 2); if (t >= 2) burst(mx, gy - 20, col, 14, 70); }); }
     else if (e.type === 'gather') { S.heroLunge = 1; floatText(mx, gy - 46, '+1 ' + e.name, '#ffd8a0'); burst(mx, gy - 16, '#ffb060', 6, 40); }
   }
-  const teaser = stormReady() && !ambush() && !cave;
+  const teaser = stormReady() && !ambush() && !cave && !realm;
   if (town) drawTown(ctx, w, h, gy, S.t, G.district);
   else if (cave) drawCave(ctx, w, h, gy, S.t, G.dg.floor);
   else {
@@ -2853,20 +2863,48 @@ const STORM_WEAPON = { gladiator: 'Audros šaukėjo kardas', duelist: 'Audros il
 const stormCharge = () => G.p.stormCharge ?? 100;
 const stormReady = () => stormCharge() >= 100;
 function stormBanner() {
-  if (ambush() || G.mode === 'boss' || G.loc === 'dungeon') return '';
+  if (ambush() || G.mode === 'boss' || G.loc === 'dungeon' || (G.loc === 'zone' && Z().realm)) return '';
   if (stormReady()) return `<button class="storm-banner" data-act="storm"><span class="sb-bolt" aria-hidden="true">ϟ</span><span class="sb-txt"><b>Plyšio audra</b><small>Dangus virš Žaržiūros plyšta. Pro jį lenda kažkas milžiniško. Nebūtina, bet verta: atlygis – epinis ar legendinis daiktas.</small></span><span class="sb-go">Kovoti</span></button>`;
   const c = stormCharge();
   return `<div class="storm-charge"><span>Plyšio audra kaupiasi</span><div class="cd q"><i style="width:${c}%"></i></div><span class="num">${c}%</span></div>`;
 }
 
+// Storm themes: the Rift Storm (Žaržiūra) and one event per portal realm, each with its own wyrm, sky and weather.
+const STORM_THEMES = {
+  rift: { name: 'Vortraksas, Dangaus Ryjikas', banner: 'VORTRAKSAS', sub: 'DANGAUS RYJIKAS', win: 'AUDRA NUGALĖTA', gen: 'Plyšio',
+    sky: ['#05040d', '#140b2e', '#2a1238'], glow: '230,190,255', cloud: '50,34,90', crackOuter: '200,120,255', crackShadow: '#e070ff', crackCore: '250,236,255',
+    rim: 'rgba(150,220,255,.55)', spike: '#7cf0ff', wing: 'rgba(90,60,190,.32)', body: ['#4b3a86', '#1e1640'], head: '#5a48a0', eye: '#7cf0ff', mouth: '#c070ff', ground: '170,140,255', rain: 'rain', bolt: '235,230,255' },
+  fire: { name: 'Ignaras, Liepsnų žaltys', event: 'Liepsnų liūtis', desc: 'Iš dangaus pliaupia ugnis, o pro debesis nardo Ignaras – liepsnų žaltys.', banner: 'IGNARAS', sub: 'LIEPSNŲ ŽALTYS', win: 'LIŪTIS NURIMO', gen: 'Ignaro',
+    sky: ['#060102', '#3a0c04', '#6a1a06'], glow: '255,170,80', cloud: '90,24,8', crackOuter: '255,120,40', crackShadow: '#ff6a20', crackCore: '255,240,200',
+    rim: 'rgba(255,190,90,.6)', spike: '#ffb040', wing: 'rgba(200,70,20,.38)', body: ['#8a3010', '#3a0e04'], head: '#a0401a', eye: '#ffe060', mouth: '#ff8020', ground: '255,140,60', rain: 'ember', bolt: '255,200,140' },
+  frost: { name: 'Šalnara, Ledo slibinė', event: 'Didžioji pūga', desc: 'Pūga užkloja viską baltai. Iš jos išnyra Šalnara – ledo slibinė.', banner: 'ŠALNARA', sub: 'LEDO SLIBINĖ', win: 'PŪGA NURIMO', gen: 'Šalnaros',
+    sky: ['#01040c', '#0e2a44', '#2a5a7a'], glow: '200,240,255', cloud: '120,160,200', crackOuter: '150,220,255', crackShadow: '#7ad8ff', crackCore: '240,255,255',
+    rim: 'rgba(220,250,255,.6)', spike: '#e0ffff', wing: 'rgba(160,220,255,.3)', body: ['#6a9ac0', '#1a3a58'], head: '#8ab8d8', eye: '#e0ffff', mouth: '#a0e8ff', ground: '200,240,255', rain: 'snow', bolt: '220,245,255' },
+  shroom: { name: 'Mikas, Sporų kirminas', event: 'Sporų žydėjimas', desc: 'Girios grybai išsprogsta sporų debesimis. Iš jų išsirango Mikas – sporų kirminas.', banner: 'MIKAS', sub: 'SPORŲ KIRMINAS', win: 'ŽYDĖJIMAS BAIGĖSI', gen: 'Miko',
+    sky: ['#030106', '#1e0a2a', '#3a1446'], glow: '200,255,120', cloud: '60,30,80', crackOuter: '180,255,90', crackShadow: '#a0ff40', crackCore: '240,255,220',
+    rim: 'rgba(200,255,120,.55)', spike: '#c0ff60', wing: 'rgba(150,60,180,.38)', body: ['#7a3a8a', '#2a0e34'], head: '#8a4a9a', eye: '#c0ff60', mouth: '#c0ff60', ground: '190,255,100', rain: 'spore', bolt: '210,255,160' },
+  dream: { name: 'Morfėjas, Sapnų ryjikas', event: 'Košmaro naktis', desc: 'Sapnai virsta košmarais. Morfėjas ryja salas vieną po kitos.', banner: 'MORFĖJAS', sub: 'SAPNŲ RYJIKAS', win: 'KOŠMARAS IŠSISKLAIDĖ', gen: 'Morfėjo',
+    sky: ['#0e0418', '#4a2a6a', '#a86aa8'], glow: '255,210,240', cloud: '160,110,190', crackOuter: '255,150,220', crackShadow: '#ff8ad8', crackCore: '255,245,252',
+    rim: 'rgba(255,220,250,.6)', spike: '#ffd0f0', wing: 'rgba(255,170,230,.32)', body: ['#c89ad8', '#4a2a6a'], head: '#d8aae8', eye: '#ff80c0', mouth: '#ff9ad8', ground: '255,190,240', rain: 'petal', bolt: '255,230,250' },
+  blood: { name: 'Sangvinas, Kraujo drakonas', event: 'Kraujo pilnatis', desc: 'Mėnulis prisipildo kraujo. Iš kapų pakyla Sangvinas – kraujo drakonas.', banner: 'SANGVINAS', sub: 'KRAUJO DRAKONAS', win: 'PILNATIS NUBLĖSO', gen: 'Sangvino',
+    sky: ['#020001', '#2a0206', '#4a060c'], glow: '255,90,90', cloud: '70,8,14', crackOuter: '255,50,60', crackShadow: '#ff2030', crackCore: '255,220,220',
+    rim: 'rgba(255,120,120,.55)', spike: '#ff3040', wing: 'rgba(140,10,30,.42)', body: ['#5a0a14', '#1a0206'], head: '#6a1020', eye: '#ff2020', mouth: '#ff3040', ground: '255,60,70', rain: 'blood', bolt: '255,170,170' },
+};
+const realmCharge = id => ((G.p.realmCharge || {})[id] ?? 40);
+function realmEventBanner(z) {
+  const th = STORM_THEMES[z.realm.key], c = realmCharge(z.id), col = z.realm.color;
+  if (c >= 100 && G.mode !== 'boss') return `<button class="storm-banner realm-ev" data-act="realmEvent" style="--pc:${col}"><span class="sb-bolt" aria-hidden="true">✦</span><span class="sb-txt"><b>${esc(th.event)}</b><small>${esc(th.desc)} Atlygis – „${esc(th.gen)} …“ daiktas ir pasaulio esmės.</small></span><span class="sb-go">Kovoti</span></button>`;
+  return `<div class="storm-charge" style="--pc:${col}"><span>${esc(th.event)} artėja</span><div class="cd q"><i style="width:${Math.min(100, c)}%;background:${col}"></i></div><span class="num">${Math.min(100, c)}%</span></div>`;
+}
+
 let SM = null;
 const N_SEG = 30, LAG = .075;
-function openStorm(final = false) {
+function openStorm(final = false, theme = 'rift') {
   const p = G.p, st = stats(p), P = cls(p).passive;
   const dps = st.dmg * 1.4 * st.as * (1 + st.crit * (st.critDmg - 1));
   SFX.init();
   SM = {
-    phase: 'intro', t: 0, bt: -99, st, P, hp: st.maxHp, max: st.maxHp, bmax: Math.round(dps * (final ? 60 : 40)), bhp: 0, final,
+    phase: 'intro', t: 0, bt: -99, st, P, hp: st.maxHp, max: st.maxHp, bmax: Math.round(dps * (final ? 60 : 40)), bhp: 0, final, th: STORM_THEMES[theme], theme,
     atk: null, atkCd: 3, fire: null, wp: null, wpCd: 4, heroCd: .6, combo: 0, perfects: 0, weakHits: 0, dodgeLock: 0, slow: 1, slowT: 0,
     shake: 0, flash: 0, flashC: '#fff', hurtV: 0, bossFlash: 0, parts: [], floats: [], bolts: [], boltCd: .3, slashes: [], meteors: [],
     heroDash: 0, deadN: 0, headDead: false, banner: null, chest: null, reward: null, enraged: false, last: performance.now(), raf: 0, hintT: 0, cardShown: false,
@@ -2877,7 +2915,8 @@ function openStorm(final = false) {
   const el = $('storm'); el.hidden = false; el.className = 'intro';
   $('stCard').hidden = true; $('stHint').hidden = true; $('stHeroName').textContent = `${p.name} · ${cls(p).name}`;
   $('stMute').textContent = SFX.on ? '♪ įj.' : '♪ išj.';
-  $('stName').textContent = final ? 'Vortraksas · paskutinė audra' : 'Vortraksas, Dangaus Ryjikas';
+  $('storm').style.setProperty('--sc', SM.th.crackShadow);
+  $('stName').textContent = final ? 'Vortraksas · paskutinė audra' : SM.th.name;
   stormSize();
   SFX.play('thunder'); buzz([60, 40, 120]);
   SM.raf = requestAnimationFrame(stormFrame);
@@ -2930,7 +2969,7 @@ function bossDamage(d, x, y, big, color) {
   sFloat(x, y - 20 * SM.K, fmt(d), color || (big ? '#ffd060' : '#ffffff'), big ? 30 : 18);
   sPart(x, y, big ? '#ffd060' : '#bfe8ff', big ? 26 : 8, big ? 220 : 120);
   if (!SM.enraged && SM.bhp <= SM.bmax * .5 && SM.bhp > 0) {
-    SM.enraged = true; sBanner('VORTRAKSAS ĮNIRŠO', 'Audra parausta, puolimai greitėja.', '#ff6b6b', 2.4);
+    SM.enraged = true; sBanner(`${SM.th.banner} ĮNIRŠO`, 'Dangus parausta, puolimai greitėja.', '#ff6b6b', 2.4);
     SFX.play('roar'); buzz([80, 50, 160]); SM.shake = 1.2; bolt(SM.w * .3, 0, SM.w * .45, SM.gy);
   }
   if (SM.bhp <= 0 && SM.phase === 'fight') stormVictory();
@@ -2977,26 +3016,30 @@ function stormVictory() {
 function stormDefeat() {
   SM.phase = 'defeat'; SM.t = 0; SM.atk = null; SM.fire = null; SM.wp = null;
   $('storm').className = 'victory';
-  sBanner('AUDRA TAVE PRARIJO', 'Plyšys kol kas užsivėrė…', '#ff6b6b', 3);
+  sBanner('PRALAIMĖJAI', 'Šį kartą dangus laimėjo…', '#ff6b6b', 3);
   SFX.play('boom'); buzz([200, 100, 400]);
-  const g = Z().gold * 8; G.p.gold += g; if (!SM.final) G.p.stormCharge = 50;
-  emit(`Plyšio audra tave įveikė. Iš griuvėsių surinkai ${g} aukso.`, 'bad');
-  setTimeout(() => SM && showStormCard(`<h3 class="bad">Pralaimėjai</h3><p>Vortraksui liko <b>${Math.round(SM.bhp / SM.bmax * 100)}%</b> gyvybės. ${SM.final ? 'Sustiprėk ir bandyk dar kartą.' : 'Audra vėl susikaups greičiau (50%).'}</p><p class="meta">Surinkta ${fmt(g)} aukso · tobulų išvengimų: ${SM.perfects} · silpnų vietų: ${SM.weakHits}</p>`), 1800);
+  const g = Z().gold * 8; G.p.gold += g;
+  if (SM.theme !== 'rift') G.p.realmCharge = { ...(G.p.realmCharge || {}), [G.zone]: 50 }; else if (!SM.final) G.p.stormCharge = 50;
+  emit(`${SM.th.name.split(',')[0]} tave įveikė. Iš griuvėsių surinkai ${g} aukso.`, 'bad');
+  setTimeout(() => SM && showStormCard(`<h3 class="bad">Pralaimėjai</h3><p>Bosui liko <b>${Math.round(SM.bhp / SM.bmax * 100)}%</b> gyvybės. ${SM.final ? 'Sustiprėk ir bandyk dar kartą.' : 'Audra vėl susikaups greičiau (50%).'}</p><p class="meta">Surinkta ${fmt(g)} aukso · tobulų išvengimų: ${SM.perfects} · silpnų vietų: ${SM.weakHits}</p>`), 1800);
 }
 function stormReward() {
   G.p.stats = G.p.stats || {}; G.p.stats.perfectBest = Math.max(G.p.stats.perfectBest || 0, SM.perfects);
   const p = G.p, z = Z(), c = cls(p), legendary = Math.random() < Math.min(.85, .25 + .1 * SM.perfects + .05 * SM.weakHits);
-  const first = !(p.stormWins > 0), slot = first ? 'Weapon' : SLOTS[rand(6)];
+  const first = SM.theme === 'rift' && !(p.stormWins > 0), slot = first ? 'Weapon' : SLOTS[rand(6)];
   const ilvl = Math.max(z.req, p.level) + 4, b = Math.round((4 + ilvl * 2) * 1.3), q = d => Math.trunc(b / d);
   const base = {
     Weapon: c.dmgStat === 'm' ? A(0, q(4), b, 0, q(5)) : A(b, q(4), 0, 0, q(5)), Armor: A(q(4), 0, 0, b, q(6)), Helmet: A(0, 0, q(3), q(2), q(5)),
     Boots: A(0, q(2), 0, q(3), q(6)), Belt: A(q(3), 0, 0, q(2), q(6)), Ring: A(q(4), q(4), q(4), 0, q(2)),
   }[slot];
-  const it = { id: Math.random().toString(36).slice(2), name: slot === 'Weapon' ? STORM_WEAPON[c.id] : `Plyšio ${BASE_NAMES[slot][rand(3)]}`, slot, tier: legendary ? 4 : 3, ilvl, enh: 0, base, def: ['Armor', 'Helmet', 'Boots'].includes(slot) ? ilvl * 3 : 0, storm: true };
+  const realmEv = SM.theme !== 'rift';
+  const it = { id: Math.random().toString(36).slice(2), name: realmEv ? `${SM.th.gen} ${BASE_NAMES[slot][rand(3)]}` : slot === 'Weapon' ? STORM_WEAPON[c.id] : `Plyšio ${BASE_NAMES[slot][rand(3)]}`, slot, tier: legendary ? 4 : 3, ilvl, enh: 0, base, def: ['Armor', 'Helmet', 'Boots'].includes(slot) ? ilvl * 3 : 0, storm: true };
   const gold = z.gold * 40, exp = Math.round(expToNext(p.level) * .35);
-  p.gold += gold; const lv = gainExp(p, exp); p.stormWins = (p.stormWins || 0) + 1; p.stormCharge = 0; if (SM.final) p.won = true;
+  p.gold += gold; const lv = gainExp(p, exp);
+  if (realmEv) { p.realmEvents = (p.realmEvents || 0) + 1; p.realmCharge = { ...(p.realmCharge || {}), [z.id]: 0 }; const e = realmEss(z.id); if (e) addMat(p, e, 5); }
+  else { p.stormWins = (p.stormWins || 0) + 1; p.stormCharge = 0; if (SM.final) p.won = true; }
   const out = receive(p, it);
-  emit(`AUDRA NUGALĖTA — ${it.name} (${TIERS[it.tier].toLowerCase()}, ${out}), +${fmt(gold)} aukso, +${fmt(exp)} patirties`, 'boss');
+  emit(`${SM.th.win} — ${it.name} (${TIERS[it.tier].toLowerCase()}, ${out}), +${fmt(gold)} aukso, +${fmt(exp)} patirties`, 'boss');
   save();
   return { it, gold, exp, out, lv };
 }
@@ -3015,7 +3058,7 @@ function rewardCard() {
     <div class="st-tier t${it.tier}">${TIERS[it.tier]}</div><h3 class="t${it.tier}">${esc(it.name)}</h3>
     <div class="meta">${SLOT_LT[it.slot]} · ${it.ilvl} lygio · galia <span class="num">${power(it)}</span> · ${r.out === 'užsidėta' ? '<b class="buff">užsidėta</b>' : r.out}</div>
     <div class="st-stats">${stats_}</div>
-    <p class="meta">+${fmt(r.gold)} aukso · +${fmt(r.exp)} patirties${r.lv ? ` · +${r.lv} lygis` : ''}<br>Tobulų išvengimų: ${SM.perfects} · silpnų vietų: ${SM.weakHits}${SM.perfects + SM.weakHits ? ' (didino legendinio daikto tikimybę)' : ''}</p>`);
+    <p class="meta">+${fmt(r.gold)} aukso · +${fmt(r.exp)} patirties${r.lv ? ` · +${r.lv} lygis` : ''}${SM.theme !== 'rift' && realmEss(G.zone) ? ` · +5× ${esc(matName(realmEss(G.zone)))}` : ''}<br>Tobulų išvengimų: ${SM.perfects} · silpnų vietų: ${SM.weakHits}${SM.perfects + SM.weakHits ? ' (didino legendinio daikto tikimybę)' : ''}</p>`);
 }
 function closeStorm() {
   if (!SM) return;
@@ -3045,7 +3088,7 @@ function stormUpdate(dt) {
     if (s.t > .25 && !s.i1) { s.i1 = 1; bolt(s.w * .7, 0, s.crack.o[0], s.crack.o[1]); }
     if (s.t > 1.4 && !s.i2) { s.i2 = 1; s.flash = RM ? .2 : .9; s.flashC = '#f0d8ff'; SFX.play('boom'); s.shake = 1; buzz(120); }
     if (s.t > 1.7 && !s.i3) { s.i3 = 1; SFX.play('roar'); buzz([200, 80, 200]); }
-    if (s.t > 3 && !s.i4) { s.i4 = 1; sBanner('VORTRAKSAS', s.final ? 'PASKUTINĖ AUDRA' : 'DANGAUS RYJIKAS', '#d8c8ff', 2.4); }
+    if (s.t > 3 && !s.i4) { s.i4 = 1; sBanner(s.th.banner, s.final ? 'PASKUTINĖ AUDRA' : s.th.sub, `rgb(${s.th.crackCore})`, 2.4); }
     if (s.t > 4.7) { s.phase = 'fight'; s.hintT = 9; $('storm').className = 'fight'; $('stHint').hidden = false; }
     return;
   }
@@ -3076,7 +3119,7 @@ function stormUpdate(dt) {
     if (s.deadN >= N_SEG && !s.headDead) {
       s.headDead = true; const [x, y] = wpos(s.bt); sPart(x, y, '#ffffff', 80, 380, 1.4); sPart(x, y, '#ffd060', 60, 300, 1.6);
       s.flash = RM ? .3 : 1; s.flashC = '#ffffff'; s.shake = 1.4; SFX.play('boom'); buzz([300, 80, 300]);
-      sBanner(s.final ? 'PLYŠYS UŽVERTAS' : 'AUDRA NUGALĖTA', 'Dangus vėl susiveria.', '#ffd060', 2.6); s.vt = s.t;
+      sBanner(s.final ? 'PLYŠYS UŽVERTAS' : s.th.win, 'Dangus vėl nurimsta.', '#ffd060', 2.6); s.vt = s.t;
     }
     if (s.headDead && s.t > s.vt + 1.6 && !s.chest) { s.chest = { x: s.w * .5, y: -60, vy: 0, landed: false, opening: false, ot: 0 }; s.phase = 'chest'; }
     return;
@@ -3136,7 +3179,7 @@ function stormUpdate(dt) {
 }
 
 function drawWyrm(ctx) {
-  const s = SM, K = s.K, t = s.t, enr = s.enraged, rim = enr ? 'rgba(255,110,110,.6)' : 'rgba(150,220,255,.55)', spike = enr ? '#ff6060' : '#7cf0ff';
+  const s = SM, K = s.K, t = s.t, enr = s.enraged, th = s.th, rim = enr ? 'rgba(255,110,110,.6)' : th.rim, spike = enr ? '#ff6060' : th.spike;
   const fl = s.bossFlash > 0;
   for (let i = N_SEG - 1; i >= 1; i--) {
     const tt = s.bt - i * LAG; if (tt < 0) continue;
@@ -3147,12 +3190,12 @@ function drawWyrm(ctx) {
       for (const side of [-1, 1]) {
         ctx.save(); ctx.translate(x, y); ctx.rotate(ang);
         ctx.beginPath(); ctx.moveTo(0, 0); ctx.bezierCurveTo(-r, side * r * (3 + flap), -r * 4, side * r * (4.6 + flap * 2), -r * 5.4, side * r * 1.6); ctx.quadraticCurveTo(-r * 2.6, side * r * 1.3, 0, 0);
-        ctx.fillStyle = enr ? 'rgba(150,40,70,.35)' : 'rgba(90,60,190,.32)'; ctx.fill(); ctx.strokeStyle = rim; ctx.lineWidth = 1.2; ctx.stroke();
+        ctx.fillStyle = enr ? 'rgba(150,40,70,.35)' : th.wing; ctx.fill(); ctx.strokeStyle = rim; ctx.lineWidth = 1.2; ctx.stroke();
         ctx.restore();
       }
     }
     const g = ctx.createRadialGradient(x - r * .3, y - r * .4, r * .1, x, y, r);
-    g.addColorStop(0, fl ? '#ffffff' : enr ? '#6a2a4a' : '#4b3a86'); g.addColorStop(.7, enr ? '#2a0e20' : '#1e1640'); g.addColorStop(1, '#0b0818');
+    g.addColorStop(0, fl ? '#ffffff' : enr ? '#6a2a4a' : th.body[0]); g.addColorStop(.7, enr ? '#2a0e20' : th.body[1]); g.addColorStop(1, '#0b0818');
     ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, r, 0, 7); ctx.fill();
     ctx.strokeStyle = rim; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(x, y, r, -Math.PI * .95, -Math.PI * .05); ctx.stroke();
     if (i % 2 === 0) {
@@ -3173,13 +3216,13 @@ function drawWyrm(ctx) {
   ctx.fillStyle = fl ? '#ddd' : '#24183e'; ctx.beginPath(); ctx.moveTo(-8, 0); ctx.lineTo(46, 4); ctx.lineTo(40, 12); ctx.lineTo(-6, 12); ctx.fill();
   ctx.fillStyle = '#e8e0d0'; for (let k = 0; k < 5; k++) { ctx.beginPath(); ctx.moveTo(8 + k * 8, 3); ctx.lineTo(11 + k * 8, -4); ctx.lineTo(14 + k * 8, 3); ctx.fill(); }
   ctx.restore();
-  const hg = ctx.createRadialGradient(-4, -8, 2, 6, 0, 46); hg.addColorStop(0, fl ? '#fff' : enr ? '#7a3050' : '#5a48a0'); hg.addColorStop(1, '#120c24');
+  const hg = ctx.createRadialGradient(-4, -8, 2, 6, 0, 46); hg.addColorStop(0, fl ? '#fff' : enr ? '#7a3050' : th.head); hg.addColorStop(1, '#120c24');
   ctx.fillStyle = hg; ctx.beginPath(); ctx.moveTo(-26, -16); ctx.quadraticCurveTo(10, -26, 52, -2); ctx.lineTo(50, 6); ctx.quadraticCurveTo(10, 14, -26, 14); ctx.quadraticCurveTo(-36, 0, -26, -16); ctx.fill();
   ctx.strokeStyle = rim; ctx.lineWidth = 1.5; ctx.stroke();
-  const eye = enr ? '#ff3030' : '#7cf0ff'; ctx.fillStyle = eye; ctx.shadowColor = eye; ctx.shadowBlur = 16;
+  const eye = enr ? '#ff3030' : th.eye; ctx.fillStyle = eye; ctx.shadowColor = eye; ctx.shadowBlur = 16;
   ctx.beginPath(); ctx.ellipse(16, -8, 6, 2.6, -.2, 0, 7); ctx.fill(); ctx.shadowBlur = 0;
   if (breath > 0 || (s.fire && s.fire.kind === 'breath')) {
-    const mg = ctx.createRadialGradient(48, 6, 1, 48, 6, 10 + breath * 30); mg.addColorStop(0, '#fff6d0'); mg.addColorStop(.4, enr ? '#ff5040' : '#c070ff'); mg.addColorStop(1, 'rgba(0,0,0,0)');
+    const mg = ctx.createRadialGradient(48, 6, 1, 48, 6, 10 + breath * 30); mg.addColorStop(0, '#fff6d0'); mg.addColorStop(.4, enr ? '#ff5040' : th.mouth); mg.addColorStop(1, 'rgba(0,0,0,0)');
     ctx.fillStyle = mg; ctx.beginPath(); ctx.arc(48, 6, 10 + breath * 30, 0, 7); ctx.fill();
   }
   ctx.restore();
@@ -3218,19 +3261,19 @@ function stormFrame(ts) {
   ctx.save();
   if (s.shake > 0 && !RM) ctx.translate((Math.random() - .5) * s.shake * 14, (Math.random() - .5) * s.shake * 14);
   // sky
-  const g = ctx.createLinearGradient(0, 0, 0, gy); g.addColorStop(0, '#05040d'); g.addColorStop(.6, s.enraged ? '#2c0812' : '#140b2e'); g.addColorStop(1, s.enraged ? '#4a1018' : '#2a1238');
+  const th = s.th, g = ctx.createLinearGradient(0, 0, 0, gy); g.addColorStop(0, th.sky[0]); g.addColorStop(.6, s.enraged ? '#2c0812' : th.sky[1]); g.addColorStop(1, s.enraged ? '#4a1018' : th.sky[2]);
   ctx.fillStyle = g; ctx.fillRect(-20, -20, w + 40, h + 40);
   const intro = Math.min(1, s.t / 1.4), o = s.crack.o, open = s.phase === 'intro' ? Math.max(0, Math.min(1, (s.t - 1.4) / .6)) : (s.headDead ? Math.max(0, 1 - (s.t - s.vt) / 1.5) : 1);
-  if (open > 0) { const rg = ctx.createRadialGradient(o[0], o[1] * .6, 4, o[0], o[1] * .6, 260 * K); rg.addColorStop(0, `rgba(230,190,255,${.55 * open})`); rg.addColorStop(1, 'rgba(80,30,140,0)'); ctx.fillStyle = rg; ctx.fillRect(0, 0, w, h); }
-  for (const cl of s.clouds) { const cx = cl.x * w, cy = cl.y * h, r = cl.r * w; const cg = ctx.createRadialGradient(cx, cy, 2, cx, cy, r); cg.addColorStop(0, s.enraged ? `rgba(90,20,40,${cl.a})` : `rgba(50,34,90,${cl.a})`); cg.addColorStop(1, 'rgba(0,0,0,0)'); ctx.fillStyle = cg; ctx.fillRect(cx - r, cy - r, r * 2, r * 2); }
+  if (open > 0) { const rg = ctx.createRadialGradient(o[0], o[1] * .6, 4, o[0], o[1] * .6, 260 * K); rg.addColorStop(0, `rgba(${th.glow},${.55 * open})`); rg.addColorStop(1, 'rgba(80,30,140,0)'); ctx.fillStyle = rg; ctx.fillRect(0, 0, w, h); }
+  for (const cl of s.clouds) { const cx = cl.x * w, cy = cl.y * h, r = cl.r * w; const cg = ctx.createRadialGradient(cx, cy, 2, cx, cy, r); cg.addColorStop(0, s.enraged ? `rgba(90,20,40,${cl.a})` : `rgba(${th.cloud},${cl.a})`); cg.addColorStop(1, 'rgba(0,0,0,0)'); ctx.fillStyle = cg; ctx.fillRect(cx - r, cy - r, r * 2, r * 2); }
   // crack
   const showCrack = s.phase === 'intro' ? intro : open;
   if (showCrack > 0) {
     const pts = s.crack.pts, n = Math.max(2, Math.ceil(pts.length * (s.phase === 'intro' ? intro : 1)));
     const line = (arr, k) => { ctx.beginPath(); ctx.moveTo(arr[0][0], arr[0][1]); for (let i = 1; i < k; i++) ctx.lineTo(arr[i][0], arr[i][1]); ctx.stroke(); };
     ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-    ctx.strokeStyle = `rgba(200,120,255,${.35 * showCrack})`; ctx.lineWidth = (8 + open * 14) * K; line(pts, n);
-    ctx.shadowColor = '#e070ff'; ctx.shadowBlur = RM ? 0 : 22; ctx.strokeStyle = `rgba(250,236,255,${showCrack})`; ctx.lineWidth = (2 + open * 4) * K; line(pts, n);
+    ctx.strokeStyle = `rgba(${th.crackOuter},${.35 * showCrack})`; ctx.lineWidth = (8 + open * 14) * K; line(pts, n);
+    ctx.shadowColor = th.crackShadow; ctx.shadowBlur = RM ? 0 : 22; ctx.strokeStyle = `rgba(${th.crackCore},${showCrack})`; ctx.lineWidth = (2 + open * 4) * K; line(pts, n);
     if (s.phase !== 'intro' || s.t > .8) for (const b of s.crack.br) { ctx.lineWidth = 1.5 * K; line(b, b.length); }
     ctx.shadowBlur = 0;
   }
@@ -3242,7 +3285,7 @@ function stormFrame(ts) {
   ctx.fillRect(w * .1, gy - 90 * K, 22 * K, 90 * K); for (let k = 0; k < 3; k++) ctx.fillRect(w * .1 - 3 * K + k * 10 * K, gy - 98 * K, 6 * K, 8 * K);
   // bolts
   for (const b of s.bolts) {
-    ctx.strokeStyle = `rgba(235,230,255,${b.life / .35})`; ctx.lineWidth = 2.5 * K; ctx.shadowColor = '#b8a8ff'; ctx.shadowBlur = RM ? 0 : 20;
+    ctx.strokeStyle = `rgba(${th.bolt},${b.life / .35})`; ctx.lineWidth = 2.5 * K; ctx.shadowColor = th.crackShadow; ctx.shadowBlur = RM ? 0 : 20;
     ctx.beginPath(); ctx.moveTo(b.pts[0][0], b.pts[0][1]); for (const p of b.pts) ctx.lineTo(p[0], p[1]); ctx.stroke(); ctx.shadowBlur = 0;
   }
   drawWyrm(ctx);
@@ -3256,7 +3299,7 @@ function stormFrame(ts) {
   }
   // ground
   const gg = ctx.createLinearGradient(0, gy, 0, h); gg.addColorStop(0, '#120d16'); gg.addColorStop(1, '#050408'); ctx.fillStyle = gg; ctx.fillRect(-20, gy, w + 40, h - gy + 20);
-  ctx.fillStyle = s.enraged ? 'rgba(255,90,90,.25)' : 'rgba(170,140,255,.25)'; ctx.fillRect(0, gy, w, 2);
+  ctx.fillStyle = s.enraged ? 'rgba(255,90,90,.25)' : `rgba(${th.ground},.25)`; ctx.fillRect(0, gy, w, 2);
   // hero (+ afterimages while dashing)
   const [hx] = heroPos(), c0 = cls(G.p), hk = 2.3 * K;
   if (s.phase !== 'defeat' || s.t < .8) {
@@ -3303,9 +3346,23 @@ function stormFrame(ts) {
   ctx.globalAlpha = 1;
   // rain
   if (!RM) {
-    ctx.strokeStyle = 'rgba(190,200,255,.22)'; ctx.lineWidth = 1; ctx.beginPath();
-    for (const r of s.rain) { r.y += r.s * (1 / 60) * 1.6; r.x -= .004; if (r.y > 1) { r.y = -.05; r.x = Math.random() * 1.1; } const x = r.x * w, y = r.y * h; ctx.moveTo(x, y); ctx.lineTo(x - r.l * w * .3, y + r.l * h); }
-    ctx.stroke();
+    const mode = th.rain;
+    if (mode === 'rain' || mode === 'blood') {
+      ctx.strokeStyle = mode === 'blood' ? 'rgba(200,30,40,.45)' : 'rgba(190,200,255,.22)'; ctx.lineWidth = mode === 'blood' ? 1.4 : 1; ctx.beginPath();
+      for (const r of s.rain) { r.y += r.s * (1 / 60) * 1.6; r.x -= .004; if (r.y > 1) { r.y = -.05; r.x = Math.random() * 1.1; } const x = r.x * w, y = r.y * h; ctx.moveTo(x, y); ctx.lineTo(x - r.l * w * .3, y + r.l * h); }
+      ctx.stroke();
+    } else {
+      const col = { ember: '#ffa040', snow: '#ffffff', spore: '#c0ff60', petal: '#ffd0ea' }[mode];
+      ctx.fillStyle = col; if (mode === 'ember' || mode === 'spore') { ctx.shadowColor = col; ctx.shadowBlur = 6; }
+      for (const r of s.rain) {
+        const up = mode === 'ember' || mode === 'spore', v = mode === 'snow' ? .35 : mode === 'petal' ? .3 : .25;
+        r.y += (up ? -1 : 1) * r.s * (1 / 60) * v; r.x += Math.sin(s.t * 1.5 + r.l * 300) * .0015 + (mode === 'petal' ? .002 : 0);
+        if (r.y > 1.02) r.y = -.02; if (r.y < -.02) r.y = 1.02; if (r.x > 1.05) r.x = -.05;
+        ctx.globalAlpha = mode === 'spore' ? .5 + .5 * Math.sin(s.t * 3 + r.l * 500) : .85;
+        ctx.beginPath(); if (mode === 'petal') ctx.ellipse(r.x * w, r.y * h, 3.5, 1.8, s.t + r.l * 90, 0, 7); else ctx.arc(r.x * w, r.y * h, mode === 'snow' ? 1.8 + r.l * 30 : 1.4 + r.l * 20, 0, 7); ctx.fill();
+      }
+      ctx.globalAlpha = 1; ctx.shadowBlur = 0;
+    }
   }
   // floats
   for (const f of s.floats) {
@@ -3508,26 +3565,90 @@ function drawPortalHub(ts) {
   for (const p of PH.parts || []) { p.x += (p.tx - p.x) * dt * 2.5; p.y += (p.ty - p.y) * dt * 2.5; p.life -= dt * .9; ctx.globalAlpha = Math.max(0, p.life); ctx.fillStyle = p.c; ctx.beginPath(); ctx.arc(p.x, p.y, 1.4, 0, 7); ctx.fill(); }
   ctx.globalAlpha = 1; if (PH.parts) PH.parts = PH.parts.filter(p => p.life > 0);
 }
-// Full-screen swirl between worlds; `mid` runs at the peak (where the travel happens).
-function warp(color, mid, dark) {
-  const cv = $('warp'); cv.hidden = false;
+// Cosmic transition between worlds: starfield → hyperspace tunnel with nebulae → flash (travel happens here) → title card.
+// Tap to skip. opts: { dark, title, sub, dur }.
+let WARP = null;
+function warp(color, mid, opts = {}) {
+  if (opts === true) opts = { dark: true };
+  const cv = $('warp'); cv.hidden = false; cv.style.pointerEvents = 'auto';
   const dpr = Math.min(2, window.devicePixelRatio || 1), W = window.innerWidth, H = window.innerHeight; cv.width = W * dpr; cv.height = H * dpr;
-  const ctx = cv.getContext('2d'), start = performance.now(), D = RM ? 500 : 1300; let done = false;
-  try { SFX.init(); SFX.tone(160, 1.1, 'sine', .15, dark ? 60 : 900); SFX.noise(1.1, 400, 3000, .15, 'bandpass'); } catch (e) { /* no audio */ }
-  buzz([30, 30, 60]);
-  (function step(now) {
-    const k = (now - start) / D; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W, H);
-    if (k >= .5 && !done) { done = true; mid(); }
-    const a = k < .5 ? k * 2 : Math.max(0, 1 - (k - .5) * 2), R = Math.hypot(W, H) * (k < .5 ? k * 2 : 1);
-    ctx.globalAlpha = a; ctx.fillStyle = dark ? '#05040a' : '#0a0614'; ctx.fillRect(0, 0, W, H);
-    const g = ctx.createRadialGradient(W / 2, H / 2, 2, W / 2, H / 2, R * .6); g.addColorStop(0, dark ? '#000' : '#fff'); g.addColorStop(.3, color); g.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
-    if (!RM) { ctx.strokeStyle = dark ? 'rgba(160,140,120,.5)' : 'rgba(255,255,255,.55)'; ctx.lineWidth = 2;
-      for (let i = 0; i < 36; i++) { const ang = i / 36 * 6.283 + k * 9, r1 = R * .1 * (1 + (i % 3)), r2 = r1 + R * .25; ctx.beginPath(); ctx.moveTo(W / 2 + Math.cos(ang) * r1, H / 2 + Math.sin(ang) * r1); ctx.lineTo(W / 2 + Math.cos(ang + .4) * r2, H / 2 + Math.sin(ang + .4) * r2); ctx.stroke(); } }
+  const D = RM ? 700 : (opts.dur || 4800), dark = !!opts.dark;
+  const stars = Array.from({ length: dark ? 180 : 320 }, () => ({ x: Math.random() * 2 - 1, y: Math.random() * 2 - 1, z: Math.random(), c: Math.random() }));
+  const neb = Array.from({ length: 5 }, (_, i) => ({ a: i * 1.26, r: .35 + Math.random() * .35, d: .15 + Math.random() * .25, c: i % 2 }));
+  WARP = { start: performance.now(), done: false, skip: false, last: performance.now() };
+  const W0 = WARP, ctx = cv.getContext('2d');
+  try {
+    SFX.init();
+    if (dark) { SFX.noise(D / 1000, 200, 60, .35); SFX.tone(70, D / 1000 * .6, 'sawtooth', .08, 40); }
+    else { SFX.tone(70, D / 1000 * .55, 'sawtooth', .07, 520); SFX.tone(140, D / 1000 * .55, 'sine', .1, 1040); SFX.noise(D / 1000 * .55, 300, 4000, .14, 'bandpass'); }
+  } catch (e) { /* audio unavailable */ }
+  buzz(dark ? [40, 60, 40] : [20, 40, 20, 40, 60]);
+  const speedAt = k => k < .12 ? .06 : k < .55 ? .06 + Math.pow((k - .12) / .43, 2.2) * 2.4 : k < .62 ? 2.46 : k < .9 ? .08 + (1 - (k - .62) / .28) ** 2 * 2.38 : .06;
+  let flashed = false;
+  function step(now) {
+    if (WARP !== W0) return;
+    let k = (now - W0.start) / D; const dt = Math.min(.05, (now - W0.last) / 1000); W0.last = now;
+    if (W0.skip) { W0.skip = false; if (!W0.done) W0.start = now - D * .6; else W0.start = now - D * .94; k = (now - W0.start) / D; }
+    if (k >= .58 && !W0.done) { W0.done = true; mid(); }
+    if (k >= .555 && !flashed) { flashed = true; try { SFX.play(dark ? 'boom' : 'perfect'); if (!dark) SFX.play('chest'); } catch (e) { /* ignore */ } buzz(80); }
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W, H);
+    const fade = k < .08 ? k / .08 : k > .92 ? Math.max(0, (1 - k) / .08) : 1;
+    ctx.globalAlpha = fade;
+    if (RM) { ctx.fillStyle = dark ? '#05040a' : color; ctx.fillRect(0, 0, W, H); ctx.globalAlpha = 1; if (k < 1) requestAnimationFrame(step); else end(); return; }
+    const cx = W / 2, cy = H / 2, M = Math.max(W, H), m = Math.min(W, H), sp = speedAt(k);
+    const bg = ctx.createRadialGradient(cx, cy, 0, cx, cy, M * .8); bg.addColorStop(0, dark ? '#120a06' : '#0c0620'); bg.addColorStop(1, dark ? '#030202' : '#010008');
+    ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+    // nebulae
+    ctx.globalCompositeOperation = 'lighter';
+    for (const n of neb) {
+      const a = n.a + k * 1.6 * (n.c ? 1 : -1), x = cx + Math.cos(a) * M * n.d, y = cy + Math.sin(a) * M * n.d * .8, r = M * n.r;
+      const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+      g.addColorStop(0, dark ? (n.c ? 'rgba(120,60,20,.22)' : 'rgba(60,40,30,.2)') : n.c ? hexA(color, .28) : 'rgba(80,110,255,.2)'); g.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = g; ctx.fillRect(x - r, y - r, r * 2, r * 2);
+    }
+    // tunnel rings
+    const tun = k < .18 ? 0 : k < .3 ? (k - .18) / .12 : k < .6 ? 1 : k < .7 ? (.7 - k) / .1 : 0;
+    if (tun > 0) for (let j = 0; j < 22; j++) {
+      const zz = ((j / 22) + now / 1000 * sp * .35) % 1, r = m * .04 / Math.max(.04, 1 - zz), al = tun * zz * (1 - zz) * 2.4;
+      if (r > M * 1.2) continue;
+      ctx.strokeStyle = dark ? `rgba(200,120,60,${al * .6})` : hexA(j % 3 ? color : '#a8c0ff', al * .8); ctx.lineWidth = 1 + zz * 3;
+      ctx.beginPath(); ctx.ellipse(cx, cy, r, r * .82, (now / 1000 * .3 + j * .2) % 6.28, 0, 7); ctx.stroke();
+    }
+    // stars → streaks
+    for (const s of stars) {
+      const pz = s.z; s.z -= sp * dt; if (s.z <= .02) { s.z = 1; s.x = Math.random() * 2 - 1; s.y = Math.random() * 2 - 1; continue; }
+      const px = cx + s.x / pz * m * .5, py = cy + s.y / pz * m * .5, x = cx + s.x / s.z * m * .5, y = cy + s.y / s.z * m * .5;
+      if (x < -50 || x > W + 50 || y < -50 || y > H + 50) { s.z = 1; continue; }
+      const a = Math.min(1, (1 - s.z) * 1.4);
+      ctx.strokeStyle = dark ? `rgba(255,${170 + s.c * 60},${110 + s.c * 40},${a})` : s.c < .3 ? hexA(color, a) : s.c < .45 ? `rgba(170,190,255,${a})` : `rgba(255,255,255,${a})`;
+      ctx.lineWidth = .4 + (1 - s.z) * 2.6; ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(x, y); ctx.stroke();
+    }
+    // core glow
+    const cg = ctx.createRadialGradient(cx, cy, 0, cx, cy, m * (.08 + sp * .12));
+    cg.addColorStop(0, dark ? 'rgba(255,200,140,.7)' : 'rgba(255,255,255,.95)'); cg.addColorStop(.3, dark ? 'rgba(160,80,30,.3)' : hexA(color, .55)); cg.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = cg; ctx.fillRect(0, 0, W, H);
+    ctx.globalCompositeOperation = 'source-over';
+    // flash
+    if (k > .53 && k < .68) { const f = k < .58 ? (k - .53) / .05 : 1 - (k - .58) / .1; ctx.fillStyle = dark ? `rgba(20,10,5,${f})` : `rgba(255,255,255,${f})`; ctx.fillRect(0, 0, W, H); }
+    // title card
+    if (opts.title && k > .6 && k < .97) {
+      const a = Math.min(1, (k - .6) / .08) * Math.min(1, (.97 - k) / .08), sc = 1 + (1 - Math.min(1, (k - .6) / .12)) * .25;
+      ctx.save(); ctx.globalAlpha = a * fade; ctx.translate(cx, cy); ctx.scale(sc, sc); ctx.textAlign = 'center';
+      const fs = Math.min(44, W * .92 / Math.max(6, opts.title.length * .7));
+      ctx.font = `700 ${fs}px "Alegreya SC", Georgia, serif`; ctx.fillStyle = '#fff'; ctx.shadowColor = dark ? '#ff9040' : color; ctx.shadowBlur = 28;
+      ctx.fillText(opts.title, 0, 0); ctx.shadowBlur = 0;
+      if (opts.sub) { ctx.font = `500 15px "Alegreya Sans", system-ui, sans-serif`; ctx.fillStyle = dark ? '#e8c8a0' : '#e8e4ff'; ctx.fillText(opts.sub, 0, 30); }
+      ctx.strokeStyle = hexA(dark ? '#ff9040' : color, .7); ctx.lineWidth = 1.5; const lw = Math.min(W * .7, 260) * a; ctx.beginPath(); ctx.moveTo(-lw / 2, -fs * .95); ctx.lineTo(lw / 2, -fs * .95); ctx.moveTo(-lw / 2, 46); ctx.lineTo(lw / 2, 46); ctx.stroke();
+      ctx.restore();
+    }
     ctx.globalAlpha = 1;
-    if (k < 1) requestAnimationFrame(step); else cv.hidden = true;
-  })(start);
+    if (k < 1) requestAnimationFrame(step); else end();
+  }
+  function end() { if (!W0.done) { W0.done = true; mid(); } cv.hidden = true; cv.style.pointerEvents = 'none'; if (WARP === W0) WARP = null; }
+  requestAnimationFrame(step);
 }
+function hexA(hex, a) { if (!hex || hex[0] !== '#') return hex; const n = parseInt(hex.slice(1), 16); return `rgba(${n >> 16},${(n >> 8) & 255},${n & 255},${Math.max(0, Math.min(1, a))})`; }
+$('warp').addEventListener('pointerdown', () => { if (WARP) WARP.skip = true; });
 
 // ===== Title screen: Continue / New hero → class selection =====
 let startOpen = false, pickClass = 'gladiator', SAVE = null;
